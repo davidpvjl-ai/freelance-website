@@ -5,6 +5,10 @@
 (function(){
   'use strict';
 
+  /* ============== CONFIG ============== */
+  // Formspree endpoint — vervang YOUR_FORM_ID door je eigen Formspree ID na account-aanmaak
+  const FORMSPREE_URL = 'https://formspree.io/f/mvzljdde';
+
   /* ============== STATE ============== */
   const TOTAL_QUESTIONS = 14;
   const state = {
@@ -820,6 +824,44 @@ Output ALLEEN als geldig JSON zonder markdown, geen extra tekst:
       localStorage.setItem(key, JSON.stringify(list));
     }catch(e){}
 
+    // Submit naar Formspree zodat David een e-mail krijgt met alle antwoorden
+    if(FORMSPREE_URL && !FORMSPREE_URL.includes('YOUR_FORM_ID')){
+      try{
+        const payload = {
+          _subject: `Nieuwe wizard-submission van ${state.answers.contact.name || 'onbekend'}`,
+          naam: state.answers.contact.name,
+          email: state.answers.contact.email,
+          telefoon: state.answers.contact.phone,
+          bedrijf: state.answers.contact.company,
+          huidige_site: state.answers.contact.currentSite,
+          q1_bedrijf: state.answers.q1,
+          q2_doelgroep: state.answers.q2,
+          q3_hoofdactie: state.answers.q3 + (state.answers.q3_other ? ' — ' + state.answers.q3_other : ''),
+          q4_pijn: (state.answers.q4||[]).join(', '),
+          q5_uniek: state.answers.q5,
+          q6_secties: (state.answers.q6||[]).join(', '),
+          q7_objecties: state.answers.q7,
+          q8_sfeer: (state.answers.q8||[]).join(', '),
+          q9_kleuren: JSON.stringify(state.answers.q9_colors),
+          q10_layout: state.answers.q10,
+          q11_animatie: state.answers.q11,
+          q12_ui: state.answers.q12,
+          q12_bg: state.answers.q12_bg,
+          q13: state.answers.q13,
+          q14: state.answers.q14,
+          fallback_headline: state.generated.headline,
+          fallback_sub: state.generated.subHeadline,
+          fallback_cta: state.generated.ctaText,
+          submitted_at: new Date().toISOString()
+        };
+        await fetch(FORMSPREE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch(e){ console.warn('Formspree submit failed:', e); }
+    }
+
     // Make sure loader gets at least 4.5s so the build-up reads
     await new Promise(r=>setTimeout(r,4500));
     go(17);
@@ -840,9 +882,11 @@ Output ALLEEN als geldig JSON zonder markdown, geen extra tekst:
 
     const wrap = el('div',{class:'iw-preview'});
 
+    const firstName = state.answers.contact.name.split(' ')[0] || 'ondernemer';
+    const userEmail = state.answers.contact.email || 'je inbox';
     wrap.appendChild(el('div',{class:'iw-preview-head'},[
-      el('h2',{class:'iw-h2'}, `Bedankt, ${state.answers.contact.name.split(' ')[0]||'ondernemer'}! Hier is je preview ✨`),
-      el('p',{class:'iw-sub'}, 'Op basis van je antwoorden + design-keuzes hebben we je hero en testimonials-sectie gebouwd in jouw huisstijl.')
+      el('h2',{class:'iw-h2'}, `Bedankt, ${firstName}! Hier is alvast een eerste indruk ✨`),
+      el('p',{class:'iw-sub'}, 'Op basis van je antwoorden + design-keuzes hebben we een eerste versie van je hero en testimonials gebouwd in jouw huisstijl. David kijkt hier persoonlijk naar en stuurt binnen 24 uur je definitieve preview met scherpe copy naar ' + userEmail + '.')
     ]));
 
     const frame = el('div',{class:'iw-preview-frame'});
