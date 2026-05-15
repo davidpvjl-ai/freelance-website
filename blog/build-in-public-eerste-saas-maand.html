@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build in Public — 5 lessen uit 30 dagen SaaS bouwen</title>
+<meta name="description" content="Reality check van mijn eerste SaaS-maand: wat werkte, wat brak, en wat ik de volgende keer anders doe.">
+<meta property="og:title" content="Build in Public — 5 lessen uit 30 dagen SaaS bouwen">
+<meta property="og:description" content="Reality check van mijn eerste SaaS-maand: wat werkte, wat brak, en wat ik de volgende keer anders doe.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://davidspijker.nl/blog/build-in-public-eerste-saas-maand.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Build in Public — 5 lessen uit 30 dagen SaaS bouwen">
+<meta name="twitter:description" content="Reality check van mijn eerste SaaS-maand: wat werkte, wat brak, en wat ik de volgende keer anders doe.">
+
+<link rel="canonical" href="https://davidspijker.nl/blog/build-in-public-eerste-saas-maand.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<style>
+.post-wrap{max-width:780px;margin:0 auto;padding:60px 5% 0}
+.post-breadcrumbs{font-size:13px;color:var(--muted);margin-bottom:28px;display:flex;gap:8px;align-items:center}
+.post-breadcrumbs a{color:var(--muted);text-decoration:none;transition:color .2s}
+.post-breadcrumbs a:hover{color:var(--accent)}
+.post-breadcrumbs .sep{opacity:.4}
+.post-cat{font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:16px;display:inline-flex;align-items:center;gap:7px}
+.pc-website{color:#1759e8}
+.pc-automatisering{color:#dc2626}
+.pc-eigen{color:#ea580c}
+.pc-dot{width:8px;height:8px;border-radius:50%}
+.pc-dot.website{background:#1759e8}
+.pc-dot.automatisering{background:#dc2626}
+.pc-dot.eigen{background:#ea580c}
+.post-title{font-family:var(--font-head);font-weight:800;font-size:clamp(32px,4.5vw,52px);line-height:1.1;letter-spacing:-1.2px;margin-bottom:20px}
+.post-excerpt{font-size:19px;color:var(--muted);line-height:1.6;margin-bottom:32px;max-width:660px}
+.post-byline{display:flex;align-items:center;gap:14px;padding:18px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:40px;font-size:13px;color:var(--muted)}
+.post-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#3b6ef5);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;font-family:var(--font-head)}
+.post-byline-name{color:var(--text);font-weight:600;font-size:14px}
+.post-byline-right{margin-left:auto;display:flex;gap:14px;align-items:center}
+.post-media{margin:0 auto 48px;max-width:900px;padding:0 5%}
+.post-hero-img{width:100%;max-height:480px;object-fit:cover;border-radius:16px;display:block}
+.post-video{position:relative;padding-bottom:56.25%;height:0;border-radius:16px;overflow:hidden;background:#000}
+.post-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.post-hero-placeholder{aspect-ratio:16/8;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:96px;position:relative;overflow:hidden}
+.post-hero-placeholder.website{background:linear-gradient(135deg,rgba(23,89,232,0.12),rgba(23,89,232,0.03))}
+.post-hero-placeholder.automatisering{background:linear-gradient(135deg,rgba(220,38,38,0.12),rgba(220,38,38,0.03))}
+.post-hero-placeholder.eigen{background:linear-gradient(135deg,rgba(234,88,12,0.12),rgba(234,88,12,0.03))}
+.post-hero-placeholder::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(0,0,0,0.03),rgba(0,0,0,0.03) 3px,transparent 3px,transparent 22px)}
+.post-body{font-size:17px;line-height:1.75;color:var(--text);max-width:720px;margin:0 auto 56px;padding:0 5%}
+.post-body h2{font-family:var(--font-head);font-size:28px;font-weight:700;letter-spacing:-0.5px;margin:44px 0 16px;line-height:1.25}
+.post-body h3{font-family:var(--font-head);font-size:22px;font-weight:700;margin:32px 0 12px}
+.post-body p{margin-bottom:20px;color:#2d3142}
+.post-body ul,.post-body ol{margin:0 0 20px 24px;color:#2d3142}
+.post-body li{margin-bottom:8px}
+.post-body a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.post-body a:hover{text-decoration-thickness:2px}
+.post-body blockquote{border-left:3px solid var(--accent);padding:4px 20px;margin:28px 0;color:var(--muted);font-style:italic;font-size:18px}
+.post-body code{background:rgba(23,89,232,0.08);color:var(--accent);padding:2px 7px;border-radius:4px;font-size:14px;font-family:'JetBrains Mono',ui-monospace,monospace}
+.post-tags{max-width:720px;margin:0 auto 56px;padding:28px 5% 0;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.post-tags-label{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-right:4px}
+.post-tag{background:rgba(23,89,232,0.08);color:var(--accent);padding:6px 14px;border-radius:16px;font-size:13px;text-decoration:none;transition:all .2s}
+.post-tag:hover{background:var(--accent);color:#fff}
+.related-project{max-width:900px;margin:0 auto 80px;padding:0 5%}
+.rp-card{background:rgba(255,255,255,0.95);border:1px solid var(--border);border-radius:16px;padding:32px;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;box-shadow:0 4px 20px rgba(23,89,232,0.06)}
+.rp-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.rp-icon.website{background:rgba(23,89,232,0.12)}
+.rp-icon.automatisering{background:rgba(220,38,38,0.12)}
+.rp-icon.eigen{background:rgba(234,88,12,0.12)}
+.rp-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.rp-title{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:6px;letter-spacing:-0.2px}
+.rp-desc{font-size:14px;color:var(--muted);line-height:1.55;margin-bottom:8px}
+.rp-result{font-size:13px;color:var(--accent);font-weight:600}
+.rp-cta{background:var(--accent);color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;transition:all .2s}
+.rp-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px var(--accent-glow)}
+.related-posts{max-width:1240px;margin:0 auto;padding:60px 5% 100px;border-top:1px solid var(--border)}
+.related-posts h3{font-family:var(--font-head);font-size:22px;margin-bottom:24px;letter-spacing:-0.3px}
+.rl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.rl-card{background:rgba(255,255,255,0.9);border:1px solid var(--border);border-radius:12px;padding:20px;text-decoration:none;color:inherit;transition:all .25s;display:flex;flex-direction:column;gap:10px}
+.rl-card:hover{transform:translateY(-3px);border-color:rgba(23,89,232,0.3);box-shadow:0 10px 28px rgba(23,89,232,0.08)}
+.rl-cat{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;font-weight:600}
+.rl-title{font-family:var(--font-head);font-size:16px;font-weight:700;line-height:1.3;letter-spacing:-0.2px}
+.rl-excerpt{font-size:13px;color:var(--muted);line-height:1.5;flex:1}
+@media(max-width:900px){
+  .rp-card{grid-template-columns:1fr;text-align:center}
+  .rp-icon{margin:0 auto}
+  .rl-grid{grid-template-columns:1fr}
+  .post-title{font-size:32px}
+  .post-excerpt{font-size:17px}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Build in public — wat ik leerde in 30 dagen SaaS bouwen",
+  "description": "Reality check van mijn eerste SaaS-maand: wat werkte, wat brak, en wat ik de volgende keer anders doe.",
+  "datePublished": "2026-03-15",
+  "author": {
+    "@type": "Person",
+    "name": "David Spijker",
+    "url": "https://davidspijker.nl"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "David Spijker"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://davidspijker.nl/blog/build-in-public-eerste-saas-maand.html"
+  },
+  "keywords": "saas, build-in-public, creator"
+}
+</script>
+</head>
+<body>
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<nav>
+  <a href="../index.html" class="nav-logo"><img src="../assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../websites.html">Websites</a></li>
+    <li><a href="../automatisering.html">Automatisering</a></li>
+    <li><a href="../blog.html" style="color:var(--text);font-weight:600">Blog</a></li>
+  </ul>
+  <a href="../index.html#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<article class="post-wrap">
+  <nav class="post-breadcrumbs" aria-label="Breadcrumbs">
+    <a href="../index.html">Home</a>
+    <span class="sep">/</span>
+    <a href="../blog.html">Blog</a>
+    <span class="sep">/</span>
+    <a href="../blog.html?cat=eigen">Eigen projecten</a>
+  </nav>
+
+  <div class="post-cat pc-eigen"><span class="pc-dot eigen"></span>Eigen projecten</div>
+  <h1 class="post-title">Build in public — wat ik leerde in 30 dagen SaaS bouwen</h1>
+  <p class="post-excerpt">Reality check: wat ik heb geleerd in 30 dagen bouwen.</p>
+
+  <div class="post-byline">
+    <div class="post-avatar">DS</div>
+    <div>
+      <div class="post-byline-name">David Spijker</div>
+      <div>Websites, AI-automatisering en eigen SaaS</div>
+    </div>
+    <div class="post-byline-right">
+      <span>15 maart 2026</span>
+      <span>2.100 views</span>
+    </div>
+  </div>
+</article>
+
+<div class="post-media"><div class="post-video"><iframe src="https://www.youtube.com/embed/example" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div></div>
+
+<article class="post-body"><p>30 dagen geleden startte ik mijn eerste SaaS in het openbaar. Elke dag gefilmd, elke feature op camera, elke bug publiek. Dit zijn de 5 grootste lessen.</p><h2>1. MVP betekent écht minimal</h2><p>Ik had bedacht: login, dashboard, 3 features, betaling. Realiteit: login + 1 feature + handmatige facturering was genoeg voor de eerste 10 betalende gebruikers.</p><h2>2. Publiek bouwen verkoopt zichzelf</h2><p>Via YouTube shorts en TikTok groeide mijn wachtlijst naar 340 mensen vóór launch. Zonder marketing budget.</p><h2>3. Feedback loops zijn alles</h2><p>Een Discord met 50 early users gaf me betere product-input dan 6 maanden user interviews.</p><h2>4. Deploy wekelijks, niet dagelijks</h2><p>Snel itereren is goed — maar dagelijks deployen in week 2 brak continu dingen. Wekelijks met preview-branches = sweet spot.</p><h2>5. Documenteer alles</h2><p>Elke video, elke tweet, elke bug. Het is je marketing-content én je devlog tegelijk.</p></article>
+
+<div class="post-tags"><span class="post-tags-label">Tags</span><a href="../blog.html?tag=saas" class="post-tag">#saas</a><a href="../blog.html?tag=build-in-public" class="post-tag">#build-in-public</a><a href="../blog.html?tag=creator" class="post-tag">#creator</a></div>
+
+    <aside class="related-project">
+      <div class="rp-card">
+        <div class="rp-icon eigen">🎬</div>
+        <div>
+          <div class="rp-label">Gerelateerde case study</div>
+          <div class="rp-title">SaaS MVP in 30 dagen</div>
+          <div class="rp-desc">Mijn nieuwste eigen SaaS — volg de bouw op YouTube.</div>
+          
+        </div>
+        <a href="../blog.html" class="rp-cta">Bekijk gerelateerde posts →</a>
+      </div>
+    </aside>
+  
+
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="../index.html" class="nav-logo"><img src="../assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="../websites.html">Websites</a></li>
+        <li><a href="../automatisering.html">Automatisering</a></li>
+        <li><a href="../index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="../index.html#over">Over mij</a></li>
+        <li><a href="../blog.html">Blog</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="../voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="../privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="../admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../mobile-nav.js"></script>
+</body>
+</html>

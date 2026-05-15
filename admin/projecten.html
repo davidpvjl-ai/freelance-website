@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Projecten — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<script src="admin.js"></script>
+<script>requireAuth()</script>
+<div class="admin-shell">
+  <div id="sbMount"></div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">Projecten</div>
+        <div class="topbar-title-sub">Websites, automatiseringen en eigen projecten</div>
+      </div>
+      <div class="topbar-right">
+        <input type="text" class="topbar-search" placeholder="Zoek projecten..." id="search">
+        <button class="btn" onclick="restoreSeed()" title="Herstel verwijderde voorbeeldprojecten">↺ Herstel</button>
+        <button class="btn btn-primary" onclick="openModal()">+ Nieuw project</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="filter-bar" id="filters"></div>
+      <div class="project-grid" id="grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="mTitle">Nieuw project</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="f_id">
+      <div class="field"><label>Titel</label><input type="text" id="f_title" placeholder="bv. Webshop · Modewinkel"></div>
+      <div class="field"><label>Beschrijving</label><textarea id="f_desc" placeholder="Korte omschrijving van het project"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Categorie</label><select id="f_cat"><option value="website">Website</option><option value="automatisering">Automatisering</option><option value="eigen">Eigen project</option></select></div>
+        <div class="field"><label>Status</label><select id="f_status"><option value="draft">Concept</option><option value="published">Gepubliceerd</option></select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Resultaat / stat</label><input type="text" id="f_result" placeholder="+42% conversie"></div>
+        <div class="field"><label>Klant (optioneel)</label><input type="text" id="f_client" placeholder="Klantnaam"></div>
+      </div>
+      <div class="field"><label>Tags <small style="display:inline;margin-left:6px">komma-gescheiden</small></label><input type="text" id="f_tags" placeholder="shopify, e-commerce"></div>
+      <div class="field"><label>Video link (YouTube/TikTok)</label><input type="text" id="f_video" placeholder="https://youtube.com/..."></div>
+      <div class="field"><label>Thumbnail afbeelding</label><input type="file" id="f_thumb" accept="image/*"><small>Lokaal opgeslagen als preview</small><div id="thumbPreview" style="margin-top:8px"></div></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-danger" id="btnDelete" onclick="delProject()" style="margin-right:auto;display:none">Verwijderen</button>
+      <button class="btn" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="saveProject()">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('sbMount').outerHTML = renderSidebar('projects');
+
+let projects = Store.get('projects', []);
+let filterCat = 'all';
+let filterStatus = 'all';
+let searchQ = '';
+let currentThumb = '';
+
+function render(){
+  const filters = document.getElementById('filters');
+  const counts = {all:projects.length, website:0, automatisering:0, eigen:0};
+  projects.forEach(p=>counts[p.category]++);
+  filters.innerHTML = `
+    <span style="font-size:11px;color:var(--a-muted);margin-right:4px">CATEGORIE:</span>
+    <div class="filter-pill ${filterCat==='all'?'active':''}" onclick="setCat('all')">Alle <span class="filter-count">${counts.all}</span></div>
+    <div class="filter-pill ${filterCat==='website'?'active':''}" onclick="setCat('website')"><span class="dot dot-blue"></span>Websites <span class="filter-count">${counts.website}</span></div>
+    <div class="filter-pill ${filterCat==='automatisering'?'active':''}" onclick="setCat('automatisering')"><span class="dot dot-green"></span>Automatisering <span class="filter-count">${counts.automatisering}</span></div>
+    <div class="filter-pill ${filterCat==='eigen'?'active':''}" onclick="setCat('eigen')"><span class="dot dot-purple"></span>Eigen <span class="filter-count">${counts.eigen}</span></div>
+    <div style="width:1px;height:20px;background:var(--a-border);margin:0 4px"></div>
+    <span style="font-size:11px;color:var(--a-muted);margin-right:4px">STATUS:</span>
+    <div class="filter-pill ${filterStatus==='all'?'active':''}" onclick="setStatus('all')">Alle</div>
+    <div class="filter-pill ${filterStatus==='published'?'active':''}" onclick="setStatus('published')">Gepubliceerd</div>
+    <div class="filter-pill ${filterStatus==='draft'?'active':''}" onclick="setStatus('draft')">Concept</div>
+  `;
+
+  let list = projects;
+  if(filterCat!=='all') list = list.filter(p=>p.category===filterCat);
+  if(filterStatus!=='all') list = list.filter(p=>p.status===filterStatus);
+  if(searchQ) list = list.filter(p=>(p.title+p.desc+p.tags.join(' ')).toLowerCase().includes(searchQ));
+
+  const grid = document.getElementById('grid');
+  if(!list.length){
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">▣</div><div class="empty-title">Geen projecten gevonden</div><div class="empty-sub">Pas je filter aan of voeg een nieuw project toe</div></div>`;
+    return;
+  }
+  const catIcon = {website:'🌐',automatisering:'⚡',eigen:'🎬'};
+  const catBadge = {website:'<span class="badge badge-blue">Website</span>',automatisering:'<span class="badge badge-green">Automatisering</span>',eigen:'<span class="badge badge-purple">Eigen</span>'};
+  grid.innerHTML = list.map(p=>`
+    <div class="pj-card" onclick="editProject('${p.id}')">
+      <div class="pj-thumb" ${p.thumb?`style="background-image:url(${p.thumb})"`:''}>
+        ${!p.thumb?`<div class="pj-thumb-stripes"></div><div class="pj-thumb-placeholder">${catIcon[p.category]} ${p.category}</div>`:''}
+        <div class="pj-status">${p.status==='published'?'<span class="badge badge-green">Live</span>':'<span class="badge">Concept</span>'}</div>
+      </div>
+      <div class="pj-body">
+        <div class="pj-title">${escapeHtml(p.title)}</div>
+        <div class="pj-desc">${escapeHtml(p.desc)}</div>
+        <div class="pj-meta">
+          <div class="pj-meta-tags">${catBadge[p.category]} ${p.tags.slice(0,2).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+          <span style="font-size:10.5px">${relDate(p.created)}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function setCat(c){filterCat=c; render();}
+function setStatus(s){filterStatus=s; render();}
+document.getElementById('search').addEventListener('input', e=>{searchQ=e.target.value.toLowerCase(); render();});
+
+function openModal(){
+  document.getElementById('mTitle').textContent='Nieuw project';
+  document.getElementById('f_id').value='';
+  document.getElementById('f_title').value='';
+  document.getElementById('f_desc').value='';
+  document.getElementById('f_cat').value='website';
+  document.getElementById('f_status').value='draft';
+  document.getElementById('f_result').value='';
+  document.getElementById('f_client').value='';
+  document.getElementById('f_tags').value='';
+  document.getElementById('f_video').value='';
+  document.getElementById('thumbPreview').innerHTML='';
+  currentThumb='';
+  document.getElementById('btnDelete').style.display='none';
+  document.getElementById('modal').classList.add('open');
+}
+function editProject(id){
+  const p = projects.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('mTitle').textContent='Project bewerken';
+  document.getElementById('f_id').value=p.id;
+  document.getElementById('f_title').value=p.title;
+  document.getElementById('f_desc').value=p.desc;
+  document.getElementById('f_cat').value=p.category;
+  document.getElementById('f_status').value=p.status;
+  document.getElementById('f_result').value=p.result;
+  document.getElementById('f_client').value=p.client||'';
+  document.getElementById('f_tags').value=p.tags.join(', ');
+  document.getElementById('f_video').value=p.video||'';
+  currentThumb = p.thumb||'';
+  document.getElementById('thumbPreview').innerHTML = p.thumb?`<img src="${p.thumb}" style="max-height:90px;border-radius:6px;border:1px solid var(--a-border)">`:'';
+  document.getElementById('btnDelete').style.display='inline-flex';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+document.getElementById('f_thumb').addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = ev => { currentThumb = ev.target.result; document.getElementById('thumbPreview').innerHTML = `<img src="${currentThumb}" style="max-height:90px;border-radius:6px;border:1px solid var(--a-border)">`; };
+  r.readAsDataURL(f);
+});
+
+function saveProject(){
+  const id = document.getElementById('f_id').value;
+  const data = {
+    id: id || uid(),
+    title: document.getElementById('f_title').value.trim()||'Naamloos project',
+    desc: document.getElementById('f_desc').value.trim(),
+    category: document.getElementById('f_cat').value,
+    status: document.getElementById('f_status').value,
+    result: document.getElementById('f_result').value.trim(),
+    client: document.getElementById('f_client').value.trim(),
+    tags: document.getElementById('f_tags').value.split(',').map(s=>s.trim()).filter(Boolean),
+    video: document.getElementById('f_video').value.trim(),
+    thumb: currentThumb,
+    created: id ? projects.find(p=>p.id===id).created : new Date().toISOString().slice(0,10)
+  };
+  if(id){ projects = projects.map(p=>p.id===id?data:p); toast('Project bijgewerkt'); }
+  else{ projects.unshift(data); toast('Project toegevoegd'); }
+  Store.set('projects', projects);
+  closeModal(); render();
+}
+function delProject(){
+  if(!confirm('Weet je zeker dat je dit project wilt verwijderen?')) return;
+  const id = document.getElementById('f_id').value;
+  projects = projects.filter(p=>p.id!==id);
+  Store.set('projects', projects);
+  closeModal(); render();
+  toast('Project verwijderd');
+}
+
+function restoreSeed(){
+  const existing = new Set(projects.map(p=>p.id));
+  const missing = SEED_PROJECTS.filter(p=>!existing.has(p.id));
+  if(!missing.length){ toast('Alle voorbeeldprojecten zijn al aanwezig'); return; }
+  if(!confirm(`Herstel ${missing.length} ontbrekend(e) voorbeeldproject(en)?\n\n` + missing.map(p=>'• '+p.title).join('\n'))) return;
+  projects = [...missing, ...projects];
+  Store.set('projects', projects);
+  render();
+  toast(`${missing.length} project(en) hersteld`);
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal') closeModal(); });
+
+render();
+</script>
+</body>
+</html>

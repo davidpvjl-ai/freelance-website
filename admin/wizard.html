@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Website Wizard — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+<style>
+/* wizard-specific bits */
+.wz-table td{vertical-align:middle}
+.wz-name{font-weight:500;letter-spacing:-0.1px}
+.wz-sub{font-size:11.5px;color:var(--a-muted);margin-top:2px}
+.wz-palette{display:inline-flex;gap:3px;align-items:center}
+.wz-sw{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,0.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.06)}
+.wz-quote{font-size:12px;color:var(--a-text-dim);font-style:italic;line-height:1.45;max-width:340px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+.wz-status-new{color:var(--a-accent);background:var(--a-accent-soft);border-color:rgba(79,124,255,0.2)}
+.wz-status-contacted{color:var(--a-amber);background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)}
+.wz-status-converted{color:var(--a-green);background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.2)}
+.wz-status-archived{color:var(--a-muted);background:var(--a-surface2);border-color:var(--a-border)}
+
+/* detail panel — wizard answers grid */
+.wz-section{margin-bottom:22px}
+.wz-section-h{font-size:10.5px;color:var(--a-muted);text-transform:uppercase;letter-spacing:1.3px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.wz-section-h::after{content:'';flex:1;height:1px;background:var(--a-border)}
+.wz-row{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.05);font-size:13px;align-items:start}
+.wz-row:last-child{border-bottom:0}
+.wz-k{font-size:11.5px;color:var(--a-muted);font-weight:500;padding-top:1px;letter-spacing:0.2px}
+.wz-v{line-height:1.55;color:var(--a-text);word-break:break-word}
+.wz-v em{font-style:normal;color:var(--a-muted)}
+.wz-chips{display:flex;flex-wrap:wrap;gap:4px}
+.wz-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:6px;font-size:11.5px;background:var(--a-surface2);border:1px solid var(--a-border);color:var(--a-text-dim);font-family:var(--font-mono)}
+
+/* AI generated preview card */
+.wz-gen{background:linear-gradient(135deg,rgba(79,124,255,0.10),rgba(168,85,247,0.06));border:1px solid rgba(79,124,255,0.22);border-radius:10px;padding:14px 16px;margin-bottom:18px;position:relative;overflow:hidden}
+.wz-gen-tag{position:absolute;top:10px;right:12px;font-size:9.5px;color:var(--a-accent);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;background:var(--a-bg2);padding:3px 8px;border-radius:10px;border:1px solid rgba(79,124,255,0.25)}
+.wz-gen-head{font-family:var(--font-head);font-size:18px;font-weight:700;letter-spacing:-0.4px;line-height:1.2;margin-bottom:6px;padding-right:80px}
+.wz-gen-sub{font-size:12.5px;color:var(--a-text-dim);line-height:1.5;margin-bottom:10px}
+.wz-gen-cta{display:inline-block;background:var(--a-accent);color:#fff;padding:6px 14px;border-radius:6px;font-size:11.5px;font-weight:600;font-family:var(--font-head)}
+
+/* color preview row */
+.wz-colors{display:flex;gap:8px;align-items:center}
+.wz-color-card{display:flex;flex-direction:column;align-items:center;gap:4px}
+.wz-color-card .sw{width:36px;height:36px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.wz-color-card .lbl{font-size:9px;color:var(--a-muted);text-transform:uppercase;letter-spacing:0.8px}
+.wz-color-card .hex{font-family:var(--font-mono);font-size:10.5px;color:var(--a-text-dim)}
+
+/* layout/anim visual hint */
+.wz-vh{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;background:var(--a-bg);border:1px solid var(--a-border);border-radius:6px;font-size:11.5px}
+.wz-vh-icon{width:32px;height:20px;border-radius:3px;border:1px solid var(--a-border-hover);background:var(--a-surface);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;flex-shrink:0;padding:3px}
+.wz-vh-icon span{display:block;background:var(--a-text-dim);height:2px;border-radius:1px}
+.wz-vh-icon .lg{width:80%}
+.wz-vh-icon .sm{width:55%}
+.wz-vh-icon .tiny{width:30%;height:3px;background:var(--a-accent)}
+
+/* stats row */
+.wz-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+
+/* progress bar for completeness */
+.wz-completeness{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--a-muted);margin-top:4px}
+.wz-completeness .bar{flex:1;height:4px;background:var(--a-surface2);border-radius:2px;overflow:hidden;max-width:80px}
+.wz-completeness .fill{height:100%;background:var(--a-accent);border-radius:2px}
+
+.wz-empty{padding:60px 20px;text-align:center;color:var(--a-muted)}
+
+/* expanded card hint in body */
+.wz-msg-block{background:var(--a-bg);border:1px solid var(--a-border);border-radius:7px;padding:10px 12px;font-size:12.5px;line-height:1.55;color:var(--a-text-dim);white-space:pre-wrap}
+
+.dp-actions-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding-top:14px;border-top:1px solid var(--a-border)}
+</style>
+</head>
+<body>
+<script src="admin.js"></script>
+<script>requireAuth()</script>
+<div class="admin-shell">
+  <div id="sbMount"></div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">Website Wizard</div>
+        <div class="topbar-title-sub">Inzendingen via de gratis website-preview tool</div>
+      </div>
+      <div class="topbar-right">
+        <input type="text" class="topbar-search" placeholder="Zoek inzendingen..." id="search">
+        <a href="../websites-laten-maken.html" target="_blank" class="btn">↗ Bekijk wizard</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="wz-stats" id="stats"></div>
+      <div class="filter-bar" id="filters"></div>
+      <div class="panel"><table class="wz-table" id="subTable"></table></div>
+      <div id="emptyState" style="display:none" class="wz-empty">
+        <div class="empty-icon">✨</div>
+        <div class="empty-title">Geen inzendingen gevonden</div>
+        <div class="empty-sub">Probeer een ander filter of zoekterm.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="dp">
+  <div class="dp-head">
+    <div class="dp-title" id="dpTitle">Inzending</div>
+    <button class="modal-close" onclick="closeDP()">×</button>
+  </div>
+  <div class="dp-body" id="dpBody"></div>
+  <div class="dp-foot">
+    <button class="btn btn-danger" onclick="delSub()" style="margin-right:auto">Verwijderen</button>
+    <button class="btn" onclick="copySub()" id="copyBtn">⧉ Kopieer</button>
+    <button class="btn" onclick="closeDP()">Sluiten</button>
+    <button class="btn btn-primary" onclick="convertToLead()" id="convertBtn">+ Maak lead aan</button>
+  </div>
+</div>
+
+<script>
+document.getElementById('sbMount').outerHTML = renderSidebar('wizard');
+
+let subs = Store.get('wizard_subs', []);
+let currentId = null;
+let searchQ = '';
+let filterStatus = 'all';
+
+const STATUSES = [
+  {id:'new', label:'Nieuw'},
+  {id:'contacted', label:'Opgevolgd'},
+  {id:'converted', label:'Lead aangemaakt'},
+  {id:'archived', label:'Gearchiveerd'}
+];
+
+// Pretty labels for compact keys
+const Q_LABELS = {
+  q1:  {n:1,  t:'Aanbod'},
+  q2:  {n:2,  t:'Doelgroep'},
+  q3:  {n:3,  t:'Hoofdactie bezoeker'},
+  q4:  {n:4,  t:'Huidige situatie'},
+  q5:  {n:5,  t:'Type site'},
+  q6:  {n:6,  t:'Onderdelen / features'},
+  q7:  {n:7,  t:'Bezwaren bezoekers'},
+  q8:  {n:8,  t:'Sfeer / vibes'},
+  q9_colors: {n:9, t:'Kleuren'},
+  q10: {n:10, t:'Hero layout'},
+  q11: {n:11, t:'Animatie-stijl'},
+  q12: {n:12, t:'UI stijl'},
+  q12_bg: {n:13, t:'Achtergrond'},
+  q14: {n:14, t:'Tijdslijn'}
+};
+function qlabel(key){
+  const x = Q_LABELS[key]; if(!x) return key;
+  return `<span style="color:var(--a-accent);font-family:var(--font-mono);font-weight:600">Q${x.n}</span> · ${x.t}`;
+}
+
+const LAYOUT_LABEL = {centered:'Centered', split:'Split (tekst + beeld)', full:'Full-bleed'};
+const ANIM_LABEL = {slide:'Slide-in', fade:'Fade & subtiel', parallax:'Parallax', interactive:'Interactief', subtle:'Subtiel'};
+const UI_LABEL = {rounded:'Rounded & soft', sharp:'Strak & technisch', editorial:'Editorial'};
+const BG_LABEL = {white:'Wit', light:'Licht', dark:'Donker', warm:'Warm getint', mesh:'Mesh / blobs'};
+const COLORMODE_LABEL = {auto:'Auto (uit vibes)', custom:'Eigen kleuren'};
+
+function statsBlock(){
+  const total = subs.length;
+  const newest = subs.filter(s=>s.status==='new').length;
+  const contacted = subs.filter(s=>s.status==='contacted').length;
+  const converted = subs.filter(s=>s.status==='converted').length;
+  const recent = subs.filter(s=>(Date.now()-new Date(s.date).getTime())/86400000 < 7).length;
+  return `
+    <div class="stat"><div class="stat-label"><span class="dot dot-blue"></span>Totaal</div><div class="stat-val">${total}</div><div class="stat-delta mute">Alle inzendingen</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot dot-blue"></span>Nieuw</div><div class="stat-val">${newest}</div><div class="stat-delta">${recent} deze week</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot dot-amber"></span>Opgevolgd</div><div class="stat-val">${contacted}</div><div class="stat-delta mute">${total?Math.round((contacted/total)*100):0}% van inzendingen</div></div>
+    <div class="stat"><div class="stat-label"><span class="dot dot-green"></span>Lead aangemaakt</div><div class="stat-val">${converted}</div><div class="stat-delta">${total?Math.round((converted/total)*100):0}% conversie</div></div>
+  `;
+}
+
+function completeness(s){
+  const a = s.answers || {};
+  const fields = ['q1','q2','q3','q4','q5','q6','q7','q8','q10','q11','q12','q12_bg','q14'];
+  let filled = 0;
+  fields.forEach(f=>{
+    const v = a[f];
+    if(Array.isArray(v) && v.length) filled++;
+    else if(typeof v === 'string' && v.trim()) filled++;
+  });
+  return Math.round((filled/fields.length)*100);
+}
+
+function paletteBlock(c){
+  if(!c) return '';
+  return `<span class="wz-palette">
+    <span class="wz-sw" title="Primary ${c.primary}" style="background:${c.primary}"></span>
+    <span class="wz-sw" title="Accent ${c.accent}" style="background:${c.accent}"></span>
+    <span class="wz-sw" title="Background ${c.background}" style="background:${c.background}"></span>
+  </span>`;
+}
+
+function statusBadge(s){
+  const lbl = STATUSES.find(x=>x.id===s)?.label || s;
+  return `<span class="badge wz-status-${s}">${lbl}</span>`;
+}
+
+function render(){
+  document.getElementById('stats').innerHTML = statsBlock();
+
+  const counts = {all:subs.length};
+  STATUSES.forEach(st=>counts[st.id] = subs.filter(s=>s.status===st.id).length);
+  document.getElementById('filters').innerHTML = `
+    <span style="font-size:11px;color:var(--a-muted);margin-right:4px">STATUS:</span>
+    <div class="filter-pill ${filterStatus==='all'?'active':''}" onclick="setStatus('all')">Alle <span class="filter-count">${counts.all}</span></div>
+    ${STATUSES.map(st=>`<div class="filter-pill ${filterStatus===st.id?'active':''}" onclick="setStatus('${st.id}')">${st.label} <span class="filter-count">${counts[st.id]}</span></div>`).join('')}
+  `;
+
+  let list = subs;
+  if(filterStatus !== 'all') list = list.filter(s=>s.status===filterStatus);
+  if(searchQ){
+    list = list.filter(s=>{
+      const a = s.answers||{}, c = a.contact||{};
+      return (c.name+c.email+c.company+(a.q1||'')+(s.generated?.headline||'')).toLowerCase().includes(searchQ);
+    });
+  }
+  list = [...list].sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  const tbl = document.getElementById('subTable');
+  const empty = document.getElementById('emptyState');
+  if(!list.length){
+    tbl.parentElement.style.display='none';
+    empty.style.display='block';
+    return;
+  }
+  tbl.parentElement.style.display='';
+  empty.style.display='none';
+
+  tbl.innerHTML = `
+    <thead><tr>
+      <th>Wie</th><th>Aanbod</th><th>Hero idee</th><th>Stijl</th><th>Compleet</th><th>Status</th><th style="text-align:right">Datum</th>
+    </tr></thead>
+    <tbody>${list.map(s=>{
+      const a = s.answers||{}, c = a.contact||{};
+      const comp = completeness(s);
+      return `<tr onclick="openSub('${s.id}')" style="cursor:pointer">
+        <td>
+          <div class="wz-name">${escapeHtml(c.name||'—')}</div>
+          <div class="wz-sub">${escapeHtml(c.company||c.email||'')}</div>
+        </td>
+        <td class="sm" style="max-width:240px">${escapeHtml((a.q1||'—').slice(0,90))}${(a.q1||'').length>90?'…':''}</td>
+        <td><div class="wz-quote">"${escapeHtml(s.generated?.headline||'—')}"</div></td>
+        <td>
+          ${paletteBlock(a.q9_colors)}
+          <span style="margin-left:6px;font-size:11px;color:var(--a-muted)">${LAYOUT_LABEL[a.q10]||'—'}</span>
+        </td>
+        <td>
+          <div class="wz-completeness">
+            <span class="bar"><span class="fill" style="width:${comp}%"></span></span>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--a-text-dim)">${comp}%</span>
+          </div>
+        </td>
+        <td>${statusBadge(s.status)}</td>
+        <td class="num" style="text-align:right">${relDate(s.date)}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  `;
+}
+
+function setStatus(s){ filterStatus=s; render(); }
+document.getElementById('search').addEventListener('input', e=>{searchQ=e.target.value.toLowerCase(); render();});
+
+// ===== DETAIL =====
+function row(k, v){
+  if(v==null || v==='' || (Array.isArray(v) && !v.length)) return '';
+  let html = v;
+  if(Array.isArray(v)) html = `<div class="wz-chips">${v.map(x=>`<span class="wz-chip">${escapeHtml(x)}</span>`).join('')}</div>`;
+  else if(typeof v==='string') html = escapeHtml(v);
+  return `<div class="wz-row"><div class="wz-k">${k}</div><div class="wz-v">${html}</div></div>`;
+}
+
+function openSub(id){
+  currentId = id;
+  const s = subs.find(x=>x.id===id);
+  if(!s) return;
+  const a = s.answers||{}, c = a.contact||{}, g = s.generated||{};
+
+  document.getElementById('dpTitle').textContent = c.name || 'Inzending';
+
+  const palette = a.q9_colors||{};
+  const colorCards = ['primary','accent','background'].map(k=>`
+    <div class="wz-color-card">
+      <div class="sw" style="background:${palette[k]||'#222'}"></div>
+      <div class="lbl">${k}</div>
+      <div class="hex">${palette[k]||'—'}</div>
+    </div>`).join('');
+
+  document.getElementById('dpBody').innerHTML = `
+    <!-- AI-gegenereerde hero preview -->
+    ${(g.headline || g.subHeadline || g.ctaText) ? `
+      <div class="wz-gen">
+        <span class="wz-gen-tag">AI-preview</span>
+        <div class="wz-gen-head">${escapeHtml(g.headline||'—')}</div>
+        <div class="wz-gen-sub">${escapeHtml(g.subHeadline||'')}</div>
+        <span class="wz-gen-cta">${escapeHtml(g.ctaText||'—')} →</span>
+      </div>` : ''}
+
+    <div class="wz-section">
+      <div class="wz-section-h">Contactgegevens</div>
+      ${row('Naam', c.name)}
+      ${row('Bedrijf', c.company)}
+      ${row('E-mail', c.email)}
+      ${row('Telefoon', c.phone)}
+      ${row('Huidige site', c.currentSite)}
+      <div class="dp-actions-row">
+        ${c.email?`<a href="mailto:${c.email}?subject=${encodeURIComponent('Je website-preview — '+(c.company||c.name||''))}" class="btn btn-sm">✉ E-mail</a>`:''}
+        ${c.phone?`<a href="tel:${c.phone}" class="btn btn-sm">☏ Bellen</a>`:''}
+        ${c.phone?`<a href="https://wa.me/${c.phone.replace(/[^0-9]/g,'')}" target="_blank" class="btn btn-sm">⌬ WhatsApp</a>`:''}
+        ${c.currentSite?`<a href="https://${c.currentSite.replace(/^https?:\/\//,'')}" target="_blank" class="btn btn-sm">↗ Bekijk site</a>`:''}
+      </div>
+    </div>
+
+    <div class="wz-section">
+      <div class="wz-section-h">Bedrijf & doelgroep</div>
+      ${row(qlabel('q1'), a.q1)}
+      ${row(qlabel('q2'), a.q2)}
+      ${row(qlabel('q3'), a.q3==='Iets anders' ? (a.q3_other||'Iets anders') : a.q3)}
+      ${row(qlabel('q7'), a.q7 ? `<div class="wz-msg-block">${escapeHtml(a.q7)}</div>` : '')}
+    </div>
+
+    <div class="wz-section">
+      <div class="wz-section-h">Site-opzet</div>
+      ${row(qlabel('q4'), a.q4)}
+      ${row(qlabel('q5'), a.q5)}
+      ${row(qlabel('q6'), a.q6)}
+      ${row(qlabel('q14'), a.q14)}
+    </div>
+
+    <div class="wz-section">
+      <div class="wz-section-h">Design-keuzes</div>
+      ${row(qlabel('q8'), a.q8)}
+      <div class="wz-row">
+        <div class="wz-k">${qlabel('q9_colors')}</div>
+        <div class="wz-v">
+          <div style="font-size:11px;color:var(--a-muted);margin-bottom:8px">${COLORMODE_LABEL[a.q9_mode]||'—'}</div>
+          <div class="wz-colors">${colorCards}</div>
+        </div>
+      </div>
+      ${row(qlabel('q10'), LAYOUT_LABEL[a.q10]||a.q10)}
+      ${row(qlabel('q11'), (Array.isArray(a.q11)?a.q11:[a.q11].filter(Boolean)).map(x=>ANIM_LABEL[x]||x))}
+      ${row(qlabel('q12'), UI_LABEL[a.q12]||a.q12)}
+      ${row(qlabel('q12_bg'), BG_LABEL[a.q12_bg]||a.q12_bg)}
+    </div>
+
+    <div class="wz-section">
+      <div class="wz-section-h">Beheer</div>
+      <div class="wz-row">
+        <div class="wz-k">Status</div>
+        <div class="wz-v">
+          <select id="d_status" style="background:var(--a-bg);border:1px solid var(--a-border);border-radius:6px;padding:6px 10px;color:var(--a-text);font-size:12.5px;font-family:inherit" onchange="changeStatus(this.value)">
+            ${STATUSES.map(st=>`<option value="${st.id}" ${s.status===st.id?'selected':''}>${st.label}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      ${row('Ingezonden', fmtDate(s.date))}
+      ${row('ID', `<code style="font-family:var(--font-mono);font-size:11px;color:var(--a-muted)">${s.id}</code>`)}
+    </div>
+  `;
+
+  document.getElementById('convertBtn').style.display = s.status==='converted' ? 'none' : '';
+  document.getElementById('dp').classList.add('open');
+}
+
+function closeDP(){ document.getElementById('dp').classList.remove('open'); }
+
+function changeStatus(v){
+  const s = subs.find(x=>x.id===currentId); if(!s) return;
+  s.status = v;
+  Store.set('wizard_subs', subs);
+  render();
+  toast('Status bijgewerkt');
+}
+
+function delSub(){
+  if(!confirm('Deze inzending verwijderen?')) return;
+  subs = subs.filter(x=>x.id!==currentId);
+  Store.set('wizard_subs', subs);
+  closeDP();
+  render();
+  toast('Verwijderd');
+}
+
+function buildExportText(s){
+  const a = s.answers||{}, c = a.contact||{}, g = s.generated||{};
+  const L = [];
+  L.push('=== WEBSITE WIZARD INZENDING ===');
+  L.push('Datum:       '+ fmtDate(s.date));
+  L.push('Status:      '+ (STATUSES.find(x=>x.id===s.status)?.label || s.status));
+  L.push('ID:          '+ s.id);
+  L.push('');
+  L.push('--- CONTACT ---');
+  L.push('Naam:        '+ (c.name||'—'));
+  L.push('Bedrijf:     '+ (c.company||'—'));
+  L.push('E-mail:      '+ (c.email||'—'));
+  L.push('Telefoon:    '+ (c.phone||'—'));
+  if(c.currentSite) L.push('Huidige site: '+ c.currentSite);
+  L.push('');
+  L.push('--- ANTWOORDEN ---');
+  const fmt = v => Array.isArray(v) ? v.join(', ') : (v||'—');
+  const lines = [
+    ['Q1',  'Aanbod',                fmt(a.q1)],
+    ['Q2',  'Doelgroep',             fmt(a.q2)],
+    ['Q3',  'Hoofdactie bezoeker',   a.q3==='Iets anders' ? (a.q3_other||'Iets anders') : fmt(a.q3)],
+    ['Q4',  'Huidige situatie',      fmt(a.q4)],
+    ['Q5',  'Type site',             fmt(a.q5)],
+    ['Q6',  'Onderdelen / features', fmt(a.q6)],
+    ['Q7',  'Bezwaren bezoekers',    fmt(a.q7)],
+    ['Q8',  'Sfeer / vibes',         fmt(a.q8)],
+    ['Q9',  'Kleuren ('+(COLORMODE_LABEL[a.q9_mode]||'—')+')', a.q9_colors ? `primary ${a.q9_colors.primary} · accent ${a.q9_colors.accent} · background ${a.q9_colors.background}` : '—'],
+    ['Q10', 'Hero layout',           LAYOUT_LABEL[a.q10]||fmt(a.q10)],
+    ['Q11', 'Animatie-stijl',        fmt((Array.isArray(a.q11)?a.q11:[a.q11].filter(Boolean)).map(x=>ANIM_LABEL[x]||x))],
+    ['Q12', 'UI stijl',              UI_LABEL[a.q12]||fmt(a.q12)],
+    ['Q13', 'Achtergrond',           BG_LABEL[a.q12_bg]||fmt(a.q12_bg)],
+    ['Q14', 'Tijdslijn',             fmt(a.q14)]
+  ];
+  lines.forEach(([q,t,v])=>{ L.push(`${q.padEnd(4)} ${t}:`); L.push('     '+ String(v).replace(/\n+/g,' ')); L.push(''); });
+  if(g.headline || g.subHeadline || g.ctaText){
+    L.push('--- AI-GEGENEREERDE HERO ---');
+    L.push('Headline:    '+ (g.headline||'—'));
+    L.push('Subheadline: '+ (g.subHeadline||'—'));
+    L.push('CTA-knop:    '+ (g.ctaText||'—'));
+  }
+  return L.join('\n');
+}
+
+async function copySub(){
+  const s = subs.find(x=>x.id===currentId); if(!s) return;
+  const txt = buildExportText(s);
+  const btn = document.getElementById('copyBtn');
+  try{
+    await navigator.clipboard.writeText(txt);
+    btn.textContent = '✓ Gekopieerd';
+    toast('Inzending naar klembord');
+  }catch(e){
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); btn.textContent = '✓ Gekopieerd'; toast('Inzending naar klembord'); }
+    catch(e2){ toast('Kopiëren mislukt'); }
+    ta.remove();
+  }
+  setTimeout(()=>{ btn.textContent = '⧉ Kopieer'; }, 1800);
+}
+
+function convertToLead(){
+  const s = subs.find(x=>x.id===currentId); if(!s) return;
+  const a = s.answers||{}, c = a.contact||{};
+
+  const leads = Store.get('leads', []);
+  // budget heuristic from q14 + q5
+  let budget = '';
+  if(/webshop/i.test(a.q5||'')) budget = '€5k-10k';
+  else if(/multi/i.test(a.q5||'')) budget = '€5k-10k';
+  else budget = '€2k-5k';
+
+  const message = `Inzending via website-wizard.\n\nAanbod: ${a.q1||'—'}\n\nDoelgroep: ${(a.q2||'').slice(0,200)}\n\nHoofdactie: ${a.q3||'—'}\n\nTijdslijn: ${a.q14||'—'}`;
+
+  const lead = {
+    id: uid(),
+    name: c.name || 'Onbekend',
+    email: c.email || '',
+    company: c.company || '',
+    phone: c.phone || '',
+    service: 'website',
+    budget,
+    message,
+    status: 'new',
+    source: 'website-wizard',
+    notes: `Hero-voorstel: "${s.generated?.headline||''}" · ${LAYOUT_LABEL[a.q10]||''} · ${(a.q8||[]).join(', ')}`,
+    date: new Date().toISOString().slice(0,10)
+  };
+  leads.unshift(lead);
+  Store.set('leads', leads);
+
+  s.status = 'converted';
+  Store.set('wizard_subs', subs);
+
+  toast('Lead aangemaakt in CRM');
+  setTimeout(()=>{ location.href = 'crm.html'; }, 600);
+}
+
+// Close panel on Esc / backdrop
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDP(); });
+
+render();
+</script>
+</body>
+</html>

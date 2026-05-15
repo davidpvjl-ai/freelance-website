@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dashboard — David Spijker Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<script src="admin.js"></script>
+<script>requireAuth()</script>
+<div class="admin-shell">
+  <div id="sbMount"></div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">Dashboard</div>
+        <div class="topbar-title-sub">Overzicht van je business</div>
+      </div>
+      <div class="topbar-right">
+        <input type="text" class="topbar-search" placeholder="Zoeken...">
+        <a href="crm.html" class="btn btn-primary">+ Nieuwe lead</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="stat-grid" id="stats"></div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:18px">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Leads laatste 30 dagen</div>
+            <span class="badge badge-green">+12% vs. vorige maand</span>
+          </div>
+          <div class="chart" id="chart"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Omzet per categorie</div>
+            <span class="panel-link">Dit kwartaal</span>
+          </div>
+          <div style="padding:16px 18px" id="catBreakdown"></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:14px">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Nieuwe leads</div>
+            <a href="crm.html" class="panel-link">Alle leads →</a>
+          </div>
+          <table id="recentLeads"></table>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Recente projecten</div>
+            <a href="projecten.html" class="panel-link">Alle projecten →</a>
+          </div>
+          <div style="padding:10px 12px" id="recentProjects"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('sbMount').outerHTML = renderSidebar('dashboard');
+
+const leads = Store.get('leads', []);
+const projects = Store.get('projects', []);
+const posts = Store.get('posts', []);
+
+// STATS
+const newLeads = leads.filter(l=>l.status==='new').length;
+const won = leads.filter(l=>l.status==='won').length;
+const openDeals = leads.filter(l=>['contacted','quoted'].includes(l.status)).length;
+const published = projects.filter(p=>p.status==='published').length;
+
+document.getElementById('stats').innerHTML = `
+  <div class="stat"><div class="stat-label"><span class="dot dot-blue"></span>Nieuwe leads</div><div class="stat-val">${newLeads}</div><div class="stat-delta">+3 deze week</div></div>
+  <div class="stat"><div class="stat-label"><span class="dot dot-amber"></span>In gesprek</div><div class="stat-val">${openDeals}</div><div class="stat-delta mute">${openDeals} actieve pijplijn</div></div>
+  <div class="stat"><div class="stat-label"><span class="dot dot-green"></span>Gewonnen</div><div class="stat-val">${won}</div><div class="stat-delta">+1 deze maand</div></div>
+  <div class="stat"><div class="stat-label"><span class="dot"></span>Live projecten</div><div class="stat-val">${published}</div><div class="stat-delta mute">${projects.length-published} in concept</div></div>
+`;
+
+// CHART — simple sparkline
+const days = 30;
+const pts = [];
+for(let i=0;i<days;i++){
+  const base = 2 + Math.sin(i*0.4)*1.5 + Math.random()*1.8;
+  pts.push(Math.max(0, Math.round(base)));
+}
+const max = Math.max(...pts);
+const w = 600, h = 120, pad = 10;
+const xStep = (w - pad*2) / (days-1);
+let path = '';
+let area = `M${pad},${h-pad} `;
+pts.forEach((v,i)=>{
+  const x = pad + i*xStep;
+  const y = h - pad - (v/max)*(h-pad*2);
+  path += (i===0?'M':'L') + x + ',' + y + ' ';
+  area += 'L' + x + ',' + y + ' ';
+});
+area += `L${w-pad},${h-pad} Z`;
+document.getElementById('chart').innerHTML = `
+  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#4f7cff" stop-opacity=".35"/><stop offset="100%" stop-color="#4f7cff" stop-opacity="0"/></linearGradient></defs>
+    <path d="${area}" fill="url(#g)"/>
+    <path d="${path}" fill="none" stroke="#4f7cff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts.map((v,i)=>`<circle cx="${pad+i*xStep}" cy="${h-pad-(v/max)*(h-pad*2)}" r="2" fill="#4f7cff"/>`).join('')}
+  </svg>
+`;
+
+// CAT BREAKDOWN
+const catData = [
+  {label:'Websites', val:65, color:'#4f7cff', amount:'€ 18.400'},
+  {label:'Automatisering', val:85, color:'#22c55e', amount:'€ 22.100'},
+  {label:'Eigen projecten', val:30, color:'#a855f7', amount:'€ 4.800'},
+];
+document.getElementById('catBreakdown').innerHTML = catData.map(c=>`
+  <div style="margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:12.5px">
+      <span style="display:flex;align-items:center;gap:7px"><span class="dot" style="background:${c.color};box-shadow:0 0 6px ${c.color}"></span>${c.label}</span>
+      <span class="num" style="font-family:var(--font-mono);color:var(--a-text-dim)">${c.amount}</span>
+    </div>
+    <div style="height:6px;background:var(--a-bg);border-radius:3px;overflow:hidden"><div style="height:100%;width:${c.val}%;background:${c.color};border-radius:3px"></div></div>
+  </div>
+`).join('');
+
+// RECENT LEADS
+const recent = [...leads].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+const statusBadge = (s)=>{
+  const m={new:['Nieuw','blue'],contacted:['In gesprek','amber'],quoted:['Offerte','purple'],won:['Gewonnen','green'],lost:['Verloren','red']};
+  return `<span class="badge badge-${m[s][1]}">${m[s][0]}</span>`;
+};
+document.getElementById('recentLeads').innerHTML = `
+  <thead><tr><th>Naam</th><th>Service</th><th>Status</th><th style="text-align:right">Datum</th></tr></thead>
+  <tbody>${recent.map(l=>`
+    <tr onclick="location.href='crm.html'" style="cursor:pointer">
+      <td><div style="font-weight:500">${escapeHtml(l.name)}</div><div class="sm">${escapeHtml(l.company||l.email)}</div></td>
+      <td><span class="tag">${l.service}</span></td>
+      <td>${statusBadge(l.status)}</td>
+      <td class="num" style="text-align:right">${relDate(l.date)}</td>
+    </tr>
+  `).join('')}</tbody>
+`;
+
+// RECENT PROJECTS
+const recentP = [...projects].sort((a,b)=>new Date(b.created)-new Date(a.created)).slice(0,4);
+const catBadge = (c)=>{
+  const m={website:['Website','blue'],automatisering:['Auto','green'],eigen:['Eigen','purple']};
+  return `<span class="badge badge-${m[c][1]}">${m[c][0]}</span>`;
+};
+document.getElementById('recentProjects').innerHTML = recentP.map(p=>`
+  <a href="projecten.html" style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:7px;text-decoration:none;color:var(--a-text);transition:background .1s" onmouseover="this.style.background='var(--a-surface2)'" onmouseout="this.style.background='transparent'">
+    <div style="width:36px;height:36px;background:var(--a-surface2);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px">${p.category==='website'?'🌐':p.category==='automatisering'?'⚡':'🎬'}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(p.title)}</div>
+      <div style="font-size:11px;color:var(--a-muted)">${catBadge(p.category)} ${p.status==='draft'?'<span class="badge">Concept</span>':'<span class="badge badge-green">Live</span>'}</div>
+    </div>
+  </a>
+`).join('');
+</script>
+</body>
+</html>

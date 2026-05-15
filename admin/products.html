@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Producten — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+<style>
+.modal-wide{max-width:880px}
+.chars{font-size:10.5px;color:var(--a-muted);float:right}
+.chars.warn{color:var(--a-amber)}
+
+/* Tabs in modal */
+.pm-tabs{display:flex;gap:2px;border-bottom:1px solid var(--a-border);margin:-4px -4px 18px;padding:0 4px;overflow-x:auto;scrollbar-width:none}
+.pm-tabs::-webkit-scrollbar{display:none}
+.pm-tab{padding:10px 14px;font-size:13px;font-weight:500;color:var(--a-muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;font-family:inherit;background:none;border-top:0;border-left:0;border-right:0}
+.pm-tab:hover{color:var(--a-text)}
+.pm-tab.active{color:var(--a-accent);border-bottom-color:var(--a-accent)}
+.pm-tab-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--a-bg);color:var(--a-muted);font-size:11px;font-weight:600;margin-right:7px}
+.pm-tab.active .pm-tab-num{background:var(--a-accent-soft);color:var(--a-accent)}
+.pm-pane{display:none}
+.pm-pane.active{display:block}
+
+/* Repeater rows */
+.rep-list{display:flex;flex-direction:column;gap:8px}
+.rep-row{background:var(--a-bg);border:1px solid var(--a-border);border-radius:8px;padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.rep-handle{color:var(--a-muted);font-size:14px;cursor:grab;user-select:none}
+.rep-row input[type="text"],.rep-row textarea,.rep-row select{padding:7px 10px;border:1px solid var(--a-border);border-radius:6px;font-size:13px;font-family:inherit;background:#fff;width:100%}
+.rep-row textarea{min-height:50px;resize:vertical;line-height:1.45}
+.rep-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rep-grid-3{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px}
+.rep-del{background:none;border:0;color:var(--a-muted);font-size:18px;cursor:pointer;padding:4px 8px;line-height:1;border-radius:5px;transition:all .15s}
+.rep-del:hover{color:#dc2626;background:#fef2f2}
+.rep-add{margin-top:10px;padding:10px;border:1px dashed var(--a-border);border-radius:8px;background:transparent;color:var(--a-muted);width:100%;cursor:pointer;font-size:13px;font-family:inherit;transition:all .15s}
+.rep-add:hover{border-color:var(--a-accent);color:var(--a-accent);background:var(--a-accent-soft)}
+
+/* Tier card */
+.tier-card{background:var(--a-bg);border:1px solid var(--a-border);border-radius:10px;padding:14px;margin-bottom:10px}
+.tier-card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.tier-card-num{width:24px;height:24px;border-radius:50%;background:var(--a-accent-soft);color:var(--a-accent);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+.tier-card-title{font-weight:600;font-size:13.5px;color:var(--a-text)}
+.tier-card-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.tier-features-mini textarea{min-height:80px;width:100%;padding:7px 10px;border:1px solid var(--a-border);border-radius:6px;font-size:12.5px;font-family:inherit;line-height:1.5;background:#fff;resize:vertical}
+.tier-features-hint{font-size:11px;color:var(--a-muted);margin-top:4px}
+
+/* Status pill */
+.st-pill{padding:3px 9px;border-radius:11px;font-size:11px;font-weight:600;display:inline-block}
+.st-pill.published{background:rgba(34,197,94,0.10);color:#15803d}
+.st-pill.draft{background:rgba(120,120,120,0.10);color:#525252}
+
+.help-card{background:linear-gradient(135deg,rgba(220,38,38,0.06),rgba(239,68,68,0.04));border:1px solid rgba(220,38,38,0.14);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-size:13px;color:var(--a-text);line-height:1.55}
+.help-card strong{color:#dc2626}
+
+.field small{display:block;color:var(--a-muted);font-size:11.5px;margin-top:4px;line-height:1.4}
+
+.cl-thumb-prod{width:54px;height:54px;border-radius:10px;background:linear-gradient(135deg,#fef2f2,#fee2e2);border:1px solid rgba(220,38,38,0.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+</style>
+</head>
+<body>
+<script src="admin.js"></script>
+<script>requireAuth()</script>
+<div class="admin-shell">
+  <div id="sbMount"></div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">Producten / Automatiseringen</div>
+        <div class="topbar-title-sub">Productpagina's voor jouw automatiseringen beheren</div>
+      </div>
+      <div class="topbar-right">
+        <input type="text" class="topbar-search" placeholder="Zoek..." id="search">
+        <a href="../automatisering.html" target="_blank" class="btn">↗ Automatisering</a>
+        <button class="btn btn-primary" onclick="openModal()">+ Nieuw product</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="list" style="display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <div class="modal-title" id="mTitle">Nieuw product</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="f_id">
+
+      <!-- TABS -->
+      <div class="pm-tabs">
+        <button type="button" class="pm-tab active" data-tab="basis"><span class="pm-tab-num">1</span>Basis</button>
+        <button type="button" class="pm-tab" data-tab="content"><span class="pm-tab-num">2</span>Content</button>
+        <button type="button" class="pm-tab" data-tab="bullets"><span class="pm-tab-num">3</span>Bullets</button>
+        <button type="button" class="pm-tab" data-tab="proces"><span class="pm-tab-num">4</span>Proces</button>
+        <button type="button" class="pm-tab" data-tab="prijzen"><span class="pm-tab-num">5</span>Pakketten</button>
+        <button type="button" class="pm-tab" data-tab="faq"><span class="pm-tab-num">6</span>FAQ</button>
+        <button type="button" class="pm-tab" data-tab="cta"><span class="pm-tab-num">7</span>Slot-CTA</button>
+      </div>
+
+      <!-- TAB 1: BASIS -->
+      <div class="pm-pane active" data-pane="basis">
+        <div class="help-card">
+          <strong>Tip:</strong> de productpagina werkt het best als je de tagline kort houdt (max 10 woorden) en de samenvatting concreet maakt — wat het doet, voor wie, en het belangrijkste voordeel.
+        </div>
+
+        <div class="field"><label>Producttitel</label><input type="text" id="f_title" placeholder="bv. Social Media AI Bot" oninput="autoSlug()"></div>
+
+        <div class="field-row">
+          <div class="field"><label>Slug / URL</label><input type="text" id="f_slug" placeholder="social-media-ai-bot"><small>Wordt: <code>/product.html?slug=...</code></small></div>
+          <div class="field"><label>Status</label><select id="f_status"><option value="draft">Concept</option><option value="published">Gepubliceerd</option></select></div>
+        </div>
+
+        <div class="field"><label>Tagline / headline <span class="chars" id="chTag">0 / 80</span></label><input type="text" id="f_tagline" maxlength="100" oninput="updChars()" placeholder="bv. Een AI-agent die jouw social media draait — op autopilot"><small>Format: "[Wat het doet] voor [doelgroep], zonder [pijnpunt]"</small></div>
+
+        <div class="field"><label>Korte samenvatting <span class="chars" id="chEx">0 / 200</span></label><textarea id="f_excerpt" maxlength="240" oninput="updChars()" placeholder="1-2 zinnen die het verkopen"></textarea></div>
+
+        <div class="field"><label>Doelgroep (audience)</label><input type="text" id="f_audience" placeholder="bv. evenementlocaties, hotels en MKB met merkidentiteit"><small>Voor SEO schema en interne filtering. Komt niet zichtbaar op de pagina.</small></div>
+
+        <div class="field-row">
+          <div class="field"><label>Emoji (hero visual)</label><input type="text" id="f_emoji" maxlength="2" placeholder="🤖"></div>
+          <div class="field"><label>Aanmaakdatum</label><input type="date" id="f_created"></div>
+        </div>
+
+        <div class="field"><label>Hoofdafbeelding (optioneel — vervangt de emoji-visual)</label>
+          <input type="file" id="f_image" accept="image/*">
+          <small>Wordt gebruikt als hero-visual + og:image voor social shares</small>
+          <div id="imgPreview" style="margin-top:8px"></div>
+        </div>
+
+        <div class="field"><label>Gekoppelde blog (uitleg-artikel)</label>
+          <select id="f_relatedPost"><option value="">Geen blog gekoppeld</option></select>
+          <small>Linkt onderaan de productpagina naar deze blogpost. Maak de blog eerst aan onder "Content".</small>
+        </div>
+      </div>
+
+      <!-- TAB 2: CONTENT (probleem + oplossing) -->
+      <div class="pm-pane" data-pane="content">
+        <div class="help-card">
+          <strong>Het probleem:</strong> 3-4 zinnen die de pijn herkenbaar maken — geen oplossing, alleen herkenning.<br>
+          <strong>De oplossing:</strong> in normale taal uitleggen wat het is en wat het anders maakt.
+        </div>
+
+        <div class="field"><label>Het probleem (HTML ondersteund: &lt;p&gt;)</label>
+          <textarea id="f_problem" style="min-height:140px" placeholder="<p>Als [doelgroep] heb je [pijnpunt]...</p><p>Het kost tijd, geld en energie...</p>"></textarea>
+        </div>
+
+        <div class="field"><label>De oplossing (HTML ondersteund: &lt;p&gt;)</label>
+          <textarea id="f_solution" style="min-height:160px" placeholder="<p>Wij bouwen een [type oplossing]...</p><p>[Wat het anders maakt]...</p>"></textarea>
+        </div>
+      </div>
+
+      <!-- TAB 3: BULLETS (forWho + whatYouGet + results) -->
+      <div class="pm-pane" data-pane="bullets">
+        <div class="help-card">
+          Drie bullet-lijsten: <strong>voor wie</strong> (kwalificeert leads), <strong>wat zit erin</strong> (concrete deliverables), <strong>wat levert het op</strong> (resultaten met icoon).
+        </div>
+
+        <div class="field"><label>Voor wie is dit? — bullets</label>
+          <div class="rep-list" id="repForWho"></div>
+          <button type="button" class="rep-add" onclick="addForWho()">+ Voeg toe</button>
+        </div>
+
+        <div class="field"><label>Wat zit erin? — concrete deliverables</label>
+          <div class="rep-list" id="repWhat"></div>
+          <button type="button" class="rep-add" onclick="addWhat()">+ Voeg toe</button>
+        </div>
+
+        <div class="field"><label>Wat levert het op? — resultaten met icoon</label>
+          <div class="rep-list" id="repResults"></div>
+          <button type="button" class="rep-add" onclick="addResult()">+ Voeg toe</button>
+        </div>
+      </div>
+
+      <!-- TAB 4: PROCES -->
+      <div class="pm-pane" data-pane="proces">
+        <div class="help-card">
+          Stappen die de drempel verlagen — meestal 3-4 stappen, korte titel + 1 zin uitleg + duur.
+        </div>
+
+        <div class="field"><label>Hoe werkt het? — stappen</label>
+          <div class="rep-list" id="repProcess"></div>
+          <button type="button" class="rep-add" onclick="addStep()">+ Stap toevoegen</button>
+        </div>
+      </div>
+
+      <!-- TAB 5: PRIJZEN -->
+      <div class="pm-pane" data-pane="prijzen">
+        <div class="help-card">
+          Drie pakketten naast elkaar. Geef het middelste pakket een badge (bv. "Aanbevolen") om visueel uit te lichten.
+        </div>
+
+        <div id="repTiers"></div>
+        <button type="button" class="rep-add" onclick="addTier()">+ Pakket toevoegen</button>
+      </div>
+
+      <!-- TAB 6: FAQ -->
+      <div class="pm-pane" data-pane="faq">
+        <div class="help-card">
+          3-5 eerlijke vragen die jouw doelgroep stelt. Beantwoord ze concreet — geen marketing-gladheid.
+        </div>
+
+        <div class="field"><label>Veelgestelde vragen</label>
+          <div class="rep-list" id="repFaq"></div>
+          <button type="button" class="rep-add" onclick="addFaq()">+ Vraag toevoegen</button>
+        </div>
+      </div>
+
+      <!-- TAB 7: SLOT-CTA -->
+      <div class="pm-pane" data-pane="cta">
+        <div class="help-card">
+          Korte tekst + twee knoppen onderaan de pagina. Format: <em>"Klaar om [resultaat] te krijgen zonder [pijnpunt]?"</em>
+        </div>
+
+        <div class="field"><label>Slot-headline</label>
+          <input type="text" id="f_ctaHead" placeholder="Klaar voor consistente social media zonder dagelijks werk?">
+        </div>
+        <div class="field"><label>Slot-subtekst</label>
+          <textarea id="f_ctaSub" style="min-height:70px" placeholder="Plan een vrijblijvend gesprek..."></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Primaire knop tekst</label><input type="text" id="f_ctaP" placeholder="Plan gesprek"></div>
+          <div class="field"><label>Primaire knop URL</label><input type="text" id="f_ctaPUrl" placeholder="index.html#contact" value="index.html#contact"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Secundaire knop tekst</label><input type="text" id="f_ctaS" placeholder="Stuur bericht"></div>
+          <div class="field"><label>Secundaire knop URL</label><input type="text" id="f_ctaSUrl" placeholder="index.html#contact" value="index.html#contact"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-danger" id="btnDelete" onclick="delProduct()" style="margin-right:auto;display:none">Verwijderen</button>
+      <a class="btn" id="btnPreview" target="_blank" style="display:none">↗ Bekijk pagina</a>
+      <button class="btn" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="saveProduct()">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('sbMount').outerHTML = renderSidebar('products');
+let products = Store.get('products', []);
+let posts = Store.get('posts', []);
+let searchQ = '';
+
+// Working copies for repeaters
+let _forWho=[], _what=[], _results=[], _process=[], _tiers=[], _faqs=[], _img='';
+
+function render(){
+  let list = products;
+  if(searchQ) list = list.filter(p=>(p.title+(p.tagline||'')+(p.excerpt||'')).toLowerCase().includes(searchQ));
+  const el = document.getElementById('list');
+  if(!list.length){
+    el.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">⚉</div>
+        <div class="empty-title">Nog geen producten</div>
+        <div class="empty-sub">Maak je eerste productpagina voor een automatisering.</div>
+        <button class="btn btn-primary" style="margin-top:14px" onclick="openModal()">+ Nieuw product</button>
+      </div>`;
+    return;
+  }
+  el.innerHTML = list.map(p=>{
+    const tiers = (p.tiers||[]).length;
+    const startsAt = p.tiers && p.tiers[0] ? p.tiers[0].setup : '—';
+    const blog = p.relatedPost ? posts.find(x=>x.slug===p.relatedPost) : null;
+    const thumb = p.image
+      ? `<div class="cl-thumb" style="background:url(${p.image}) center/cover"></div>`
+      : `<div class="cl-thumb-prod">${p.emoji||'⚡'}</div>`;
+    return `
+      <div class="cl-card" onclick="editProduct('${p.id}')">
+        <div class="cl-row">
+          ${thumb}
+          <div class="cl-body">
+            <div class="cl-title">${escapeHtml(p.title)}</div>
+            <div class="cl-excerpt">${escapeHtml(p.tagline||p.excerpt||'')}</div>
+            <div class="cl-meta">
+              <span class="st-pill ${p.status==='published'?'published':'draft'}">${p.status==='published'?'Live':'Concept'}</span>
+              <span style="color:var(--a-muted)">${tiers} pakket${tiers===1?'':'ten'} · vanaf ${escapeHtml(startsAt)}</span>
+              ${blog ? `<span style="color:var(--a-muted)">📖 ${escapeHtml(blog.title)}</span>` : '<span style="color:var(--a-amber)">⚠ geen blog gekoppeld</span>'}
+              <span style="margin-left:auto;color:var(--a-muted);font-family:var(--a-font-mono);font-size:11px">/${escapeHtml(p.slug||'')}</span>
+            </div>
+          </div>
+          <div style="color:var(--a-muted);font-size:18px">›</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('search').addEventListener('input', e=>{ searchQ=e.target.value.toLowerCase(); render(); });
+
+// ===== TABS =====
+document.querySelectorAll('.pm-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    const t = tab.dataset.tab;
+    document.querySelectorAll('.pm-tab').forEach(x=>x.classList.toggle('active', x.dataset.tab===t));
+    document.querySelectorAll('.pm-pane').forEach(x=>x.classList.toggle('active', x.dataset.pane===t));
+  });
+});
+
+// ===== SLUG / CHARS =====
+function slugify(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+function autoSlug(){
+  const slugEl = document.getElementById('f_slug');
+  if(slugEl.dataset.touched) return;
+  slugEl.value = slugify(document.getElementById('f_title').value);
+}
+document.getElementById('f_slug').addEventListener('input', e=>{ e.target.dataset.touched='1'; });
+function updChars(){
+  const t = document.getElementById('f_tagline').value.length;
+  document.getElementById('chTag').textContent = t+' / 80';
+  document.getElementById('chTag').classList.toggle('warn', t>80);
+  const e = document.getElementById('f_excerpt').value.length;
+  document.getElementById('chEx').textContent = e+' / 200';
+  document.getElementById('chEx').classList.toggle('warn', e>200);
+}
+
+// ===== REPEATERS =====
+function renderForWho(){
+  const c = document.getElementById('repForWho');
+  c.innerHTML = _forWho.map((v,i)=>`
+    <div class="rep-row" style="grid-template-columns:auto 1fr auto">
+      <span class="rep-handle">⋮⋮</span>
+      <input type="text" value="${escapeAttr(v)}" oninput="_forWho[${i}]=this.value" placeholder="bv. Hotels met 20+ kamers">
+      <button class="rep-del" onclick="_forWho.splice(${i},1);renderForWho()" title="Verwijderen">×</button>
+    </div>
+  `).join('');
+}
+function addForWho(){ _forWho.push(''); renderForWho(); }
+
+function renderWhat(){
+  const c = document.getElementById('repWhat');
+  c.innerHTML = _what.map((v,i)=>`
+    <div class="rep-row" style="grid-template-columns:auto 1fr auto">
+      <span class="rep-handle">⋮⋮</span>
+      <input type="text" value="${escapeAttr(v)}" oninput="_what[${i}]=this.value" placeholder="bv. Wekelijks 5-7 posts">
+      <button class="rep-del" onclick="_what.splice(${i},1);renderWhat()">×</button>
+    </div>
+  `).join('');
+}
+function addWhat(){ _what.push(''); renderWhat(); }
+
+function renderResults(){
+  const c = document.getElementById('repResults');
+  c.innerHTML = _results.map((r,i)=>`
+    <div class="rep-row" style="grid-template-columns:auto 60px 1fr auto">
+      <span class="rep-handle">⋮⋮</span>
+      <input type="text" value="${escapeAttr(r.icon||'')}" maxlength="2" oninput="_results[${i}].icon=this.value" placeholder="⏱" style="text-align:center">
+      <input type="text" value="${escapeAttr(r.label||'')}" oninput="_results[${i}].label=this.value" placeholder="bv. Bespaart 8-10 uur per week">
+      <button class="rep-del" onclick="_results.splice(${i},1);renderResults()">×</button>
+    </div>
+  `).join('');
+}
+function addResult(){ _results.push({icon:'',label:''}); renderResults(); }
+
+function renderProcess(){
+  const c = document.getElementById('repProcess');
+  c.innerHTML = _process.map((s,i)=>`
+    <div class="rep-row" style="grid-template-columns:auto 1fr auto">
+      <span class="rep-handle">⋮⋮</span>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div class="rep-grid-2">
+          <input type="text" value="${escapeAttr(s.title||'')}" oninput="_process[${i}].title=this.value" placeholder="Stap titel">
+          <input type="text" value="${escapeAttr(s.duration||'')}" oninput="_process[${i}].duration=this.value" placeholder="Duur (bv. 30 min, 1-2 weken)">
+        </div>
+        <textarea oninput="_process[${i}].desc=this.value" placeholder="Korte uitleg van deze stap...">${escapeAttr(s.desc||'')}</textarea>
+      </div>
+      <button class="rep-del" onclick="_process.splice(${i},1);renderProcess()">×</button>
+    </div>
+  `).join('');
+}
+function addStep(){ _process.push({title:'',desc:'',duration:''}); renderProcess(); }
+
+function renderTiers(){
+  const c = document.getElementById('repTiers');
+  c.innerHTML = _tiers.map((t,i)=>`
+    <div class="tier-card">
+      <div class="tier-card-head">
+        <div class="tier-card-num">${i+1}</div>
+        <div class="tier-card-title">Pakket ${i+1}</div>
+        <button class="rep-del" style="margin-left:auto" onclick="_tiers.splice(${i},1);renderTiers()" title="Verwijder pakket">×</button>
+      </div>
+      <div class="tier-card-grid">
+        <input type="text" value="${escapeAttr(t.name||'')}" oninput="_tiers[${i}].name=this.value" placeholder="Naam (bv. Pro)">
+        <input type="text" value="${escapeAttr(t.desc||'')}" oninput="_tiers[${i}].desc=this.value" placeholder="Subline (bv. Voor groeiende bedrijven)">
+        <input type="text" value="${escapeAttr(t.setup||'')}" oninput="_tiers[${i}].setup=this.value" placeholder="Setup (€ 2.450)">
+        <input type="text" value="${escapeAttr(t.monthly||'')}" oninput="_tiers[${i}].monthly=this.value" placeholder="Per maand (€ 395/mnd)">
+      </div>
+      <div class="rep-grid-2" style="margin-bottom:10px">
+        <input type="text" value="${escapeAttr(t.badge||'')}" oninput="_tiers[${i}].badge=this.value" placeholder="Badge (bv. Aanbevolen — leeg = geen)">
+        <input type="text" value="${escapeAttr(t.cta||'')}" oninput="_tiers[${i}].cta=this.value" placeholder="Knop tekst (bv. Kies Pro)">
+      </div>
+      <div class="tier-features-mini">
+        <textarea oninput="_tiers[${i}].features=this.value.split('\\n').map(s=>s.trim()).filter(Boolean)" placeholder="Features — één per regel">${(t.features||[]).join('\n')}</textarea>
+        <div class="tier-features-hint">Eén feature per regel. Een vinkje wordt automatisch toegevoegd.</div>
+      </div>
+    </div>
+  `).join('');
+}
+function addTier(){ _tiers.push({name:'',desc:'',setup:'',monthly:'',badge:'',cta:'Kies dit pakket',features:[]}); renderTiers(); }
+
+function renderFaq(){
+  const c = document.getElementById('repFaq');
+  c.innerHTML = _faqs.map((f,i)=>`
+    <div class="rep-row" style="grid-template-columns:auto 1fr auto">
+      <span class="rep-handle">⋮⋮</span>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <input type="text" value="${escapeAttr(f.q||'')}" oninput="_faqs[${i}].q=this.value" placeholder="Vraag (bv. Kan ik op elk moment stoppen?)">
+        <textarea oninput="_faqs[${i}].a=this.value" placeholder="Antwoord...">${escapeAttr(f.a||'')}</textarea>
+      </div>
+      <button class="rep-del" onclick="_faqs.splice(${i},1);renderFaq()">×</button>
+    </div>
+  `).join('');
+}
+function addFaq(){ _faqs.push({q:'',a:''}); renderFaq(); }
+
+function escapeAttr(s){ return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+// ===== POSTS DROPDOWN =====
+function fillPostsDropdown(){
+  const sel = document.getElementById('f_relatedPost');
+  const opts = ['<option value="">Geen blog gekoppeld</option>'].concat(
+    posts.map(p=>`<option value="${escapeAttr(p.slug)}">${escapeHtml(p.title)} ${p.status==='draft'?'(concept)':''}</option>`)
+  );
+  sel.innerHTML = opts.join('');
+}
+
+// ===== IMAGE =====
+document.getElementById('f_image').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev => { _img = ev.target.result; document.getElementById('imgPreview').innerHTML = `<img src="${_img}" style="max-height:120px;border-radius:8px;border:1px solid var(--a-border)">`; };
+  r.readAsDataURL(f);
+});
+
+// ===== MODAL =====
+function resetModal(){
+  ['f_id','f_title','f_slug','f_tagline','f_excerpt','f_audience','f_emoji','f_problem','f_solution','f_ctaHead','f_ctaSub','f_ctaP','f_ctaS'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f_status').value='draft';
+  document.getElementById('f_created').value=new Date().toISOString().slice(0,10);
+  document.getElementById('f_relatedPost').value='';
+  document.getElementById('f_ctaPUrl').value='index.html#contact';
+  document.getElementById('f_ctaSUrl').value='index.html#contact';
+  document.getElementById('f_slug').dataset.touched='';
+  document.getElementById('imgPreview').innerHTML='';
+  _img=''; _forWho=[]; _what=[]; _results=[]; _process=[]; _tiers=[]; _faqs=[];
+  // Switch to first tab
+  document.querySelectorAll('.pm-tab').forEach((x,i)=>x.classList.toggle('active', i===0));
+  document.querySelectorAll('.pm-pane').forEach((x,i)=>x.classList.toggle('active', i===0));
+  document.getElementById('btnDelete').style.display='none';
+  document.getElementById('btnPreview').style.display='none';
+  fillPostsDropdown();
+  renderForWho(); renderWhat(); renderResults(); renderProcess(); renderTiers(); renderFaq();
+  updChars();
+}
+
+function openModal(){
+  document.getElementById('mTitle').textContent='Nieuw product';
+  resetModal();
+  // Sensible defaults — empty starter sections
+  _tiers = [
+    {name:'Basis',desc:'',setup:'',monthly:'',badge:'',cta:'Kies Basis',features:[]},
+    {name:'Pro',desc:'',setup:'',monthly:'',badge:'Aanbevolen',cta:'Kies Pro',features:[]},
+    {name:'Maatwerk',desc:'',setup:'Op aanvraag',monthly:'',badge:'',cta:'Plan gesprek',features:[]}
+  ];
+  renderTiers();
+  document.getElementById('modal').classList.add('open');
+}
+
+function editProduct(id){
+  const p = products.find(x=>x.id===id); if(!p) return;
+  resetModal();
+  document.getElementById('mTitle').textContent='Product bewerken';
+  document.getElementById('f_id').value=p.id;
+  document.getElementById('f_title').value=p.title||'';
+  document.getElementById('f_slug').value=p.slug||'';
+  document.getElementById('f_slug').dataset.touched='1';
+  document.getElementById('f_tagline').value=p.tagline||'';
+  document.getElementById('f_excerpt').value=p.excerpt||'';
+  document.getElementById('f_audience').value=p.audience||'';
+  document.getElementById('f_emoji').value=p.emoji||'';
+  document.getElementById('f_status').value=p.status||'draft';
+  document.getElementById('f_created').value=p.created||new Date().toISOString().slice(0,10);
+  document.getElementById('f_relatedPost').value=p.relatedPost||'';
+  document.getElementById('f_problem').value=p.problem||'';
+  document.getElementById('f_solution').value=p.solution||'';
+  document.getElementById('f_ctaHead').value=p.finalCta?.headline||'';
+  document.getElementById('f_ctaSub').value=p.finalCta?.sub||'';
+  document.getElementById('f_ctaP').value=p.finalCta?.primary||'';
+  document.getElementById('f_ctaPUrl').value=p.finalCta?.primaryUrl||'index.html#contact';
+  document.getElementById('f_ctaS').value=p.finalCta?.secondary||'';
+  document.getElementById('f_ctaSUrl').value=p.finalCta?.secondaryUrl||'index.html#contact';
+  _img = p.image||'';
+  if(_img) document.getElementById('imgPreview').innerHTML = `<img src="${_img}" style="max-height:120px;border-radius:8px;border:1px solid var(--a-border)">`;
+  _forWho = [...(p.forWho||[])];
+  _what = [...(p.whatYouGet||[])];
+  _results = (p.results||[]).map(r=>({...r}));
+  _process = (p.process||[]).map(s=>({...s}));
+  _tiers = (p.tiers||[]).map(t=>({...t,features:[...(t.features||[])]}));
+  _faqs = (p.faqs||[]).map(f=>({...f}));
+  renderForWho(); renderWhat(); renderResults(); renderProcess(); renderTiers(); renderFaq();
+  updChars();
+  document.getElementById('btnDelete').style.display='inline-flex';
+  const prev = document.getElementById('btnPreview');
+  prev.style.display='inline-flex';
+  prev.href = '../product.html?slug='+encodeURIComponent(p.slug||'');
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+
+function saveProduct(){
+  const id = document.getElementById('f_id').value;
+  const title = document.getElementById('f_title').value.trim() || 'Naamloos product';
+  let slug = document.getElementById('f_slug').value.trim() || slugify(title);
+  const dup = products.find(p=>p.slug===slug && p.id!==id);
+  if(dup) slug = slug+'-'+Math.random().toString(36).slice(2,5);
+
+  // Normalize tier features (in case textarea wasn't blurred)
+  const tiers = _tiers.map(t=>{
+    let features = t.features;
+    if(typeof features === 'string') features = features.split('\n').map(s=>s.trim()).filter(Boolean);
+    return {...t, features: features || []};
+  });
+
+  const data = {
+    id: id || uid(),
+    title,
+    slug,
+    tagline: document.getElementById('f_tagline').value.trim(),
+    excerpt: document.getElementById('f_excerpt').value.trim(),
+    audience: document.getElementById('f_audience').value.trim(),
+    emoji: document.getElementById('f_emoji').value,
+    image: _img,
+    status: document.getElementById('f_status').value,
+    relatedPost: document.getElementById('f_relatedPost').value,
+    problem: document.getElementById('f_problem').value.trim(),
+    solution: document.getElementById('f_solution').value.trim(),
+    forWho: _forWho.filter(Boolean),
+    whatYouGet: _what.filter(Boolean),
+    results: _results.filter(r=>r.label),
+    process: _process.filter(s=>s.title),
+    tiers: tiers.filter(t=>t.name),
+    faqs: _faqs.filter(f=>f.q),
+    finalCta: {
+      headline: document.getElementById('f_ctaHead').value.trim(),
+      sub: document.getElementById('f_ctaSub').value.trim(),
+      primary: document.getElementById('f_ctaP').value.trim(),
+      primaryUrl: document.getElementById('f_ctaPUrl').value.trim() || 'index.html#contact',
+      secondary: document.getElementById('f_ctaS').value.trim(),
+      secondaryUrl: document.getElementById('f_ctaSUrl').value.trim() || 'index.html#contact'
+    },
+    created: document.getElementById('f_created').value || new Date().toISOString().slice(0,10)
+  };
+  if(id){ products = products.map(p=>p.id===id?data:p); toast('Product bijgewerkt'); }
+  else  { products.unshift(data); toast('Product toegevoegd'); }
+  Store.set('products', products);
+  closeModal(); render();
+}
+
+function delProduct(){
+  if(!confirm('Dit product verwijderen? Dit kan niet ongedaan worden gemaakt.')) return;
+  const id = document.getElementById('f_id').value;
+  products = products.filter(p=>p.id!==id);
+  Store.set('products', products);
+  closeModal(); render();
+  toast('Product verwijderd');
+}
+
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal') closeModal(); });
+
+render();
+</script>
+</body>
+</html>

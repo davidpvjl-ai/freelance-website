@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Content — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+<style>
+.modal-wide{max-width:780px}
+.seo-preview{background:var(--a-bg);border:1px solid var(--a-border);border-radius:7px;padding:12px;margin-top:6px}
+.seo-preview-title{color:#8ab4f8;font-size:14px;line-height:1.3;margin-bottom:2px;font-family:'arial',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seo-preview-url{color:#8f9196;font-size:11px;margin-bottom:4px;font-family:'arial',sans-serif}
+.seo-preview-desc{color:#bdc1c6;font-size:12px;line-height:1.4;font-family:'arial',sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.body-editor{min-height:260px!important;font-family:var(--font-body);line-height:1.6}
+.chars{font-size:10.5px;color:var(--a-muted);float:right}
+.chars.warn{color:var(--a-amber)}
+
+/* AI Assistant */
+.ai-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:0 0 18px;background:linear-gradient(135deg,rgba(23,89,232,0.08),rgba(124,58,237,0.06));border:1px solid rgba(23,89,232,0.15);border-radius:10px}
+.ai-bar-text{font-size:13px;color:var(--a-text);flex:1}
+.ai-bar-text strong{color:var(--a-text);font-weight:600}
+.btn-ai{background:linear-gradient(135deg,#1759e8,#7c3aed);color:#fff;border:0;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:transform .15s,box-shadow .15s;font-family:inherit}
+.btn-ai:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(23,89,232,0.25)}
+.btn-ai:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+
+.ai-panel{position:fixed;inset:0;background:rgba(15,23,42,0.55);backdrop-filter:blur(4px);display:none;z-index:200;align-items:center;justify-content:center;padding:20px}
+.ai-panel.open{display:flex}
+.ai-panel-card{background:#fff;border-radius:16px;width:100%;max-width:680px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,0.3);overflow:hidden}
+.ai-panel-head{padding:22px 26px 14px;border-bottom:1px solid var(--a-border);display:flex;align-items:center;gap:12px}
+.ai-panel-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#1759e8,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.ai-panel-title{font-weight:700;font-size:17px;color:var(--a-text)}
+.ai-panel-sub{font-size:12.5px;color:var(--a-muted);margin-top:2px}
+.ai-panel-close{margin-left:auto;background:none;border:0;font-size:22px;color:var(--a-muted);cursor:pointer;padding:0 6px;line-height:1}
+.ai-panel-body{padding:20px 26px;overflow-y:auto;flex:1}
+.ai-panel-foot{padding:14px 26px;border-top:1px solid var(--a-border);display:flex;justify-content:flex-end;gap:8px;background:#fafbfd}
+.ai-field{margin-bottom:14px}
+.ai-field label{display:block;font-size:12.5px;font-weight:600;color:var(--a-text);margin-bottom:6px}
+.ai-field label .opt{color:var(--a-muted);font-weight:400;font-size:11.5px;margin-left:6px}
+.ai-field input,.ai-field textarea,.ai-field select{width:100%;padding:9px 12px;border:1px solid var(--a-border);border-radius:7px;font-size:13.5px;font-family:inherit;background:#fff;color:var(--a-text)}
+.ai-field textarea{min-height:90px;resize:vertical;line-height:1.5}
+.ai-field input:focus,.ai-field textarea:focus,.ai-field select:focus{outline:none;border-color:rgba(23,89,232,0.5);box-shadow:0 0 0 3px rgba(23,89,232,0.1)}
+.ai-field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ai-hint{font-size:11.5px;color:var(--a-muted);margin-top:5px;line-height:1.45}
+.ai-status{padding:14px;border-radius:8px;background:#f4f6fb;font-size:13px;color:var(--a-muted);text-align:center;display:none}
+.ai-status.show{display:block}
+.ai-status .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(23,89,232,0.2);border-top-color:#1759e8;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-error{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.media-tabs{display:flex;gap:4px;margin-bottom:8px}
+.media-tab{padding:5px 12px;font-size:11.5px;border-radius:6px;background:var(--a-surface);border:1px solid var(--a-border);color:var(--a-text-dim);cursor:pointer}
+.media-tab.active{background:var(--a-accent-soft);border-color:var(--a-accent);color:var(--a-accent)}
+</style>
+</head>
+<body>
+<script src="admin.js"></script>
+<script>requireAuth()</script>
+<div class="admin-shell">
+  <div id="sbMount"></div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">Content / Blog</div>
+        <div class="topbar-title-sub">SEO-geoptimaliseerde artikelen beheren</div>
+      </div>
+      <div class="topbar-right">
+        <input type="text" class="topbar-search" placeholder="Zoek posts..." id="search">
+        <a href="../blog.html" target="_blank" class="btn">↗ Bekijk blog</a>
+        <button class="btn btn-primary" onclick="openModal()">+ Nieuwe post</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="filter-bar" id="filters"></div>
+      <div id="list" style="display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <div class="modal-title" id="mTitle">Nieuwe post</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="f_id">
+
+      <!-- AI ASSISTENT -->
+      <div class="ai-bar" id="aiBar">
+        <div class="ai-bar-text"><strong>✨ Claude AI-assistent</strong> — laat Claude een concept-blogpost voor je schrijven op basis van jouw input.</div>
+        <button type="button" class="btn-ai" onclick="openAiPanel()">✨ Schrijf met Claude</button>
+      </div>
+
+      <!-- TITEL + SLUG -->
+      <div class="field"><label>Titel (wordt ook H1 en meta-title-fallback)</label><input type="text" id="f_title" placeholder="bv. Waarom elke MKB'er moet automatiseren in 2026" oninput="autoSlug()"></div>
+      <div class="field-row">
+        <div class="field"><label>H1 (optioneel — override titel)</label><input type="text" id="f_h1" placeholder="Laat leeg om titel te gebruiken"></div>
+        <div class="field"><label>Slug / URL</label><input type="text" id="f_slug" placeholder="mkb-automatiseren-2026"></div>
+      </div>
+
+      <!-- EXCERPT -->
+      <div class="field">
+        <label>Korte samenvatting <span class="chars" id="chExcerpt">0 / 160</span></label>
+        <textarea id="f_excerpt" maxlength="200" oninput="updChars()" placeholder="1-2 zinnen die de lezer trekken"></textarea>
+      </div>
+
+      <!-- MEDIA -->
+      <div class="field">
+        <label>Hoofdmedia (hero)</label>
+        <div class="media-tabs">
+          <div class="media-tab active" id="tabImg" onclick="setMediaTab('image')">🖼️ Afbeelding</div>
+          <div class="media-tab" id="tabVid" onclick="setMediaTab('video')">▶ YouTube</div>
+        </div>
+        <div id="mediaImg">
+          <input type="file" id="f_image" accept="image/*">
+          <small>Wordt gebruikt als hero + og:image voor social shares</small>
+          <div id="imgPreview" style="margin-top:8px"></div>
+        </div>
+        <div id="mediaVid" style="display:none">
+          <input type="text" id="f_video" placeholder="https://youtube.com/watch?v=...">
+          <small>YouTube/TikTok/Vimeo link — wordt embedded boven de post</small>
+        </div>
+      </div>
+
+      <!-- BODY -->
+      <div class="field">
+        <label>Artikel body <small style="display:inline;margin-left:6px">HTML ondersteund: &lt;h2&gt; &lt;p&gt; &lt;ul&gt; &lt;li&gt; &lt;a&gt;</small></label>
+        <textarea id="f_body" class="body-editor" placeholder="<h2>Inleiding</h2><p>Je eerste alinea...</p>"></textarea>
+      </div>
+
+      <!-- CATEGORIE + TAGS -->
+      <div class="field-row">
+        <div class="field"><label>Categorie</label><select id="f_cat"><option value="website">Websites</option><option value="automatisering">Automatisering</option><option value="eigen">Eigen projecten</option></select></div>
+        <div class="field"><label>Status</label><select id="f_status"><option value="draft">Concept</option><option value="published">Gepubliceerd</option></select></div>
+      </div>
+      <div class="field"><label>Tags <small style="display:inline;margin-left:6px">komma-gescheiden</small></label><input type="text" id="f_tags" placeholder="n8n, productiviteit, ai"></div>
+
+      <!-- PROJECT LINK -->
+      <div class="field"><label>Gekoppeld project <small style="display:inline;margin-left:6px">voor "gerelateerde case study"-blok</small></label><select id="f_project"><option value="">Geen</option></select></div>
+
+      <!-- META -->
+      <div class="field-row">
+        <div class="field"><label>Emoji</label><input type="text" id="f_emoji" maxlength="2" placeholder="⚡"></div>
+        <div class="field"><label>Publicatiedatum</label><input type="date" id="f_date"></div>
+      </div>
+
+      <!-- SEO -->
+      <div class="field">
+        <label>Meta titel <span class="chars" id="chMetaT">0 / 60</span></label>
+        <input type="text" id="f_metaTitle" maxlength="80" oninput="updChars();updSeoPrev()" placeholder="Laat leeg om titel te gebruiken">
+      </div>
+      <div class="field">
+        <label>Meta beschrijving <span class="chars" id="chMetaD">0 / 160</span></label>
+        <textarea id="f_metaDesc" maxlength="200" oninput="updChars();updSeoPrev()" placeholder="Wat zoekers zien in Google resultaten"></textarea>
+      </div>
+      <div class="field">
+        <label>SEO preview</label>
+        <div class="seo-preview">
+          <div class="seo-preview-title" id="prevTitle">Titel hier</div>
+          <div class="seo-preview-url" id="prevUrl">davidspijker.nl › blog › slug</div>
+          <div class="seo-preview-desc" id="prevDesc">Meta beschrijving verschijnt hier</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-danger" id="btnDelete" onclick="delPost()" style="margin-right:auto;display:none">Verwijderen</button>
+      <button class="btn" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="savePost()">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<!-- AI PANEL -->
+<div class="ai-panel" id="aiPanel">
+  <div class="ai-panel-card">
+    <div class="ai-panel-head">
+      <div class="ai-panel-icon">✨</div>
+      <div>
+        <div class="ai-panel-title">Schrijf met Claude</div>
+        <div class="ai-panel-sub">Geef Claude jouw input — krijg een concept terug om te redigeren</div>
+      </div>
+      <button class="ai-panel-close" onclick="closeAiPanel()">×</button>
+    </div>
+    <div class="ai-panel-body">
+      <div class="ai-field">
+        <label>Onderwerp <span class="opt">— wat moet de blog over gaan?</span></label>
+        <input type="text" id="ai_topic" placeholder="bv. 5 manieren waarop AI je klantenservice verbetert">
+      </div>
+
+      <div class="ai-field">
+        <label>Jouw kennis, ervaringen of voorbeelden <span class="opt">— optioneel maar krachtig</span></label>
+        <textarea id="ai_context" placeholder="Bullets, ervaringen, cijfers, klantvoorbeelden, anekdotes... Hoe meer concreets, hoe beter de blog. Dit voorkomt generieke AI-tekst."></textarea>
+        <div class="ai-hint">Tip: voeg specifieke cijfers toe (bv. "bij klant X bespaarde dit 12 uur/week"), klantnamen of -types, tools die je gebruikt, en je persoonlijke mening. Zo wordt het écht jouw blog en geen generieke AI-output.</div>
+      </div>
+
+      <div class="ai-field-row">
+        <div class="ai-field">
+          <label>Categorie</label>
+          <select id="ai_cat">
+            <option value="website">Websites</option>
+            <option value="automatisering">Automatisering</option>
+            <option value="eigen">Eigen projecten</option>
+          </select>
+        </div>
+        <div class="ai-field">
+          <label>Lengte</label>
+          <select id="ai_length">
+            <option value="kort">Kort (~400 woorden)</option>
+            <option value="medium" selected>Medium (~700 woorden)</option>
+            <option value="lang">Uitgebreid (~1100 woorden)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ai-field-row">
+        <div class="ai-field">
+          <label>Toon</label>
+          <select id="ai_tone">
+            <option value="zakelijk-direct" selected>Zakelijk & direct</option>
+            <option value="persoonlijk">Persoonlijk & verhalend</option>
+            <option value="praktisch">Praktisch & how-to</option>
+            <option value="kritisch">Kritisch & opiniërend</option>
+          </select>
+        </div>
+        <div class="ai-field">
+          <label>SEO-zoekwoord <span class="opt">— optioneel</span></label>
+          <input type="text" id="ai_keyword" placeholder="bv. AI klantenservice MKB">
+        </div>
+      </div>
+
+      <div class="ai-status" id="aiStatus"></div>
+    </div>
+    <div class="ai-panel-foot">
+      <button class="btn" onclick="closeAiPanel()">Annuleren</button>
+      <button class="btn btn-primary btn-ai" id="btnGenerate" onclick="generatePost()">✨ Genereer concept</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('sbMount').outerHTML = renderSidebar('content');
+let posts = Store.get('posts', []);
+let projectsList = Store.get('projects', []);
+let filterCat = 'all';
+let searchQ = '';
+let currentImg = '';
+let mediaMode = 'image';
+
+function render(){
+  const counts = {all:posts.length,website:0,automatisering:0,eigen:0};
+  posts.forEach(p=>counts[p.category]++);
+  document.getElementById('filters').innerHTML = `
+    <div class="filter-pill ${filterCat==='all'?'active':''}" onclick="setCat('all')">Alle <span class="filter-count">${counts.all}</span></div>
+    <div class="filter-pill ${filterCat==='website'?'active':''}" onclick="setCat('website')"><span class="dot dot-blue"></span>Websites <span class="filter-count">${counts.website}</span></div>
+    <div class="filter-pill ${filterCat==='automatisering'?'active':''}" onclick="setCat('automatisering')"><span class="dot dot-green"></span>Automatisering <span class="filter-count">${counts.automatisering}</span></div>
+    <div class="filter-pill ${filterCat==='eigen'?'active':''}" onclick="setCat('eigen')"><span class="dot dot-purple"></span>Eigen <span class="filter-count">${counts.eigen}</span></div>
+  `;
+  let list = posts;
+  if(filterCat!=='all') list = list.filter(p=>p.category===filterCat);
+  if(searchQ) list = list.filter(p=>(p.title+p.excerpt+(p.tags||[]).join(' ')).toLowerCase().includes(searchQ));
+  const catBadge = {website:'<span class="badge badge-blue">Websites</span>',automatisering:'<span class="badge badge-green">Automatisering</span>',eigen:'<span class="badge badge-purple">Eigen</span>'};
+  const el = document.getElementById('list');
+  if(!list.length){ el.innerHTML = '<div class="empty"><div class="empty-icon">✎</div><div class="empty-title">Geen posts</div></div>'; return; }
+  el.innerHTML = list.map(p=>{
+    const thumb = p.image ? `<div class="cl-thumb" style="background:url(${p.image}) center/cover"></div>` : `<div class="cl-thumb">${p.emoji||'✎'}</div>`;
+    const tagsHtml = (p.tags||[]).slice(0,3).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('');
+    return `
+      <div class="cl-card" onclick="editPost('${p.id}')">
+        <div class="cl-row">
+          ${thumb}
+          <div class="cl-body">
+            <div class="cl-title">${escapeHtml(p.title)}</div>
+            <div class="cl-excerpt">${escapeHtml(p.excerpt)}</div>
+            <div class="cl-meta">
+              ${catBadge[p.category]}
+              ${p.status==='published'?'<span class="badge badge-green">Live</span>':'<span class="badge">Concept</span>'}
+              <span>${fmtDate(p.date)}</span>
+              ${p.views?`<span style="color:var(--a-muted)">${p.views.toLocaleString('nl-NL')} views</span>`:''}
+              ${tagsHtml?`<span style="margin-left:auto">${tagsHtml}</span>`:''}
+            </div>
+          </div>
+          <div style="color:var(--a-muted);font-size:18px">›</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+function setCat(c){filterCat=c; render();}
+document.getElementById('search').addEventListener('input', e=>{searchQ=e.target.value.toLowerCase(); render();});
+
+function slugify(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+function autoSlug(){
+  const slugEl = document.getElementById('f_slug');
+  if(slugEl.dataset.touched) return;
+  slugEl.value = slugify(document.getElementById('f_title').value);
+  updSeoPrev();
+}
+document.getElementById('f_slug').addEventListener('input', e=>{ e.target.dataset.touched='1'; updSeoPrev(); });
+document.getElementById('f_title').addEventListener('input', updSeoPrev);
+
+function setMediaTab(mode){
+  mediaMode = mode;
+  document.getElementById('tabImg').classList.toggle('active', mode==='image');
+  document.getElementById('tabVid').classList.toggle('active', mode==='video');
+  document.getElementById('mediaImg').style.display = mode==='image'?'block':'none';
+  document.getElementById('mediaVid').style.display = mode==='video'?'block':'none';
+}
+
+function updChars(){
+  const ex = document.getElementById('f_excerpt').value.length;
+  document.getElementById('chExcerpt').textContent = ex+' / 160';
+  document.getElementById('chExcerpt').classList.toggle('warn', ex>160);
+  const mt = document.getElementById('f_metaTitle').value.length;
+  document.getElementById('chMetaT').textContent = mt+' / 60';
+  document.getElementById('chMetaT').classList.toggle('warn', mt>60);
+  const md = document.getElementById('f_metaDesc').value.length;
+  document.getElementById('chMetaD').textContent = md+' / 160';
+  document.getElementById('chMetaD').classList.toggle('warn', md>160);
+}
+function updSeoPrev(){
+  const t = document.getElementById('f_metaTitle').value || document.getElementById('f_title').value || 'Titel hier';
+  const d = document.getElementById('f_metaDesc').value || document.getElementById('f_excerpt').value || 'Meta beschrijving verschijnt hier';
+  const s = document.getElementById('f_slug').value || 'slug';
+  document.getElementById('prevTitle').textContent = t;
+  document.getElementById('prevDesc').textContent = d;
+  document.getElementById('prevUrl').textContent = 'davidspijker.nl › blog › '+s;
+}
+document.getElementById('f_excerpt').addEventListener('input', updSeoPrev);
+
+function fillProjectsDropdown(){
+  const sel = document.getElementById('f_project');
+  const opts = ['<option value="">Geen</option>'].concat(
+    projectsList.map(p=>`<option value="${p.id}">${escapeHtml(p.title)} (${p.category})</option>`)
+  );
+  sel.innerHTML = opts.join('');
+}
+
+function openModal(){
+  document.getElementById('mTitle').textContent='Nieuwe post';
+  ['f_id','f_title','f_h1','f_slug','f_excerpt','f_body','f_tags','f_video','f_emoji','f_metaTitle','f_metaDesc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f_slug').dataset.touched='';
+  document.getElementById('f_cat').value='website';
+  document.getElementById('f_status').value='draft';
+  document.getElementById('f_date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('imgPreview').innerHTML='';
+  currentImg=''; mediaMode='image'; setMediaTab('image');
+  fillProjectsDropdown();
+  document.getElementById('f_project').value='';
+  document.getElementById('btnDelete').style.display='none';
+  updChars(); updSeoPrev();
+  document.getElementById('modal').classList.add('open');
+}
+function editPost(id){
+  const p = posts.find(x=>x.id===id); if(!p) return;
+  document.getElementById('mTitle').textContent='Post bewerken';
+  document.getElementById('f_id').value=p.id;
+  document.getElementById('f_title').value=p.title||'';
+  document.getElementById('f_h1').value=p.h1||'';
+  document.getElementById('f_slug').value=p.slug||'';
+  document.getElementById('f_slug').dataset.touched='1';
+  document.getElementById('f_excerpt').value=p.excerpt||'';
+  document.getElementById('f_body').value=p.body||'';
+  document.getElementById('f_cat').value=p.category||'website';
+  document.getElementById('f_status').value=p.status||'draft';
+  document.getElementById('f_emoji').value=p.emoji||'';
+  document.getElementById('f_date').value=p.date||'';
+  document.getElementById('f_tags').value=(p.tags||[]).join(', ');
+  document.getElementById('f_video').value=p.video||'';
+  document.getElementById('f_metaTitle').value=p.metaTitle||'';
+  document.getElementById('f_metaDesc').value=p.metaDesc||'';
+  currentImg = p.image||'';
+  document.getElementById('imgPreview').innerHTML = currentImg?`<img src="${currentImg}" style="max-height:100px;border-radius:6px;border:1px solid var(--a-border)">`:'';
+  mediaMode = p.video && !p.image ? 'video' : 'image';
+  setMediaTab(mediaMode);
+  fillProjectsDropdown();
+  document.getElementById('f_project').value = p.relatedProject || '';
+  document.getElementById('btnDelete').style.display='inline-flex';
+  updChars(); updSeoPrev();
+  document.getElementById('modal').classList.add('open');
+}
+document.getElementById('f_image').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev => { currentImg = ev.target.result; document.getElementById('imgPreview').innerHTML = `<img src="${currentImg}" style="max-height:100px;border-radius:6px;border:1px solid var(--a-border)">`; };
+  r.readAsDataURL(f);
+});
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function savePost(){
+  const id = document.getElementById('f_id').value;
+  const title = document.getElementById('f_title').value.trim()||'Naamloze post';
+  let slug = document.getElementById('f_slug').value.trim() || slugify(title);
+  // ensure unique slug
+  const existing = posts.find(p=>p.slug===slug && p.id!==id);
+  if(existing){ slug = slug+'-'+Math.random().toString(36).slice(2,5); }
+  const data = {
+    id: id || uid(),
+    title,
+    h1: document.getElementById('f_h1').value.trim(),
+    slug,
+    excerpt: document.getElementById('f_excerpt').value.trim(),
+    body: document.getElementById('f_body').value,
+    category: document.getElementById('f_cat').value,
+    status: document.getElementById('f_status').value,
+    emoji: document.getElementById('f_emoji').value,
+    date: document.getElementById('f_date').value,
+    tags: document.getElementById('f_tags').value.split(',').map(s=>s.trim()).filter(Boolean),
+    image: currentImg,
+    video: document.getElementById('f_video').value.trim(),
+    metaTitle: document.getElementById('f_metaTitle').value.trim(),
+    metaDesc: document.getElementById('f_metaDesc').value.trim(),
+    relatedProject: document.getElementById('f_project').value,
+    views: id ? (posts.find(p=>p.id===id).views||0) : 0
+  };
+  if(id){ posts = posts.map(p=>p.id===id?data:p); toast('Post bijgewerkt'); }
+  else{ posts.unshift(data); toast('Post toegevoegd'); }
+  Store.set('posts', posts);
+  closeModal(); render();
+}
+function delPost(){
+  if(!confirm('Deze post verwijderen?')) return;
+  const id = document.getElementById('f_id').value;
+  posts = posts.filter(p=>p.id!==id);
+  Store.set('posts', posts);
+  closeModal(); render();
+  toast('Post verwijderd');
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal') closeModal(); });
+
+// ===== AI ASSISTENT (Claude) =====
+function openAiPanel(){
+  // Pre-fill category from current modal
+  const cat = document.getElementById('f_cat').value;
+  if(cat) document.getElementById('ai_cat').value = cat;
+  // Pre-fill topic with current title if user already typed something
+  const t = document.getElementById('f_title').value.trim();
+  if(t && !document.getElementById('ai_topic').value) document.getElementById('ai_topic').value = t;
+  document.getElementById('aiPanel').classList.add('open');
+  setTimeout(()=>document.getElementById('ai_topic').focus(), 50);
+}
+function closeAiPanel(){
+  document.getElementById('aiPanel').classList.remove('open');
+  const s = document.getElementById('aiStatus');
+  s.classList.remove('show','ai-error');
+  s.innerHTML = '';
+}
+document.getElementById('aiPanel').addEventListener('click', e=>{
+  if(e.target.id==='aiPanel') closeAiPanel();
+});
+
+function aiStatus(html, isError){
+  const s = document.getElementById('aiStatus');
+  s.classList.add('show');
+  s.classList.toggle('ai-error', !!isError);
+  s.innerHTML = html;
+}
+
+async function generatePost(){
+  const topic = document.getElementById('ai_topic').value.trim();
+  if(!topic){ aiStatus('Vul eerst een onderwerp in.', true); return; }
+  const context = document.getElementById('ai_context').value.trim();
+  const cat = document.getElementById('ai_cat').value;
+  const length = document.getElementById('ai_length').value;
+  const tone = document.getElementById('ai_tone').value;
+  const keyword = document.getElementById('ai_keyword').value.trim();
+
+  const wordTarget = length==='kort' ? 400 : length==='lang' ? 1100 : 700;
+  const toneMap = {
+    'zakelijk-direct': 'zakelijk en direct, geen fluff, korte zinnen, concrete voorbeelden',
+    'persoonlijk': 'persoonlijk en verhalend, in eerste persoon ("ik"), met anekdotes',
+    'praktisch': 'praktisch en how-to, stappenplan-stijl, met genummerde stappen',
+    'kritisch': 'kritisch en opiniërend, met duidelijk standpunt en onderbouwing'
+  };
+  const catLabels = {website:'Websites & webshops', automatisering:'AI & automatisering', eigen:'Eigen SaaS-projecten / build-in-public'};
+
+  const btn = document.getElementById('btnGenerate');
+  btn.disabled = true;
+  aiStatus('<span class="spinner"></span>Claude denkt na... dit kan 10-25 seconden duren.');
+
+  const prompt = `Je bent David Spijker, een Nederlandse webdeveloper die websites bouwt en AI-automatisering levert voor MKB-bedrijven, en daarnaast eigen SaaS-projecten ontwikkelt. Je schrijft een blogpost in het Nederlands op davidspijker.nl.
+
+ONDERWERP: ${topic}
+
+CATEGORIE: ${catLabels[cat]}
+
+${context ? `EIGEN KENNIS, ERVARINGEN EN VOORBEELDEN VAN DAVID (verwerk dit zo concreet mogelijk in de blog):
+${context}
+
+` : ''}TOON: ${toneMap[tone]}
+DOEL-LENGTE: ongeveer ${wordTarget} woorden
+${keyword ? `SEO-ZOEKWOORD om natuurlijk in titel, h1, eerste alinea en meta-data te verwerken: "${keyword}"` : ''}
+
+SCHRIJFREGELS:
+- Schrijf zoals David: nuchter, eerlijk, geen verkooppraat, geen overdreven "in 2026"-clichés, geen emoji in de body
+- Gebruik concrete cijfers, klantvoorbeelden, tools en namen waar logisch (verzin NIETS — gebruik alleen wat David in de context heeft gegeven, of laat het algemeen)
+- Korte alinea's (2-4 zinnen), heldere h2-koppen
+- Geen marketing-cliches ("game-changer", "revolutionair", "ontgrendel het potentieel" etc.)
+- Schrijf in tweede persoon ("je", niet "u") voor het MKB-publiek
+- Eindig met een natuurlijke conclusie — geen call-to-action achteraan, geen "neem contact op"
+
+GEEF JE OUTPUT TERUG ALS GELDIGE JSON (geen markdown, geen \`\`\`json, alleen pure JSON), volgens dit schema:
+{
+  "title": "Pakkende titel, max 70 tekens",
+  "h1": "H1 voor de pagina, mag iets uitgebreider/specifieker zijn",
+  "slug": "url-vriendelijke-slug-met-streepjes",
+  "excerpt": "1-2 zinnen die de lezer trekken, max 180 tekens",
+  "body": "<h2>...</h2><p>...</p><h2>...</h2><ul><li>...</li></ul><p>...</p>",
+  "tags": ["tag1","tag2","tag3","tag4"],
+  "metaTitle": "Google search title, max 60 tekens",
+  "metaDesc": "Google meta description, 140-160 tekens",
+  "emoji": "één emoji die past bij het onderwerp"
+}
+
+Body moet alleen <h2>, <h3>, <p>, <ul>, <ol>, <li>, <a>, <strong>, <em>, <code>, <blockquote> tags bevatten. Geen <h1> in body (die staat al apart). Geen wrapping <article> of <div>. Begin direct met inhoud (eerste tag mag <p> of <h2> zijn).`;
+
+  try{
+    const raw = await window.claude.complete(prompt);
+    // Try to extract JSON (in case Claude wraps it accidentally)
+    let jsonStr = raw.trim();
+    const fence = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if(fence) jsonStr = fence[1].trim();
+    const firstBrace = jsonStr.indexOf('{');
+    const lastBrace = jsonStr.lastIndexOf('}');
+    if(firstBrace > 0 || lastBrace < jsonStr.length-1){
+      jsonStr = jsonStr.slice(firstBrace, lastBrace+1);
+    }
+    let data;
+    try { data = JSON.parse(jsonStr); }
+    catch(e){
+      console.error('Parse fail:', raw);
+      throw new Error('Claude gaf een onverwacht formaat terug. Probeer opnieuw.');
+    }
+
+    // Fill the form
+    if(data.title) document.getElementById('f_title').value = data.title;
+    if(data.h1) document.getElementById('f_h1').value = data.h1;
+    if(data.slug) {
+      document.getElementById('f_slug').value = data.slug;
+      document.getElementById('f_slug').dataset.touched = '1';
+    }
+    if(data.excerpt) document.getElementById('f_excerpt').value = data.excerpt;
+    if(data.body) document.getElementById('f_body').value = data.body;
+    if(Array.isArray(data.tags)) document.getElementById('f_tags').value = data.tags.join(', ');
+    if(data.metaTitle) document.getElementById('f_metaTitle').value = data.metaTitle;
+    if(data.metaDesc) document.getElementById('f_metaDesc').value = data.metaDesc;
+    if(data.emoji) document.getElementById('f_emoji').value = data.emoji;
+    document.getElementById('f_cat').value = cat;
+
+    // Update char counters + SEO preview
+    if(typeof updChars === 'function') updChars();
+    if(typeof updSeoPrev === 'function') updSeoPrev();
+
+    aiStatus('✓ Concept gegenereerd. Sluit dit panel en redigeer het in de editor.');
+    setTimeout(()=>{ closeAiPanel(); toast('Concept klaar — bewerk en publiceer wanneer je tevreden bent'); }, 900);
+  } catch(err){
+    console.error(err);
+    aiStatus('Er ging iets mis: ' + (err.message || 'onbekende fout') + '. Probeer opnieuw of pas je input aan.', true);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+render();
+</script>
+</body>
+</html>

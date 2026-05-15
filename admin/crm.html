@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CRM — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<script src="admin.js"></script>
+<script>requireAuth()</script>
+<div class="admin-shell">
+  <div id="sbMount"></div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">CRM · Leads</div>
+        <div class="topbar-title-sub">Alle leads vanuit het contactformulier</div>
+      </div>
+      <div class="topbar-right">
+        <input type="text" class="topbar-search" placeholder="Zoek leads..." id="search">
+        <button class="btn" onclick="toggleView()" id="viewBtn">▦ Tabel</button>
+        <button class="btn btn-primary" onclick="openNew()">+ Nieuwe lead</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="filter-bar" id="filters"></div>
+      <div id="kanbanView"><div class="kanban" id="kanban"></div></div>
+      <div id="tableView" style="display:none"><div class="panel"><table id="leadTable"></table></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="dp">
+  <div class="dp-head">
+    <div class="dp-title" id="dpTitle">Lead details</div>
+    <button class="modal-close" onclick="closeDP()">×</button>
+  </div>
+  <div class="dp-body" id="dpBody"></div>
+  <div class="dp-foot">
+    <button class="btn btn-danger" onclick="delLead()" style="margin-right:auto">Verwijderen</button>
+    <button class="btn" onclick="closeDP()">Sluiten</button>
+    <button class="btn btn-primary" onclick="saveLead()">Opslaan</button>
+  </div>
+</div>
+
+<script>
+document.getElementById('sbMount').outerHTML = renderSidebar('crm');
+let leads = Store.get('leads', []);
+let currentId = null;
+let searchQ = '';
+let filterService = 'all';
+let viewMode = 'kanban';
+
+const COLUMNS = [
+  {id:'new', label:'Nieuw', color:'dot-blue'},
+  {id:'contacted', label:'In gesprek', color:'dot-amber'},
+  {id:'quoted', label:'Offerte uit', color:'dot-purple'},
+  {id:'won', label:'Gewonnen', color:'dot-green'},
+  {id:'lost', label:'Verloren', color:''}
+];
+
+function render(){
+  const counts = {all:leads.length, website:0, automatisering:0, other:0};
+  leads.forEach(l=>{
+    if(l.service==='website') counts.website++;
+    else if(l.service==='automatisering') counts.automatisering++;
+    else counts.other++;
+  });
+  document.getElementById('filters').innerHTML = `
+    <span style="font-size:11px;color:var(--a-muted);margin-right:4px">SERVICE:</span>
+    <div class="filter-pill ${filterService==='all'?'active':''}" onclick="setService('all')">Alle <span class="filter-count">${counts.all}</span></div>
+    <div class="filter-pill ${filterService==='website'?'active':''}" onclick="setService('website')"><span class="dot dot-blue"></span>Website <span class="filter-count">${counts.website}</span></div>
+    <div class="filter-pill ${filterService==='automatisering'?'active':''}" onclick="setService('automatisering')"><span class="dot dot-green"></span>Automatisering <span class="filter-count">${counts.automatisering}</span></div>
+  `;
+
+  let list = leads;
+  if(filterService!=='all') list = list.filter(l=>l.service===filterService);
+  if(searchQ) list = list.filter(l=>(l.name+l.email+l.company+l.message).toLowerCase().includes(searchQ));
+
+  if(viewMode==='kanban') renderKanban(list);
+  else renderTable(list);
+}
+
+function renderKanban(list){
+  const k = document.getElementById('kanban');
+  k.innerHTML = COLUMNS.map(col=>{
+    const items = list.filter(l=>l.status===col.id);
+    return `
+      <div class="kcol" data-col="${col.id}" ondragover="dOver(event)" ondrop="dDrop(event)" ondragleave="dLeave(event)">
+        <div class="kcol-head">
+          <div class="kcol-title"><span class="dot ${col.color}"></span>${col.label}</div>
+          <span class="kcol-count">${items.length}</span>
+        </div>
+        <div class="kcards">
+          ${items.map(l=>{
+            const svcDot = l.service==='website'?'dot-blue':l.service==='automatisering'?'dot-green':'';
+            return `<div class="kcard" draggable="true" ondragstart="dStart(event,'${l.id}')" ondragend="dEnd(event)" onclick="openLead('${l.id}')">
+              <div class="kcard-name">${escapeHtml(l.name)}</div>
+              <div class="kcard-meta"><span>${escapeHtml(l.company||l.email)}</span><span class="dot ${svcDot}" title="${l.service}"></span></div>
+              <div class="kcard-msg">${escapeHtml(l.message)}</div>
+              <div class="kcard-tags"><span class="tag">${l.service}</span>${l.budget?`<span class="tag">${escapeHtml(l.budget)}</span>`:''}<span class="tag" style="margin-left:auto;color:var(--a-muted);border-color:transparent">${relDate(l.date)}</span></div>
+            </div>`;
+          }).join('') || '<div style="padding:20px 8px;text-align:center;color:var(--a-muted);font-size:11.5px">Leeg</div>'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderTable(list){
+  const statusBadge = (s)=>{
+    const m={new:['Nieuw','blue'],contacted:['In gesprek','amber'],quoted:['Offerte','purple'],won:['Gewonnen','green'],lost:['Verloren','red']};
+    return `<span class="badge badge-${m[s][1]}">${m[s][0]}</span>`;
+  };
+  document.getElementById('leadTable').innerHTML = `
+    <thead><tr><th>Naam</th><th>Bedrijf</th><th>Service</th><th>Budget</th><th>Status</th><th>Bron</th><th style="text-align:right">Datum</th></tr></thead>
+    <tbody>${list.map(l=>`
+      <tr onclick="openLead('${l.id}')" style="cursor:pointer">
+        <td><div style="font-weight:500">${escapeHtml(l.name)}</div><div class="sm">${escapeHtml(l.email)}</div></td>
+        <td class="sm">${escapeHtml(l.company||'—')}</td>
+        <td><span class="tag">${l.service}</span></td>
+        <td class="sm">${escapeHtml(l.budget||'—')}</td>
+        <td>${statusBadge(l.status)}</td>
+        <td class="sm">${escapeHtml(l.source||'—')}</td>
+        <td class="num" style="text-align:right">${relDate(l.date)}</td>
+      </tr>
+    `).join('')}</tbody>
+  `;
+}
+
+function setService(s){ filterService=s; render(); }
+document.getElementById('search').addEventListener('input', e=>{searchQ=e.target.value.toLowerCase(); render();});
+function toggleView(){
+  viewMode = viewMode==='kanban'?'table':'kanban';
+  document.getElementById('viewBtn').textContent = viewMode==='kanban'?'▦ Tabel':'▤ Kanban';
+  document.getElementById('kanbanView').style.display = viewMode==='kanban'?'block':'none';
+  document.getElementById('tableView').style.display = viewMode==='table'?'block':'none';
+  render();
+}
+
+// DRAG
+let dragId = null;
+function dStart(e, id){ dragId=id; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function dEnd(e){ e.currentTarget.classList.remove('dragging'); document.querySelectorAll('.kcol').forEach(c=>c.style.background=''); }
+function dOver(e){ e.preventDefault(); e.currentTarget.style.background='var(--a-surface)'; }
+function dLeave(e){ e.currentTarget.style.background=''; }
+function dDrop(e){
+  e.preventDefault();
+  const col = e.currentTarget.dataset.col;
+  e.currentTarget.style.background='';
+  if(!dragId) return;
+  const lead = leads.find(l=>l.id===dragId);
+  if(lead && lead.status !== col){
+    lead.status = col;
+    Store.set('leads', leads);
+    render();
+    toast('Status bijgewerkt');
+  }
+  dragId=null;
+}
+
+// DETAIL
+function openNew(){
+  currentId = uid();
+  leads.unshift({id:currentId,name:'',email:'',company:'',phone:'',service:'website',budget:'',message:'',status:'new',source:'admin',notes:'',date:new Date().toISOString().slice(0,10)});
+  openLead(currentId);
+}
+function openLead(id){
+  currentId = id;
+  const l = leads.find(x=>x.id===id);
+  if(!l) return;
+  document.getElementById('dpTitle').textContent = l.name || 'Nieuwe lead';
+  document.getElementById('dpBody').innerHTML = `
+    <div class="field-row">
+      <div class="field"><label>Naam</label><input type="text" id="d_name" value="${escapeHtml(l.name)}"></div>
+      <div class="field"><label>Bedrijf</label><input type="text" id="d_company" value="${escapeHtml(l.company||'')}"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>E-mail</label><input type="email" id="d_email" value="${escapeHtml(l.email)}"></div>
+      <div class="field"><label>Telefoon</label><input type="text" id="d_phone" value="${escapeHtml(l.phone||'')}"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Service</label><select id="d_service"><option value="website" ${l.service==='website'?'selected':''}>Website</option><option value="automatisering" ${l.service==='automatisering'?'selected':''}>Automatisering</option><option value="eigen" ${l.service==='eigen'?'selected':''}>Eigen project</option><option value="overig" ${l.service==='overig'?'selected':''}>Overig</option></select></div>
+      <div class="field"><label>Budget</label><select id="d_budget"><option value="">—</option><option ${l.budget==='<€2k'?'selected':''}>&lt;€2k</option><option ${l.budget==='€2k-5k'?'selected':''}>€2k-5k</option><option ${l.budget==='€5k-10k'?'selected':''}>€5k-10k</option><option ${l.budget==='€10k+'?'selected':''}>€10k+</option></select></div>
+    </div>
+    <div class="field"><label>Status</label><select id="d_status">${COLUMNS.map(c=>`<option value="${c.id}" ${l.status===c.id?'selected':''}>${c.label}</option>`).join('')}</select></div>
+    <div class="field"><label>Bericht van lead</label><textarea id="d_message">${escapeHtml(l.message)}</textarea></div>
+    <div class="field"><label>Jouw notities</label><textarea id="d_notes" placeholder="Interne notities, follow-ups, etc.">${escapeHtml(l.notes||'')}</textarea></div>
+    <div class="field-row">
+      <div class="field"><label>Bron</label><input type="text" id="d_source" value="${escapeHtml(l.source||'')}"></div>
+      <div class="field"><label>Datum</label><input type="date" id="d_date" value="${l.date||''}"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:6px">
+      ${l.email?`<a href="mailto:${l.email}" class="btn btn-sm">✉ E-mail</a>`:''}
+      ${l.phone?`<a href="tel:${l.phone}" class="btn btn-sm">☏ Bellen</a>`:''}
+    </div>
+  `;
+  document.getElementById('dp').classList.add('open');
+}
+function saveLead(){
+  const l = leads.find(x=>x.id===currentId);
+  if(!l) return;
+  l.name = document.getElementById('d_name').value.trim();
+  l.company = document.getElementById('d_company').value.trim();
+  l.email = document.getElementById('d_email').value.trim();
+  l.phone = document.getElementById('d_phone').value.trim();
+  l.service = document.getElementById('d_service').value;
+  l.budget = document.getElementById('d_budget').value;
+  l.status = document.getElementById('d_status').value;
+  l.message = document.getElementById('d_message').value;
+  l.notes = document.getElementById('d_notes').value;
+  l.source = document.getElementById('d_source').value.trim();
+  l.date = document.getElementById('d_date').value;
+  Store.set('leads', leads);
+  closeDP();
+  render();
+  toast('Lead opgeslagen');
+}
+function delLead(){
+  if(!confirm('Deze lead verwijderen?')) return;
+  leads = leads.filter(l=>l.id!==currentId);
+  Store.set('leads', leads);
+  closeDP();
+  render();
+  toast('Lead verwijderd');
+}
+function closeDP(){
+  // If new empty lead was cancelled, remove it
+  const l = leads.find(x=>x.id===currentId);
+  if(l && !l.name && !l.email && !l.message){
+    leads = leads.filter(x=>x.id!==currentId);
+    Store.set('leads', leads);
+  }
+  document.getElementById('dp').classList.remove('open');
+  currentId=null;
+  render();
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDP(); });
+
+// Check for new lead from contact form
+const newLeadFromForm = Store.get('newLeadFromForm', null);
+if(newLeadFromForm){
+  Store.set('newLeadFromForm', null);
+  toast('Nieuwe lead ontvangen van contactformulier!');
+}
+
+render();
+</script>
+</body>
+</html>
