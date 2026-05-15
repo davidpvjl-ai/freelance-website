@@ -824,7 +824,7 @@ Output ALLEEN als geldig JSON zonder markdown, geen extra tekst:
       localStorage.setItem(key, JSON.stringify(list));
     }catch(e){}
 
-    // Submit naar Formspree zodat David een e-mail krijgt met alle antwoorden
+    // Submit naar Formspree (fire-and-forget — wizard wacht niet op response)
     if(FORMSPREE_URL && !FORMSPREE_URL.includes('YOUR_FORM_ID')){
       try{
         const payload = {
@@ -854,12 +854,13 @@ Output ALLEEN als geldig JSON zonder markdown, geen extra tekst:
           fallback_cta: state.generated.ctaText,
           submitted_at: new Date().toISOString()
         };
-        await fetch(FORMSPREE_URL, {
+        // Geen await — fire-and-forget. Errors worden gelogd maar blokkeren de UI niet.
+        fetch(FORMSPREE_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify(payload)
-        });
-      } catch(e){ console.warn('Formspree submit failed:', e); }
+        }).catch(e => console.warn('Formspree submit failed:', e));
+      } catch(e){ console.warn('Formspree submit prep failed:', e); }
     }
 
     // Make sure loader gets at least 4.5s so the build-up reads
