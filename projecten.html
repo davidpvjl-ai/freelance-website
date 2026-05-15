@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eigen projecten — David Spijker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* PAGE THEME — oranje */
+:root{
+  --accent: #ea580c;
+  --accent-light: #f97316;
+  --accent-glow: rgba(234,88,12,0.22);
+  --border: rgba(234,88,12,0.14);
+}
+.blob-1{background:rgba(234,88,12,0.14) !important}
+.blob-2{background:rgba(249,115,22,0.12) !important}
+.blob-3{background:rgba(251,146,60,0.10) !important}
+.blob-4{background:rgba(234,88,12,0.08) !important}
+body::after{background-image:radial-gradient(circle,rgba(234,88,12,0.055) 1px,transparent 1px) !important}
+nav{background:rgba(253,246,240,0.88) !important}
+.nav-cta:hover,.btn-primary:hover,.btn-submit:hover{background:#c2410c !important}
+/* scoped creator-overrides → oranje */
+.social-pill{background:rgba(234,88,12,0.10) !important;border-color:rgba(234,88,12,0.22) !important;color:#ea580c !important}
+.social-pill:hover{background:rgba(234,88,12,0.18) !important}
+.proj-card-creator{border-color:rgba(234,88,12,0.16) !important}
+.proj-card-creator:hover{border-color:rgba(234,88,12,0.4) !important;box-shadow:0 20px 40px rgba(234,88,12,0.12) !important}
+.proj-thumb-creator{background:rgba(255,243,234,0.85) !important}
+.proj-tag-creator{background:rgba(234,88,12,0.12) !important;color:#ea580c !important}
+.creator-cta-box{border-color:rgba(234,88,12,0.22) !important}
+.blog-thumb{background:rgba(255,243,234,0.85) !important}
+.page-hero{padding:100px 5% 60px;text-align:center;max-width:900px;margin:0 auto}
+.page-hero h1{margin-bottom:20px}
+.page-hero .hero-sub{max-width:620px;margin:0 auto 36px}
+.page-hero .btn-row{justify-content:center}
+</style>
+</head>
+<body>
+<!-- MESH BLOBS -->
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="websites.html">Websites</a></li>
+    <li><a href="automatisering.html">Automatisering</a></li>
+    <li><a href="projecten.html" style="color:var(--text);font-weight:600">Projecten</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div class="reveal">
+    <div class="hero-badge" style="background:rgba(234,88,12,0.12);border-color:rgba(234,88,12,0.3);color:#ea580c">🎬 Gebouwd in het openbaar</div>
+    <h1>Mijn <em style="color:#ea580c">eigen projecten</em></h1>
+    <p class="hero-sub">Naast klantwerk bouw ik eigen software — van SaaS tot kaartspellen. Alles in het openbaar, gefilmd en gedeeld op YouTube, TikTok en Instagram. Volg de reis.</p>
+    <div class="creator-socials" style="justify-content:center">
+      <a href="#" class="social-pill">▶ YouTube</a>
+      <a href="#" class="social-pill">TikTok</a>
+      <a href="#" class="social-pill">Instagram</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-eyebrow reveal" style="color:#ea580c">Projecten</div>
+  <h2 class="reveal reveal-delay-1">Wat ik aan het bouwen ben</h2>
+  <p class="section-sub reveal reveal-delay-2">Een mix van SaaS-tools, games en experimenten. Elk project heeft een eigen video-serie.</p>
+  <div class="portfolio-grid">
+    <div class="proj-card proj-card-creator reveal" data-project-match="saas" data-cat="eigen"><div class="proj-thumb proj-thumb-creator"><div class="proj-thumb-stripes"></div><div class="proj-thumb-label">🎬 video thumbnail</div></div><div class="proj-body"><div class="proj-tags"><span class="proj-tag proj-tag-creator">SaaS</span><span class="proj-tag proj-tag-creator">In ontwikkeling</span></div><div class="proj-title">Project 01 — [SaaS naam]</div><p class="proj-desc">Gedetailleerde info volgt. Volg de bouw live op YouTube.</p><span class="proj-result" style="background:rgba(234,88,12,0.1);border-color:rgba(234,88,12,0.2);color:#ea580c">🚀 In ontwikkeling</span></div></div>
+    <div class="proj-card proj-card-creator reveal reveal-delay-1" data-project-match="kaartspel" data-cat="eigen"><div class="proj-thumb proj-thumb-creator"><div class="proj-thumb-stripes"></div><div class="proj-thumb-label">🃏 kaartspel</div></div><div class="proj-body"><div class="proj-tags"><span class="proj-tag proj-tag-creator">Game</span><span class="proj-tag proj-tag-creator">Studenten</span></div><div class="proj-title">Studentenkaartspel</div><p class="proj-desc">Een kaartspel voor studenten. Van idee tot productie, gefilmd op YouTube.</p><span class="proj-result" style="background:rgba(234,88,12,0.1);border-color:rgba(234,88,12,0.2);color:#ea580c">✅ Live</span></div></div>
+    <div class="proj-card proj-card-creator reveal reveal-delay-2" data-project-match="tool" data-cat="eigen"><div class="proj-thumb proj-thumb-creator"><div class="proj-thumb-stripes"></div><div class="proj-thumb-label">🔧 tool</div></div><div class="proj-body"><div class="proj-tags"><span class="proj-tag proj-tag-creator">Tool</span></div><div class="proj-title">Project 03 — [Tool naam]</div><p class="proj-desc">Binnenkort meer. Abonneer op YouTube om niks te missen.</p><span class="proj-result" style="background:rgba(234,88,12,0.1);border-color:rgba(234,88,12,0.2);color:#ea580c">🔜 Binnenkort</span></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-eyebrow reveal" style="color:#ea580c">Laatste video's</div>
+  <h2 class="reveal reveal-delay-1">Bekijk de bouw</h2>
+  <p class="section-sub reveal reveal-delay-2">Eerlijk, ongefiltered en praktisch. Geen valse beloftes — gewoon bouwen.</p>
+  <div class="blog-grid">
+    <div class="blog-card reveal" data-cat="eigen" data-match="saas"><div class="blog-thumb" style="background:rgba(255,243,234,0.85)"><div class="blog-thumb-stripes"></div><div style="position:relative;z-index:1;font-size:28px">▶</div></div><div class="blog-body"><div class="blog-meta" style="color:#ea580c">YouTube · 12 min</div><div class="blog-title">Hoe ik mijn eerste SaaS bouw</div><p class="blog-excerpt">Van idee tot MVP in 30 dagen — alles gefilmd.</p></div></div>
+    <div class="blog-card reveal reveal-delay-1" data-cat="eigen" data-match="kaartspel"><div class="blog-thumb" style="background:rgba(255,243,234,0.85)"><div class="blog-thumb-stripes"></div><div style="position:relative;z-index:1;font-size:28px">▶</div></div><div class="blog-body"><div class="blog-meta" style="color:#ea580c">YouTube · 8 min</div><div class="blog-title">Kaartspel ontwerpen in Figma</div><p class="blog-excerpt">Het designproces achter het studentenspel.</p></div></div>
+    <div class="blog-card reveal reveal-delay-2" data-cat="eigen" data-match="setup"><div class="blog-thumb" style="background:rgba(255,243,234,0.85)"><div class="blog-thumb-stripes"></div><div style="position:relative;z-index:1;font-size:28px">▶</div></div><div class="blog-body"><div class="blog-meta" style="color:#ea580c">TikTok · 60 sec</div><div class="blog-title">Mijn development setup</div><p class="blog-excerpt">De tools waarmee ik alles bouw.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="creator-cta-box reveal">
+    <div>
+      <div style="font-family:var(--font-head);font-weight:700;font-size:22px;margin-bottom:8px">Volg de bouw live</div>
+      <p style="color:var(--muted);font-size:15px;margin:0">Ik film alles — van de eerste regel code tot de lancering. Geen scripts, geen filters.</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="#" class="btn-primary">▶ YouTube abonneren</a>
+      <a href="#" class="btn-ghost">Instagram</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="websites.html">Websites</a></li>
+        <li><a href="automatisering.html">Automatisering</a></li>
+        <li><a href="index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="index.html#over">Over mij</a></li>
+        <li><a href="projecten.html">Projecten</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.borderBottomColor = window.scrollY > 20 ? 'rgba(234,88,12,0.08)' : 'rgba(234,88,12,0.14)';
+});
+
+/* Link kaarten naar gerelateerde blogposts */
+(function(){
+  function getPosts(){
+    try{ const r=localStorage.getItem('ds_posts'); if(r) return JSON.parse(r).filter(p=>p.status==='published'); }catch(e){}
+    return [];
+  }
+  const posts = getPosts();
+  function findPost(match, cat){
+    // probeer titel of tag te matchen
+    const m = match && match.toLowerCase();
+    let p = posts.find(x=>x.category===cat && (x.title.toLowerCase().includes(m) || (x.tags||[]).some(t=>t.toLowerCase().includes(m))));
+    return p;
+  }
+  function linkify(el){
+    const match = el.dataset.match || el.dataset.projectMatch;
+    const cat = el.dataset.cat || 'eigen';
+    const p = findPost(match, cat);
+    const href = p ? `blog/${encodeURIComponent(p.slug)}.html` : `blog.html?cat=${cat}`;
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', e=>{
+      if(e.target.closest('a')) return;
+      window.location.href = href;
+    });
+  }
+  document.querySelectorAll('.proj-card-creator, .blog-card[data-cat]').forEach(linkify);
+})();
+</script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>

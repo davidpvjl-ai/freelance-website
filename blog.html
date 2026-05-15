@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — David Spijker</title>
+<meta name="description" content="Artikelen over websites, AI-automatisering en eigen SaaS-projecten. Geen fluff, wel bruikbare inzichten uit 50+ projecten voor het MKB.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.page-hero{padding:100px 5% 40px;text-align:center;max-width:900px;margin:0 auto}
+.page-hero h1{margin-bottom:20px}
+.page-hero .hero-sub{max-width:620px;margin:0 auto 0}
+
+.blog-filters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:30px auto 60px;padding:0 5%}
+.bf-pill{background:rgba(255,255,255,0.9);border:1px solid var(--border);padding:8px 16px;border-radius:22px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s;font-family:var(--font-body);display:inline-flex;align-items:center;gap:6px}
+.bf-pill:hover{border-color:var(--accent);color:var(--text)}
+.bf-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.bf-pill .bf-count{font-size:11px;opacity:.8;background:rgba(0,0,0,0.08);padding:1px 7px;border-radius:10px}
+.bf-pill.active .bf-count{background:rgba(255,255,255,0.25)}
+.bf-dot{width:7px;height:7px;border-radius:50%}
+.dot-website{background:#1759e8}
+.dot-auto{background:#dc2626}
+.dot-eigen{background:#ea580c}
+
+.blog-archive{padding:0 5% 100px;max-width:1240px;margin:0 auto}
+.blog-archive .blog-grid{gap:24px}
+.ba-card{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .3s;cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(0,0,0,0.03)}
+.ba-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(23,89,232,0.08);border-color:rgba(23,89,232,0.25)}
+.ba-thumb{height:180px;background:rgba(238,240,249,0.8);position:relative;overflow:hidden;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center}
+.ba-thumb-emoji{font-size:48px;position:relative;z-index:1}
+.ba-thumb-stripes{position:absolute;inset:0}
+.ba-thumb-stripes.website{background:repeating-linear-gradient(-45deg,rgba(23,89,232,0.06),rgba(23,89,232,0.06) 3px,transparent 3px,transparent 20px)}
+.ba-thumb-stripes.automatisering{background:repeating-linear-gradient(-45deg,rgba(220,38,38,0.06),rgba(220,38,38,0.06) 3px,transparent 3px,transparent 20px)}
+.ba-thumb-stripes.eigen{background:repeating-linear-gradient(-45deg,rgba(234,88,12,0.06),rgba(234,88,12,0.06) 3px,transparent 3px,transparent 20px)}
+.ba-thumb-bg-website{background:linear-gradient(135deg,rgba(23,89,232,0.08),rgba(23,89,232,0.02))}
+.ba-thumb-bg-automatisering{background:linear-gradient(135deg,rgba(220,38,38,0.08),rgba(220,38,38,0.02))}
+.ba-thumb-bg-eigen{background:linear-gradient(135deg,rgba(234,88,12,0.08),rgba(234,88,12,0.02))}
+.ba-video-badge{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);color:#fff;font-size:11px;padding:4px 9px;border-radius:12px;display:flex;align-items:center;gap:5px;z-index:2}
+
+.ba-body{padding:22px;flex:1;display:flex;flex-direction:column;gap:10px}
+.ba-cat{font-size:10.5px;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.ba-cat-website{color:#1759e8}
+.ba-cat-automatisering{color:#dc2626}
+.ba-cat-eigen{color:#ea580c}
+.ba-title{font-family:var(--font-head);font-size:19px;font-weight:700;line-height:1.3;letter-spacing:-0.3px;color:var(--text)}
+.ba-excerpt{font-size:14px;color:var(--muted);line-height:1.55;flex:1}
+.ba-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+.ba-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.ba-tag{font-size:11px;background:rgba(23,89,232,0.06);color:var(--accent);padding:3px 10px;border-radius:12px;cursor:pointer;transition:all .15s}
+.ba-tag:hover{background:var(--accent);color:#fff}
+
+.ba-featured{grid-column:1/-1;display:grid;grid-template-columns:1.1fr 1fr;gap:0;background:rgba(255,255,255,0.95);margin-bottom:24px}
+.ba-featured .ba-thumb{height:100%;min-height:320px}
+.ba-featured .ba-title{font-size:28px}
+.ba-featured .ba-body{padding:40px}
+.ba-featured .ba-excerpt{font-size:16px}
+
+.blog-empty{text-align:center;padding:80px 20px;color:var(--muted)}
+.blog-empty-icon{font-size:40px;opacity:.4;margin-bottom:14px}
+
+@media(max-width:900px){
+  .ba-featured{grid-template-columns:1fr}
+  .ba-featured .ba-thumb{min-height:200px}
+  .ba-featured .ba-title{font-size:22px}
+  .ba-featured .ba-body{padding:24px}
+}
+</style>
+</head>
+<body>
+<!-- MESH BLOBS -->
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="websites.html">Websites</a></li>
+    <li><a href="automatisering.html">Automatisering</a></li>
+    <li><a href="blog.html" style="color:var(--text);font-weight:600">Blog</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<section class="page-hero reveal">
+  <div class="hero-badge">📝 Blog &amp; inzichten</div>
+  <h1>Eerlijke lessen uit <em>echte projecten</em></h1>
+  <p class="hero-sub">Geen SEO-gebabbel of AI-generieke fluff. Wel concrete takeaways uit 50+ projecten voor MKB'ers — van webshops en AI-automatisering tot mijn eigen SaaS.</p>
+</section>
+
+<div class="blog-filters" id="filters"></div>
+
+<section class="blog-archive">
+  <div class="blog-grid" id="postsGrid"></div>
+  <div class="blog-empty" id="empty" style="display:none">
+    <div class="blog-empty-icon">✎</div>
+    <div>Geen posts gevonden met dit filter.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="websites.html">Websites</a></li>
+        <li><a href="automatisering.html">Automatisering</a></li>
+        <li><a href="index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="index.html#over">Over mij</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ----- DATA -----
+const SEED_POSTS = [
+  {id:'b1',title:'Waarom elke MKB\'er moet automatiseren in 2026',h1:'Waarom elke MKB\'er moet automatiseren in 2026',slug:'mkb-automatiseren-2026',excerpt:'5 repetitieve taken die je vandaag kunt automatiseren — met concrete n8n voorbeelden.',category:'automatisering',tags:['n8n','productiviteit','mkb','ai'],status:'published',emoji:'⚡',image:'',video:'',date:'2026-04-12',views:1240},
+  {id:'b2',title:'Shopify vs. WooCommerce: wat past bij jou?',slug:'shopify-vs-woocommerce',excerpt:'Een eerlijke vergelijking op basis van 15 webshop-projecten.',category:'website',tags:['shopify','woocommerce','webshop','vergelijking'],status:'published',emoji:'🛍️',image:'',video:'',date:'2026-03-28',views:890},
+  {id:'b3',title:'Build in public: mijn eerste SaaS maand',slug:'build-in-public-eerste-saas-maand',excerpt:'Reality check: wat ik heb geleerd in 30 dagen bouwen.',category:'eigen',tags:['saas','build-in-public','creator'],status:'published',emoji:'🚀',image:'',video:'https://youtube.com/watch?v=example',date:'2026-03-15',views:2100},
+];
+
+function getPosts(){
+  try{
+    const raw = localStorage.getItem('ds_posts');
+    if(raw){
+      const arr = JSON.parse(raw);
+      // migrate: ensure slug, body, status fields
+      let dirty = false;
+      arr.forEach(p => {
+        if(!p.slug){ p.slug = (p.title||'post').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'post-' + (p.id||''); dirty = true; }
+        if(!p.body){ p.body = '<p>' + (p.excerpt||'') + '</p>'; dirty = true; }
+        if(!p.status){ p.status = 'published'; dirty = true; }
+        if(!p.date){ p.date = new Date().toISOString().slice(0,10); dirty = true; }
+      });
+      if(dirty){ try{ localStorage.setItem('ds_posts', JSON.stringify(arr)); }catch(e){} }
+      return arr.filter(p=>p.status==='published');
+    }
+  }catch(e){}
+  return SEED_POSTS;
+}
+
+const CAT_META = {
+  website:{label:'Websites',dotClass:'dot-website',catClass:'ba-cat-website',stripes:'website',bg:'ba-thumb-bg-website'},
+  automatisering:{label:'Automatisering',dotClass:'dot-auto',catClass:'ba-cat-automatisering',stripes:'automatisering',bg:'ba-thumb-bg-automatisering'},
+  eigen:{label:'Eigen projecten',dotClass:'dot-eigen',catClass:'ba-cat-eigen',stripes:'eigen',bg:'ba-thumb-bg-eigen'}
+};
+
+let allPosts = getPosts();
+let filterCat = new URL(location.href).searchParams.get('cat') || 'all';
+let filterTag = new URL(location.href).searchParams.get('tag') || '';
+
+function fmtDate(s){ if(!s) return ''; return new Date(s).toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'}); }
+function esc(s){ return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function renderFilters(){
+  const counts = {all:allPosts.length, website:0, automatisering:0, eigen:0};
+  allPosts.forEach(p=>counts[p.category]!==undefined && counts[p.category]++);
+  document.getElementById('filters').innerHTML = `
+    <div class="bf-pill ${filterCat==='all'?'active':''}" onclick="setCat('all')">Alle <span class="bf-count">${counts.all}</span></div>
+    <div class="bf-pill ${filterCat==='website'?'active':''}" onclick="setCat('website')"><span class="bf-dot dot-website"></span>Websites <span class="bf-count">${counts.website}</span></div>
+    <div class="bf-pill ${filterCat==='automatisering'?'active':''}" onclick="setCat('automatisering')"><span class="bf-dot dot-auto"></span>Automatisering <span class="bf-count">${counts.automatisering}</span></div>
+    <div class="bf-pill ${filterCat==='eigen'?'active':''}" onclick="setCat('eigen')"><span class="bf-dot dot-eigen"></span>Eigen projecten <span class="bf-count">${counts.eigen}</span></div>
+    ${filterTag?`<div class="bf-pill active" onclick="clearTag()">#${esc(filterTag)} ✕</div>`:''}
+  `;
+}
+
+function cardHtml(p, featured=false){
+  const meta = CAT_META[p.category] || CAT_META.website;
+  const hasVid = p.video ? '<div class="ba-video-badge">▶ Video</div>' : '';
+  const thumbStyle = p.image ? `style="background-image:url(${p.image})"` : '';
+  const thumbInner = p.image ? '' : `
+    <div class="ba-thumb ${meta.bg}" style="position:absolute;inset:0">
+      <div class="ba-thumb-stripes ${meta.stripes}"></div>
+      <div class="ba-thumb-emoji">${p.emoji||'✎'}</div>
+    </div>`;
+  return `
+    <a href="blog/${encodeURIComponent(p.slug)}.html" class="ba-card ${featured?'ba-featured':''}">
+      <div class="ba-thumb ${!p.image?meta.bg:''}" ${thumbStyle}>
+        ${p.image?'':`<div class="ba-thumb-stripes ${meta.stripes}"></div><div class="ba-thumb-emoji">${p.emoji||'✎'}</div>`}
+        ${hasVid}
+      </div>
+      <div class="ba-body">
+        <div class="ba-cat ${meta.catClass}"><span class="bf-dot ${meta.dotClass}"></span>${meta.label}</div>
+        <div class="ba-title">${esc(p.title)}</div>
+        <div class="ba-excerpt">${esc(p.excerpt)}</div>
+        ${(p.tags||[]).length?`<div class="ba-tags">${p.tags.slice(0,4).map(t=>`<span class="ba-tag" onclick="event.preventDefault();event.stopPropagation();setTag('${esc(t)}')">#${esc(t)}</span>`).join('')}</div>`:''}
+        <div class="ba-meta">
+          <span>${fmtDate(p.date)}</span>
+          <span>${p.views?p.views.toLocaleString('nl-NL')+' views':'Leestijd ~5 min'}</span>
+        </div>
+      </div>
+    </a>
+  `;
+}
+
+function renderPosts(){
+  let list = allPosts.slice();
+  if(filterCat!=='all') list = list.filter(p=>p.category===filterCat);
+  if(filterTag) list = list.filter(p=>(p.tags||[]).includes(filterTag));
+  list.sort((a,b)=> new Date(b.date) - new Date(a.date));
+  const grid = document.getElementById('postsGrid');
+  const empty = document.getElementById('empty');
+  if(!list.length){ grid.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  // Featured = most recent when no filter
+  if(filterCat==='all' && !filterTag && list.length>1){
+    grid.innerHTML = cardHtml(list[0], true) + list.slice(1).map(p=>cardHtml(p)).join('');
+  } else {
+    grid.innerHTML = list.map(p=>cardHtml(p)).join('');
+  }
+}
+
+function setCat(c){ filterCat=c; filterTag=''; syncUrl(); renderFilters(); renderPosts(); window.scrollTo({top:document.querySelector('.blog-archive').offsetTop-80, behavior:'smooth'}); }
+function setTag(t){ filterTag=t; filterCat='all'; syncUrl(); renderFilters(); renderPosts(); window.scrollTo({top:document.querySelector('.blog-archive').offsetTop-80, behavior:'smooth'}); }
+function clearTag(){ filterTag=''; syncUrl(); renderFilters(); renderPosts(); }
+function syncUrl(){
+  const u = new URL(location.href);
+  if(filterCat==='all') u.searchParams.delete('cat'); else u.searchParams.set('cat',filterCat);
+  if(!filterTag) u.searchParams.delete('tag'); else u.searchParams.set('tag',filterTag);
+  history.replaceState(null,'',u);
+}
+
+renderFilters();
+renderPosts();
+
+// Reveal animations + nav scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.borderBottomColor = window.scrollY > 20 ? 'rgba(23,89,232,0.08)' : 'rgba(23,89,232,0.10)';
+});
+</script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacyverklaring — David Spijker</title>
+<meta name="description" content="Privacyverklaring van Spijker Dienstverlening — hoe we omgaan met jouw persoonsgegevens conform de AVG.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.legal-hero{padding:100px 5% 32px;text-align:center;max-width:780px;margin:0 auto}
+.legal-hero h1{margin-bottom:14px}
+.legal-hero .meta{color:var(--muted);font-size:13.5px;letter-spacing:.4px}
+
+.legal-wrap{max-width:780px;margin:0 auto;padding:32px 5% 100px}
+
+.legal-intro{background:linear-gradient(135deg,rgba(23,89,232,0.05),rgba(139,92,246,0.04));border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:48px;font-size:15px;line-height:1.75;color:#2d2f4a}
+.legal-intro p{margin:0}
+
+.legal-toc{background:rgba(255,255,255,0.78);border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin-bottom:48px;backdrop-filter:blur(8px);display:block;position:static;height:auto;top:auto}
+.legal-toc-title{display:block;font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--accent);margin:0 0 14px}
+.legal-toc ol{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;counter-reset:toc}
+.legal-toc li{counter-increment:toc;font-size:14px}
+.legal-toc a{color:var(--text);text-decoration:none;display:flex;gap:10px;padding:4px 0;transition:color .15s}
+.legal-toc a:hover{color:var(--accent)}
+.legal-toc a::before{content:counter(toc,decimal-leading-zero);font-family:var(--font-head);font-weight:700;color:var(--muted);font-size:12px;min-width:22px}
+
+.legal-article{margin-bottom:44px;scroll-margin-top:80px}
+.legal-article h2{font-family:var(--font-head);font-weight:700;font-size:22px;letter-spacing:-0.4px;color:var(--text);margin:0 0 18px;padding-bottom:12px;border-bottom:2px solid var(--accent);display:inline-block}
+.legal-article h2 .num{color:var(--accent);font-weight:800;margin-right:10px}
+.legal-article p{margin:0 0 12px;font-size:15px;line-height:1.75;color:#2d2f4a}
+.legal-article p:last-child{margin-bottom:0}
+.legal-article strong{color:var(--text);font-weight:600}
+
+.legal-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin:8px 0 16px;font-size:14.5px;line-height:1.85;color:#2d2f4a}
+.legal-card strong{display:block;font-family:var(--font-head);font-size:15px;color:var(--text);margin-bottom:6px}
+.legal-card a{color:var(--accent);text-decoration:none;font-weight:500}
+.legal-card a:hover{text-decoration:underline}
+
+.legal-list{margin:8px 0 0;padding-left:0;list-style:none}
+.legal-list li{position:relative;padding:8px 0 8px 24px;font-size:15px;line-height:1.65;color:#2d2f4a;border-top:1px solid rgba(23,89,232,0.06)}
+.legal-list li:first-child{border-top:0}
+.legal-list li::before{content:"";position:absolute;left:4px;top:18px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.legal-list li strong{color:var(--text);font-weight:600}
+
+.legal-foot{margin-top:48px;padding:24px 28px;background:linear-gradient(135deg,rgba(23,89,232,0.05),rgba(139,92,246,0.04));border:1px solid var(--border);border-radius:14px;font-size:13.5px;color:var(--muted);line-height:1.7}
+.legal-foot strong{color:var(--text)}
+
+@media(max-width:700px){
+  .legal-toc ol{grid-template-columns:1fr}
+  .legal-article h2{font-size:19px}
+}
+</style>
+</head>
+<body>
+
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="websites.html">Websites</a></li>
+    <li><a href="automatisering.html">Automatisering</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<section class="legal-hero">
+  <div class="reveal">
+    <h1>Privacyverklaring</h1>
+    <p class="meta">Laatst bijgewerkt: mei 2026</p>
+  </div>
+</section>
+
+<div class="legal-wrap">
+
+  <div class="legal-intro reveal">
+    <p>Spijker Dienstverlening (hierna: <strong>"wij"</strong>) hecht veel waarde aan de bescherming van jouw persoonsgegevens. In deze privacyverklaring leggen we uit welke gegevens we verzamelen, waarom we deze gegevens verzamelen en hoe we hiermee omgaan. Wij verwerken jouw gegevens conform de Algemene Verordening Gegevensbescherming (AVG).</p>
+  </div>
+
+  <nav class="legal-toc reveal" aria-label="Inhoudsopgave">
+    <span class="legal-toc-title">Inhoud</span>
+    <ol>
+      <li><a href="#a1">Verantwoordelijke</a></li>
+      <li><a href="#a2">Welke gegevens</a></li>
+      <li><a href="#a3">Doeleinden</a></li>
+      <li><a href="#a4">Bewaartermijnen</a></li>
+      <li><a href="#a5">Delen met derden</a></li>
+      <li><a href="#a6">Beveiliging</a></li>
+      <li><a href="#a7">Jouw rechten</a></li>
+      <li><a href="#a8">Cookies en tracking</a></li>
+      <li><a href="#a9">Wijzigingen</a></li>
+      <li><a href="#a10">Klachten</a></li>
+    </ol>
+  </nav>
+
+  <article class="legal-article reveal" id="a1">
+    <h2><span class="num">01</span>Wie is verantwoordelijk?</h2>
+    <p>De verantwoordelijke voor de verwerking van jouw persoonsgegevens is:</p>
+    <div class="legal-card">
+      <strong>Spijker Dienstverlening</strong>
+      Sibeliusstraat 12, Leiden<br>
+      <a href="mailto:Contact@DavidSpijker.nl">Contact@DavidSpijker.nl</a><br>
+      +31 6 26 13 54 10<br>
+      KvK-nummer: 96035250
+    </div>
+    <p>Voor vragen over deze privacyverklaring kun je contact opnemen via <a href="mailto:Contact@DavidSpijker.nl" style="color:var(--accent);font-weight:500">Contact@DavidSpijker.nl</a>.</p>
+  </article>
+
+  <article class="legal-article reveal" id="a2">
+    <h2><span class="num">02</span>Welke gegevens verwerken wij?</h2>
+    <p>Wij kunnen de volgende persoonsgegevens van je verwerken:</p>
+    <ul class="legal-list">
+      <li>Voor- en achternaam</li>
+      <li>E-mailadres</li>
+      <li>Telefoonnummer</li>
+      <li>Eventuele informatie die je vrijwillig verstrekt in het contactformulier of via andere communicatiekanalen</li>
+    </ul>
+  </article>
+
+  <article class="legal-article reveal" id="a3">
+    <h2><span class="num">03</span>Waarom verwerken wij jouw gegevens?</h2>
+    <p>Wij verwerken jouw persoonsgegevens voor de volgende doeleinden:</p>
+    <ul class="legal-list">
+      <li>Om <strong>contact</strong> met je op te nemen naar aanleiding van een ingevuld contactformulier</li>
+      <li>Voor het <strong>afhandelen</strong> van jouw vragen, opdrachten of offertes</li>
+      <li>Om je te <strong>informeren</strong> over onze diensten en werkzaamheden</li>
+      <li>Voor <strong>administratieve doeleinden</strong>, zoals het opstellen van facturen</li>
+    </ul>
+  </article>
+
+  <article class="legal-article reveal" id="a4">
+    <h2><span class="num">04</span>Hoe lang bewaren wij jouw gegevens?</h2>
+    <p>Wij bewaren jouw gegevens niet langer dan noodzakelijk is voor het doel waarvoor ze zijn verzameld.</p>
+    <ul class="legal-list">
+      <li><strong>Gegevens via het contactformulier:</strong> maximaal 1 jaar na het laatste contact, tenzij er een wettelijke verplichting is om deze langer te bewaren.</li>
+      <li><strong>Factuur- en administratieve gegevens:</strong> 7 jaar, conform de fiscale bewaarplicht.</li>
+    </ul>
+  </article>
+
+  <article class="legal-article reveal" id="a5">
+    <h2><span class="num">05</span>Delen wij jouw gegevens met derden?</h2>
+    <p>Wij delen jouw gegevens alleen met derden indien dit noodzakelijk is voor de uitvoering van onze diensten of om te voldoen aan een wettelijke verplichting. Denk hierbij aan:</p>
+    <ul class="legal-list">
+      <li>Boekhoudsoftware of administratiediensten</li>
+      <li>Hostingproviders voor het onderhouden van de website</li>
+      <li>Overheidsinstanties als dit wettelijk verplicht is</li>
+    </ul>
+    <p style="margin-top:14px">Met deze partijen hebben wij een verwerkersovereenkomst om jouw gegevens te beschermen.</p>
+  </article>
+
+  <article class="legal-article reveal" id="a6">
+    <h2><span class="num">06</span>Hoe beveiligen wij jouw gegevens?</h2>
+    <p>Wij nemen passende technische en organisatorische maatregelen om jouw gegevens te beschermen tegen verlies, misbruik of onbevoegde toegang. Voorbeelden hiervan zijn:</p>
+    <ul class="legal-list">
+      <li><strong>Versleuteling (SSL)</strong> van de website</li>
+      <li>Toegang tot gegevens is beperkt tot personen die deze nodig hebben</li>
+      <li>Regelmatige updates en beveiliging van systemen</li>
+    </ul>
+  </article>
+
+  <article class="legal-article reveal" id="a7">
+    <h2><span class="num">07</span>Jouw rechten</h2>
+    <p>Je hebt de volgende rechten met betrekking tot jouw persoonsgegevens:</p>
+    <ul class="legal-list">
+      <li><strong>Recht op inzage:</strong> je kunt opvragen welke gegevens wij van je verwerken.</li>
+      <li><strong>Recht op rectificatie:</strong> je kunt onjuiste gegevens laten corrigeren.</li>
+      <li><strong>Recht op verwijdering:</strong> je kunt vragen om jouw gegevens te verwijderen (tenzij wettelijke verplichtingen anders vereisen).</li>
+      <li><strong>Recht op bezwaar:</strong> je kunt bezwaar maken tegen de verwerking van jouw gegevens.</li>
+      <li><strong>Recht op gegevensoverdraagbaarheid:</strong> je kunt jouw gegevens laten overdragen aan een andere partij.</li>
+    </ul>
+    <p style="margin-top:14px">Om een verzoek in te dienen, kun je contact opnemen via <a href="mailto:Contact@DavidSpijker.nl" style="color:var(--accent);font-weight:500">Contact@DavidSpijker.nl</a>. Wij reageren binnen <strong>30 dagen</strong> op jouw verzoek.</p>
+  </article>
+
+  <article class="legal-article reveal" id="a8">
+    <h2><span class="num">08</span>Cookies en tracking</h2>
+    <p>Onze website maakt gebruik van cookies om de functionaliteit en prestaties te verbeteren. Voor meer informatie over hoe wij cookies gebruiken, verwijzen wij je naar onze cookieverklaring.</p>
+  </article>
+
+  <article class="legal-article reveal" id="a9">
+    <h2><span class="num">09</span>Wijzigingen in deze privacyverklaring</h2>
+    <p>Wij behouden ons het recht voor om deze privacyverklaring te wijzigen. Wij raden je aan deze verklaring regelmatig te raadplegen. De meest recente versie is altijd beschikbaar op onze website.</p>
+  </article>
+
+  <article class="legal-article reveal" id="a10">
+    <h2><span class="num">10</span>Klachten</h2>
+    <p>Als je een klacht hebt over de verwerking van jouw persoonsgegevens, verzoeken wij je contact met ons op te nemen. Je hebt ook het recht om een klacht in te dienen bij de <strong>Autoriteit Persoonsgegevens</strong> via <a href="https://www.autoriteitpersoonsgegevens.nl" target="_blank" rel="noopener" style="color:var(--accent);font-weight:500">autoriteitpersoonsgegevens.nl</a>.</p>
+  </article>
+
+  <div class="legal-foot reveal">
+    <strong>Vragen over je privacy?</strong> Neem gerust contact op via <a href="index.html#contact" style="color:var(--accent);font-weight:600">het contactformulier</a> of mail rechtstreeks naar <a href="mailto:Contact@DavidSpijker.nl" style="color:var(--accent);font-weight:600">Contact@DavidSpijker.nl</a>.
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="websites.html">Websites</a></li>
+        <li><a href="automatisering.html">Automatisering</a></li>
+        <li><a href="index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="index.html#over">Over mij</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<script src="mobile-nav.js"></script>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

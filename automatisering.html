@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automatisering — David Spijker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* PAGE THEME — rood */
+:root{
+  --accent: #dc2626;
+  --accent-light: #ef4444;
+  --accent-glow: rgba(220,38,38,0.22);
+  --border: rgba(220,38,38,0.14);
+}
+.blob-1{background:rgba(220,38,38,0.14) !important}
+.blob-2{background:rgba(239,68,68,0.12) !important}
+.blob-3{background:rgba(248,113,113,0.10) !important}
+.blob-4{background:rgba(220,38,38,0.08) !important}
+body::after{background-image:radial-gradient(circle,rgba(220,38,38,0.055) 1px,transparent 1px) !important}
+nav{background:rgba(253,242,242,0.88) !important}
+.nav-cta:hover,.btn-primary:hover,.btn-submit:hover{background:#b91c1c !important}
+.page-hero{padding:100px 5% 60px;text-align:center;max-width:900px;margin:0 auto}
+.page-hero h1{margin-bottom:20px}
+.page-hero .hero-sub{max-width:620px;margin:0 auto 36px}
+.page-hero .btn-row{justify-content:center}
+</style>
+</head>
+<body>
+<!-- MESH BLOBS -->
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="websites.html">Websites</a></li>
+    <li><a href="automatisering.html" style="color:var(--text);font-weight:600">Automatisering</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div class="reveal">
+    <div class="hero-badge">Voor MKB'ers</div>
+    <h1>Jouw bedrijf <em>op autopilot</em></h1>
+    <p class="hero-sub">Repetitieve taken kosten je meer tijd dan je denkt. Ik bouw workflows die dat oplossen — met n8n, Make en AI-integraties die écht werken in jouw proces.</p>
+    <div class="btn-row">
+      <a href="index.html#contact" class="btn-primary">Gratis intake →</a>
+      <a href="#portfolio" class="btn-ghost">Bekijk werk</a>
+    </div>
+  </div>
+</section>
+
+<section id="diensten">
+  <div class="section-eyebrow reveal">Wat ik automatiseer</div>
+  <h2 class="reveal reveal-delay-1">Drie richtingen</h2>
+  <p class="section-sub reveal reveal-delay-2">Van losse workflows tot volledige CRM-integraties — altijd praktisch en onderhoudbaar.</p>
+  <div class="services-grid">
+    <div class="svc-card reveal"><div class="svc-icon">🔄</div><div class="svc-title">Workflows</div><p class="svc-desc">Koppel al jouw tools: CRM, e-mail, facturen, social media — allemaal automatisch.</p><ul class="svc-benefits"><li>No-code & low-code</li><li>500+ integraties</li><li>Zelf te beheren</li><li>Transparante kosten</li></ul></div>
+    <div class="svc-card reveal reveal-delay-1"><div class="svc-icon">🤖</div><div class="svc-title">AI Integraties</div><p class="svc-desc">Slimme chatbots, automatische samenvattingen, leadkwalificatie — AI die écht werkt.</p><ul class="svc-benefits"><li>ChatGPT / Claude koppelingen</li><li>AI leadbots</li><li>Automatische rapportages</li><li>Contentgeneratie</li></ul></div>
+    <div class="svc-card reveal reveal-delay-2"><div class="svc-icon">📊</div><div class="svc-title">CRM & Data</div><p class="svc-desc">Van losse Excel-bestanden naar een gestroomlijnd CRM dat automatisch gevuld wordt.</p><ul class="svc-benefits"><li>CRM-inrichting</li><li>Automatische data-sync</li><li>Dashboards op maat</li><li>Migraties</li></ul></div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="section-eyebrow reveal">Mijn automatiseringen</div>
+  <h2 class="reveal reveal-delay-1">Wat ik bouw</h2>
+  <p class="section-sub reveal reveal-delay-2" style="margin-bottom:32px">Concrete automatiseringen die ik aanbied als kant-en-klaar pakket. Elke automatisering heeft een eigen pagina met uitleg, prijzen en proces.</p>
+
+  <div class="wf-search reveal">
+    <div class="wf-searchbar">
+      <svg class="wf-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="wfSearch" placeholder="Zoek op tool, rol of use-case — bijv. HubSpot, sales, facturen…">
+      <kbd class="wf-kbd">⌘K</kbd>
+    </div>
+    <div class="wf-cats" id="wfCats"></div>
+  </div>
+
+  <div class="wf-grid" id="wfGrid"></div>
+  <div class="wf-empty" id="wfEmpty" hidden>
+    <div class="wf-empty-icon">🔍</div>
+    <div class="wf-empty-title">Geen workflows gevonden</div>
+    <div class="wf-empty-sub">Probeer een andere zoekterm of categorie — of <a href="index.html#contact" style="color:var(--accent);font-weight:600">vraag een workflow op maat aan</a>.</div>
+  </div>
+  <div class="wf-footer reveal">
+    <div class="wf-footer-text">Niet wat je zocht? Ik bouw ook workflows op maat.</div>
+    <a href="index.html#contact" class="btn-ghost" style="padding:10px 18px;font-size:13px">Custom workflow bespreken →</a>
+  </div>
+</section>
+
+<style>
+/* Workflow database */
+.wf-search{max-width:860px;margin:0 auto 32px}
+.wf-searchbar{position:relative;background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 16px;box-shadow:0 2px 16px rgba(23,89,232,0.06);transition:all .2s}
+.wf-searchbar:focus-within{border-color:var(--accent);box-shadow:0 4px 24px rgba(23,89,232,0.14)}
+.wf-search-icon{color:var(--muted);flex-shrink:0}
+.wf-searchbar input{flex:1;border:0;background:transparent;padding:16px 12px;font-family:inherit;font-size:15px;color:var(--text);outline:none}
+.wf-searchbar input::placeholder{color:var(--muted)}
+.wf-kbd{background:rgba(23,89,232,0.08);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:11px;font-family:var(--font-body);color:var(--muted);letter-spacing:.3px}
+.wf-cats{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;justify-content:center}
+.wf-cat{background:rgba(255,255,255,0.85);border:1px solid var(--border);border-radius:999px;padding:7px 15px;font-size:13px;color:var(--text);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+.wf-cat:hover{border-color:rgba(23,89,232,0.3);transform:translateY(-1px)}
+.wf-cat.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(23,89,232,0.25)}
+.wf-cat-ico{font-size:14px;line-height:1}
+.wf-cat-cnt{background:rgba(23,89,232,0.1);border-radius:10px;padding:1px 7px;font-size:10.5px;color:var(--muted);font-weight:600;margin-left:2px}
+.wf-cat.active .wf-cat-cnt{background:rgba(255,255,255,0.22);color:#fff}
+
+.wf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;max-width:1200px;margin:0 auto}
+.wf-card{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:12px;padding:18px;transition:all .2s;cursor:pointer;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.wf-card:hover{border-color:rgba(23,89,232,0.3);transform:translateY(-2px);box-shadow:0 10px 28px rgba(23,89,232,0.1)}
+.wf-card-head{display:flex;align-items:center;gap:10px}
+.wf-card-icon{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,rgba(23,89,232,0.12),rgba(139,92,246,0.12));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1px solid var(--border)}
+.wf-card-title{font-family:var(--font-head);font-weight:700;font-size:14.5px;line-height:1.3;color:var(--text);flex:1;min-width:0}
+.wf-card-desc{font-size:12.5px;color:var(--muted);line-height:1.55;flex:1;margin:0}
+.wf-card-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.wf-tag{font-size:10px;background:rgba(23,89,232,0.07);color:var(--accent);border-radius:4px;padding:2px 7px;font-weight:600;letter-spacing:.2px;text-transform:lowercase}
+.wf-card-meta{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.wf-card-result{color:#16a34a;font-weight:600}
+.wf-card-time{display:inline-flex;align-items:center;gap:3px}
+
+/* Featured card — heeft een eigen productpagina */
+.wf-card-featured{border:1.5px solid rgba(220,38,38,0.35);background:linear-gradient(180deg,#fff,#fef9f9);box-shadow:0 4px 20px rgba(220,38,38,0.08);padding-bottom:54px}
+.wf-card-featured:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 14px 36px rgba(220,38,38,0.18)}
+.wf-card-featured .wf-card-icon{background:linear-gradient(135deg,rgba(220,38,38,0.18),rgba(239,68,68,0.10));border:1px solid rgba(220,38,38,0.18)}
+.wf-card-pill{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:#dc2626;color:#fff;font-family:var(--font-head);font-size:11px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;padding:7px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background .2s,box-shadow .2s,transform .2s;box-shadow:0 4px 14px rgba(220,38,38,0.28)}
+.wf-card-featured:hover .wf-card-pill{transform:translateX(-50%) translateY(-2px);box-shadow:0 8px 22px rgba(220,38,38,0.4)}
+
+.wf-empty{max-width:420px;margin:40px auto;text-align:center;padding:32px}
+.wf-empty-icon{font-size:36px;margin-bottom:12px;opacity:.5}
+.wf-empty-title{font-family:var(--font-head);font-weight:700;font-size:18px;margin-bottom:6px}
+.wf-empty-sub{font-size:14px;color:var(--muted);line-height:1.6}
+.wf-footer{max-width:860px;margin:36px auto 0;padding:20px 24px;background:rgba(255,255,255,0.6);border:1px dashed var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.wf-footer-text{font-size:14px;color:var(--muted)}
+
+@media(max-width:640px){
+  .wf-footer{flex-direction:column;text-align:center}
+  .wf-searchbar input{font-size:14px}
+  .wf-kbd{display:none}
+}
+</style>
+
+<script>
+const WF_CATS = [
+  {id:'all', label:'Alles', icon:'✨'},
+  {id:'sales', label:'Sales & CRM', icon:'💼'},
+  {id:'marketing', label:'Marketing', icon:'📣'},
+  {id:'ai', label:'AI', icon:'🤖'},
+  {id:'finance', label:'Finance', icon:'💳'},
+  {id:'support', label:'Support', icon:'💬'},
+  {id:'hr', label:'HR & Recruitment', icon:'👥'},
+  {id:'ecom', label:'E-commerce', icon:'🛍️'},
+  {id:'ops', label:'Operations', icon:'⚙️'},
+  {id:'data', label:'Data & Reporting', icon:'📊'},
+];
+
+const WORKFLOWS = [
+  {cat:'marketing', icon:'🤖', title:'Social Media AI Bot', desc:'AI-agent die wekelijks social posts schrijft, plant en publiceert — op autopilot.', tags:['openai','instagram','linkedin'], result:'−8-10u/wk', time:'1-2 weken setup', productSlug:'social-media-ai-bot'},
+  {cat:'data', icon:'🧮', title:'Maandrapport PDF generator', desc:'Elke 1e van de maand: PDF rapport per klant via email.', tags:['docs','n8n'], result:'−8u/mnd', time:'3u'},
+];
+
+// (counter weggehaald — geen vaste 'X automatiseringen'-claim meer)
+
+// Render categories with counts
+const catsEl = document.getElementById('wfCats');
+const gridEl = document.getElementById('wfGrid');
+const searchEl = document.getElementById('wfSearch');
+const emptyEl = document.getElementById('wfEmpty');
+let activeCat = 'all';
+let query = '';
+
+function renderCats(){
+  catsEl.innerHTML = WF_CATS.map(c => {
+    const cnt = c.id === 'all' ? WORKFLOWS.length : WORKFLOWS.filter(w => w.cat === c.id).length;
+    return `<button class="wf-cat ${c.id===activeCat?'active':''}" data-cat="${c.id}">
+      <span class="wf-cat-ico">${c.icon}</span>${c.label}<span class="wf-cat-cnt">${cnt}</span>
+    </button>`;
+  }).join('');
+  catsEl.querySelectorAll('.wf-cat').forEach(b => {
+    b.addEventListener('click', () => { activeCat = b.dataset.cat; renderCats(); renderGrid(); });
+  });
+}
+
+function renderGrid(){
+  const q = query.trim().toLowerCase();
+  const filtered = WORKFLOWS.filter(w => {
+    if(activeCat !== 'all' && w.cat !== activeCat) return false;
+    if(!q) return true;
+    return (w.title + ' ' + w.desc + ' ' + w.tags.join(' ') + ' ' + w.cat).toLowerCase().includes(q);
+  });
+  if(filtered.length === 0){
+    gridEl.innerHTML = '';
+    emptyEl.hidden = false;
+    return;
+  }
+  emptyEl.hidden = true;
+  // haal gepubliceerde automatisering-posts op voor slimme links
+  let autoPosts = [];
+  try{ const r = localStorage.getItem('ds_posts'); if(r) autoPosts = JSON.parse(r).filter(p=>p.status==='published' && p.category==='automatisering'); }catch(e){}
+  // gepubliceerde producten ophalen voor product-link matching op slug
+  let prodList = [];
+  try{ const r = localStorage.getItem('ds_products'); if(r) prodList = JSON.parse(r).filter(p=>p.status==='published'); }catch(e){}
+  function wfLink(w){
+    // 1. Heeft de workflow een expliciete productSlug? Check of het product live staat…
+    if(w.productSlug){
+      const exists = prodList.length===0 || prodList.find(p=>p.slug===w.productSlug);
+      if(exists) return 'product.html?slug='+encodeURIComponent(w.productSlug);
+    }
+    // 2. Anders: probeer een blog te matchen
+    const hay = (w.title + ' ' + w.tags.join(' ')).toLowerCase();
+    const match = autoPosts.find(p => (p.tags||[]).some(t => hay.includes(t.toLowerCase())) || hay.includes((p.title||'').toLowerCase().split(' ')[0]));
+    return match ? `blog/${encodeURIComponent(match.slug)}.html` : 'blog.html?cat=automatisering';
+  }
+  gridEl.innerHTML = filtered.map(w => {
+    const isProduct = !!w.productSlug;
+    return `
+    <a href="${wfLink(w)}" class="wf-card${isProduct?' wf-card-featured':''}" style="text-decoration:none;color:inherit">
+      ${isProduct ? '<div class="wf-card-pill">Productpagina →</div>' : ''}
+      <div class="wf-card-head">
+        <div class="wf-card-icon">${w.icon}</div>
+        <div class="wf-card-title">${w.title}</div>
+      </div>
+      <p class="wf-card-desc">${w.desc}</p>
+      <div class="wf-card-tags">${w.tags.map(t=>`<span class="wf-tag">${t}</span>`).join('')}</div>
+      <div class="wf-card-meta">
+        <span class="wf-card-result">${w.result}</span>
+        <span class="wf-card-time">⏱ ${w.time}</span>
+      </div>
+    </a>
+  `;}).join('');
+}
+
+searchEl.addEventListener('input', e => { query = e.target.value; renderGrid(); });
+document.addEventListener('keydown', e => {
+  if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'){
+    e.preventDefault(); searchEl.focus();
+  }
+});
+
+renderCats();
+renderGrid();
+</script>
+
+<section id="proces">
+  <div class="section-eyebrow reveal">Aanpak</div>
+  <h2 class="reveal reveal-delay-1">Van ruis naar routine</h2>
+  <div class="steps">
+    <div class="step reveal"><div class="step-num">01</div><div><div class="step-title">Audit</div><p class="step-desc">We brengen jouw tijdrovende taken in kaart.</p></div></div>
+    <div class="step reveal reveal-delay-1"><div class="step-num">02</div><div><div class="step-title">Blueprint</div><p class="step-desc">Ik ontwerp de workflow en bereken tijdwinst.</p></div></div>
+    <div class="step reveal reveal-delay-2"><div class="step-num">03</div><div><div class="step-title">Bouwen</div><p class="step-desc">Workflow opgezet, getest en gedocumenteerd.</p></div></div>
+    <div class="step reveal reveal-delay-3"><div class="step-num">04</div><div><div class="step-title">Overdracht</div><p class="step-desc">Training + support zodat jij zelfstandig bent.</p></div></div>
+  </div>
+</section>
+
+<section style="text-align:center">
+  <h2 class="reveal">Welke taak wil jij kwijt?</h2>
+  <p class="section-sub reveal reveal-delay-1" style="margin:0 auto 32px">In een gratis intake berekenen we samen hoeveel uur per week je kunt besparen.</p>
+  <a href="index.html#contact" class="btn-primary reveal reveal-delay-2">Gratis intake plannen →</a>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="websites.html">Websites</a></li>
+        <li><a href="automatisering.html">Automatisering</a></li>
+        <li><a href="index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="index.html#over">Over mij</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.borderBottomColor = window.scrollY > 20 ? 'rgba(23,89,232,0.08)' : 'rgba(23,89,232,0.10)';
+});
+</script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>

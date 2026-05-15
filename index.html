@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David Spijker — Websites, AI & Automatisering voor MKB</title>
+<meta name="description" content="Slimme websites, AI-automatisering en SEO voor MKB-bedrijven. Meer leads, minder handwerk.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* HERO CARD VISUALISATIES */
+.card-img-inner.viz-webdesign,
+.card-img-inner.viz-workflow{padding:0;background:linear-gradient(135deg,rgba(23,89,232,0.06),rgba(23,89,232,0.02));overflow:hidden;border-radius:inherit}
+
+/* --- Webdesign: mini browser mockup --- */
+.viz-webdesign{align-items:stretch;justify-content:stretch}
+.viz-webdesign .vw-browser{position:relative;flex:1;margin:10px;background:#fff;border:1px solid var(--border);border-radius:6px;box-shadow:0 6px 16px rgba(23,89,232,0.08);display:flex;flex-direction:column;overflow:hidden}
+.viz-webdesign .vw-bar{display:flex;align-items:center;gap:5px;padding:6px 8px;background:#f5f7fc;border-bottom:1px solid var(--border)}
+.viz-webdesign .vw-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.viz-webdesign .vw-dot-r{background:#ff5f57}
+.viz-webdesign .vw-dot-y{background:#febc2e}
+.viz-webdesign .vw-dot-g{background:#28c840}
+.viz-webdesign .vw-url{flex:1;margin-left:6px;background:#fff;border:1px solid var(--border);border-radius:3px;padding:2px 8px;font-family:ui-monospace,Menlo,monospace;font-size:8.5px;color:var(--muted);text-align:center;letter-spacing:.2px}
+.viz-webdesign .vw-body{flex:1;display:flex;flex-direction:column;padding:9px 10px;gap:8px;background:linear-gradient(180deg,#fbfcff 0%,#f4f7ff 100%)}
+.viz-webdesign .vw-hero{display:flex;flex-direction:column;gap:4px;padding-bottom:2px}
+.viz-webdesign .vw-h-line{height:5px;border-radius:2px;background:linear-gradient(90deg,#1759e8,#3b6ef5);width:70%}
+.viz-webdesign .vw-h-line-2{width:48%;background:linear-gradient(90deg,#3b6ef5,#7ea4ff);height:4px;margin-bottom:3px}
+.viz-webdesign .vw-h-btn{margin-top:3px;width:48px;height:11px;border-radius:3px;background:#1759e8;box-shadow:0 2px 6px rgba(23,89,232,0.32);animation:vwPulse 2.4s ease-in-out infinite}
+.viz-webdesign .vw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;flex:1;margin-top:auto}
+.viz-webdesign .vw-tile{background:#fff;border:1px solid var(--border);border-radius:4px;min-height:24px;position:relative;overflow:hidden}
+.viz-webdesign .vw-tile::before{content:"";position:absolute;left:5px;right:5px;top:5px;height:6px;border-radius:2px;background:rgba(23,89,232,0.18)}
+.viz-webdesign .vw-tile::after{content:"";position:absolute;left:5px;right:30%;bottom:5px;height:3px;border-radius:2px;background:rgba(23,89,232,0.10)}
+.viz-webdesign .vw-cursor{position:absolute;width:11px;height:11px;border-radius:50%;background:rgba(23,89,232,0.18);border:1.5px solid #1759e8;animation:vwCursor 4.2s cubic-bezier(.5,.05,.3,1) infinite;pointer-events:none}
+@keyframes vwPulse{0%,100%{box-shadow:0 2px 6px rgba(23,89,232,0.32)}50%{box-shadow:0 2px 10px rgba(23,89,232,0.6)}}
+@keyframes vwCursor{
+  0%   {left:90%;top:18%;opacity:0}
+  10%  {opacity:1}
+  35%  {left:18%;top:46%;opacity:1}
+  55%  {left:18%;top:46%;transform:scale(.7);opacity:.55}
+  60%  {left:18%;top:46%;transform:scale(1);opacity:1}
+  90%  {left:78%;top:82%;opacity:1}
+  100% {left:78%;top:82%;opacity:0}
+}
+
+/* --- Workflow: connected nodes (n8n-stijl) — pure SVG --- */
+.viz-workflow .wf-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block}
+.viz-workflow .wf-svg g rect{transition:filter .3s}
+.viz-workflow .wf-pulse{transform-box:fill-box;transform-origin:center;animation:wfPing 2.4s ease-out infinite}
+@keyframes wfPing{
+  0%   {transform:scale(.98);opacity:.55}
+  70%  {transform:scale(1.45);opacity:0}
+  100% {transform:scale(1.45);opacity:0}
+}
+
+/* TOOLS MARQUEE — gebruikte software */
+.tools-marquee{margin-top:48px;text-align:center}
+.tools-label{display:inline-block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px}
+.tools-viewport{position:relative;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 8%,#000 92%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0%,#000 8%,#000 92%,transparent 100%)}
+.tools-track{display:flex;width:max-content;gap:14px;animation:toolsScroll 38s linear infinite;will-change:transform}
+.tools-track:hover{animation-play-state:paused}
+.tools-group{display:flex;gap:14px;padding-right:14px;flex-shrink:0}
+.tool-chip{display:inline-flex;align-items:center;gap:10px;padding:11px 18px 11px 14px;background:rgba(255,255,255,0.85);border:1px solid var(--border);border-radius:999px;backdrop-filter:blur(8px);font-family:var(--font-head);font-weight:600;font-size:13.5px;color:var(--text);white-space:nowrap;box-shadow:0 2px 8px rgba(23,89,232,0.04);transition:transform .25s,box-shadow .25s,border-color .25s}
+.tool-chip:hover{transform:translateY(-2px);border-color:rgba(23,89,232,0.32);box-shadow:0 10px 24px rgba(23,89,232,0.12)}
+.tool-chip img{width:22px;height:22px;object-fit:contain;flex-shrink:0;display:block}
+.tool-chip-text{padding:11px 20px}
+.tool-chip-lov .tool-lov-mark{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;background:linear-gradient(135deg,#ff5e8a,#ff8b62);color:#fff;font-size:13px;font-weight:700;flex-shrink:0}
+@keyframes toolsScroll{
+  from{transform:translateX(0)}
+  to  {transform:translateX(-50%)}
+}
+@media(prefers-reduced-motion:reduce){
+  .tools-track{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- MESH BLOBS -->
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="#" style="color:var(--text);font-weight:600">Home</a></li>
+    <li><a href="websites.html">Websites</a></li>
+    <li><a href="automatisering.html">Automatisering</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left reveal">
+    <div class="hero-badge">Beschikbaar voor nieuwe projecten</div>
+    <h1>Websites, automatiseringen<br><em>en software.</em></h1>
+    <p class="hero-sub">Je ziet precies wat er gebouwd wordt en waarom.<br>Net gestart, dus de eerste 3 klanten krijgen 100% korting. Kies hieronder wat je nodig hebt.</p>
+    <div class="btn-row">
+      <a href="websites.html" class="btn-primary">Websites →</a>
+      <a href="automatisering.html" class="btn-ghost">Automatisering</a>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-num">Net begonnen</span><span class="stat-lbl">Bouw mee aan mijn portfolio</span></div>
+      <div><span class="stat-num">100% korting</span><span class="stat-lbl">Voor de eerste 3 klanten</span></div>
+      <div><span class="stat-num">Leiden-based</span><span class="stat-lbl">Persoonlijk, geen agency-bullshit</span></div>
+    </div>
+  </div>
+  <div class="hero-right reveal reveal-delay-2">
+    <div class="project-cards" id="cardStack">
+      <div class="p-card active" data-idx="0">
+        <div class="card-tag">Voor MKB'ers · Websites</div>
+        <div class="card-img"><div class="card-img-inner viz-webdesign">
+          <div class="vw-browser">
+            <div class="vw-bar">
+              <span class="vw-dot vw-dot-r"></span>
+              <span class="vw-dot vw-dot-y"></span>
+              <span class="vw-dot vw-dot-g"></span>
+              <div class="vw-url">davidspijker.nl</div>
+            </div>
+            <div class="vw-body">
+              <div class="vw-hero">
+                <div class="vw-h-line vw-h-line-1"></div>
+                <div class="vw-h-line vw-h-line-2"></div>
+                <div class="vw-h-btn"></div>
+              </div>
+              <div class="vw-grid">
+                <div class="vw-tile"></div>
+                <div class="vw-tile"></div>
+                <div class="vw-tile"></div>
+              </div>
+            </div>
+            <span class="vw-cursor" aria-hidden="true"></span>
+          </div>
+        </div></div>
+        <div class="card-title">Converterende websites</div>
+        <div class="card-result">↑ Hoge conversie</div>
+      </div>
+      <div class="p-card" data-idx="1">
+        <div class="card-tag">Voor MKB'ers · Automatisering</div>
+        <div class="card-img"><div class="card-img-inner viz-workflow">
+          <svg class="wf-svg" viewBox="0 0 340 130" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="wfLine" x1="0" x2="1">
+                <stop offset="0" stop-color="#1759e8" stop-opacity=".15"/>
+                <stop offset=".5" stop-color="#1759e8" stop-opacity=".55"/>
+                <stop offset="1" stop-color="#1759e8" stop-opacity=".15"/>
+              </linearGradient>
+            </defs>
+
+            <!-- connecting lines -->
+            <g fill="none" stroke="url(#wfLine)" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="3 4">
+              <path d="M58 50 H 116" />
+              <path d="M158 50 H 216" />
+              <path d="M258 50 H 312" />
+              <path d="M137 65 V 92 H 200 V 80" />
+              <animate attributeName="stroke-dashoffset" from="0" to="-28" dur="2.2s" repeatCount="indefinite"/>
+            </g>
+
+            <!-- node 1: trigger (lightning) -->
+            <g transform="translate(20,32)">
+              <rect class="wf-pulse" width="38" height="38" rx="10" fill="none" stroke="#1759e8" stroke-width="1.5"/>
+              <rect width="38" height="38" rx="10" fill="#fff" stroke="rgba(23,89,232,0.28)"/>
+              <path d="M22 8 L11 22 H18 L16 30 L27 16 H20 Z" fill="#1759e8"/>
+            </g>
+
+            <!-- node 2: process (gear-ish) -->
+            <g transform="translate(118,32)">
+              <rect width="38" height="38" rx="10" fill="#fff" stroke="rgba(23,89,232,0.28)"/>
+              <g transform="translate(19,19)" fill="#1759e8">
+                <circle r="4" fill="none" stroke="#1759e8" stroke-width="1.6"/>
+                <rect x="-1.3" y="-9" width="2.6" height="4" rx="1"/>
+                <rect x="-1.3" y="5" width="2.6" height="4" rx="1"/>
+                <rect x="-9" y="-1.3" width="4" height="2.6" rx="1"/>
+                <rect x="5" y="-1.3" width="4" height="2.6" rx="1"/>
+              </g>
+            </g>
+
+            <!-- node 3: branch (envelope) — sits below -->
+            <g transform="translate(180,72)">
+              <rect width="38" height="38" rx="10" fill="#fff" stroke="rgba(23,89,232,0.28)"/>
+              <g transform="translate(8,11)" fill="none" stroke="#1759e8" stroke-width="1.6" stroke-linejoin="round">
+                <rect x="0" y="0" width="22" height="16" rx="2"/>
+                <path d="M0 1 L11 10 L22 1"/>
+              </g>
+            </g>
+
+            <!-- node 4: process (data) -->
+            <g transform="translate(218,32)">
+              <rect width="38" height="38" rx="10" fill="#fff" stroke="rgba(23,89,232,0.28)"/>
+              <g transform="translate(10,11)" fill="#1759e8">
+                <rect x="0" y="0" width="18" height="3" rx="1"/>
+                <rect x="0" y="6" width="14" height="3" rx="1" opacity=".7"/>
+                <rect x="0" y="12" width="18" height="3" rx="1" opacity=".4"/>
+              </g>
+            </g>
+
+            <!-- node 5: success (check, filled accent) -->
+            <g transform="translate(312,32)">
+              <rect width="38" height="38" rx="10" fill="#1759e8"/>
+              <path d="M11 20 L16 25 L27 13" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+
+            <!-- animated spark riding the main line -->
+            <circle r="3.4" fill="#1759e8">
+              <animateMotion dur="3.2s" repeatCount="indefinite" keyPoints="0;0.33;0.66;1" keyTimes="0;0.33;0.66;1"
+                path="M58 50 H 116 M158 50 H 216 M258 50 H 330"/>
+              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.05;0.95;1" dur="3.2s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div></div>
+        <div class="card-title">Werk op autopilot</div>
+        <div class="card-result">↓ Tot 15 uur/week besparen</div>
+      </div>
+    </div>
+    <div class="card-dots">
+      <div class="card-dot active" data-dot="0"></div>
+      <div class="card-dot" data-dot="1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PATHS SECTION -->
+<section id="paden">
+  <div class="section-eyebrow reveal">Twee paden, één builder</div>
+  <h2 class="reveal reveal-delay-1">Wat kan jouw bedrijf gebruiken?</h2>
+  <p class="section-sub reveal reveal-delay-2">Elk pad heeft zijn eigen pagina met projecten, aanpak en prijzen.</p>
+  <div class="routes-grid">
+    <a href="websites.html" class="route-card reveal">
+      <div class="route-icon">🌐</div>
+      <div class="route-label">Voor MKB'ers</div>
+      <div class="route-title">Websites</div>
+      <p class="route-desc">Converterende websites, webshops en landingspagina's op maat.</p>
+      <div class="route-cta">Bekijk werk →</div>
+      <div class="route-stat">Gratis website preview</div>
+    </a>
+    <a href="automatisering.html" class="route-card reveal reveal-delay-1">
+      <div class="route-icon">⚡</div>
+      <div class="route-label">Voor MKB'ers</div>
+      <div class="route-title">Automatisering</div>
+      <p class="route-desc">n8n workflows, AI-integraties en CRM-automatisering die tijd besparen.</p>
+      <div class="route-cta">Bekijk werk →</div>
+      <div class="route-stat">Tot 15 uur/week besparen</div>
+    </a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="proces" class="hiw-bg">
+  <div class="section-eyebrow reveal">Hoe werkt het?</div>
+  <h2 class="reveal reveal-delay-1">Van idee naar resultaat</h2>
+  <p class="section-sub reveal reveal-delay-2">Een helder en eerlijk proces — geen verrassingen, wel resultaten.</p>
+
+  <div class="proc-slider reveal reveal-delay-2" id="procSlider">
+    <!-- top: progress rail with 4 dots -->
+    <div class="proc-rail">
+      <div class="proc-rail-bg"></div>
+      <div class="proc-rail-fill" id="procRailFill"></div>
+      <button class="proc-dot" data-idx="0" aria-label="Stap 1"><span>01</span><em>Discovery</em></button>
+      <button class="proc-dot" data-idx="1" aria-label="Stap 2"><span>02</span><em>Bouwen</em></button>
+      <button class="proc-dot" data-idx="2" aria-label="Stap 3"><span>03</span><em>Lanceren</em></button>
+      <button class="proc-dot" data-idx="3" aria-label="Stap 4"><span>04</span><em>Schalen</em></button>
+    </div>
+
+    <!-- main carousel viewport -->
+    <div class="proc-viewport">
+      <div class="proc-track" id="procTrack">
+        <article class="proc-slide">
+          <div class="proc-slide-inner">
+            <div class="proc-slide-num">01</div>
+            <h3 class="proc-slide-title">Discovery</h3>
+            <p class="proc-slide-desc">We bespreken jouw doelen, uitdagingen en doelgroep in een gratis intake gesprek. Ik luister, stel vragen en kom met een voorstel op maat.</p>
+            <ul class="proc-slide-bullets">
+              <li>Gratis kennismaking (45 min)</li>
+              <li>Heldere offerte binnen 48 uur</li>
+              <li>Geen verplichtingen</li>
+            </ul>
+          </div>
+        </article>
+        <article class="proc-slide">
+          <div class="proc-slide-inner">
+            <div class="proc-slide-num">02</div>
+            <h3 class="proc-slide-title">Bouwen</h3>
+            <p class="proc-slide-desc">Ik ontwikkel de oplossing snel en iteratief — jij ziet de voortgang elke stap. Korte feedbackrondes zodat het eindresultaat exact aansluit op je wensen.</p>
+            <ul class="proc-slide-bullets">
+              <li>Wekelijkse demo's</li>
+              <li>Live preview omgeving</li>
+              <li>Direct contact via WhatsApp</li>
+            </ul>
+          </div>
+        </article>
+        <article class="proc-slide">
+          <div class="proc-slide-inner">
+            <div class="proc-slide-num">03</div>
+            <h3 class="proc-slide-title">Lanceren</h3>
+            <p class="proc-slide-desc">Alles getest, geoptimaliseerd en live. Met een soepele overdracht zodat jij de controle hebt. Geen vendor lock-in — alles staat op jouw eigen accounts.</p>
+            <ul class="proc-slide-bullets">
+              <li>Volledige QA & performance test</li>
+              <li>Documentatie en video-uitleg</li>
+              <li>30 dagen gratis nazorg</li>
+            </ul>
+          </div>
+        </article>
+        <article class="proc-slide">
+          <div class="proc-slide-inner">
+            <div class="proc-slide-num">04</div>
+            <h3 class="proc-slide-title">Schalen</h3>
+            <p class="proc-slide-desc">We analyseren de data en optimaliseren continu voor maximale groei. Optionele service-overeenkomst voor doorlopende verbeteringen.</p>
+            <ul class="proc-slide-bullets">
+              <li>Maandelijks performance rapport</li>
+              <li>A/B-tests en optimalisaties</li>
+              <li>Strategische groei-sessies</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="proc-controls">
+      <button class="proc-arrow" id="procPrev" aria-label="Vorige stap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="proc-counter"><span id="procCurrent">1</span><span class="proc-counter-sep">/</span><span>4</span></div>
+      <button class="proc-arrow" id="procNext" aria-label="Volgende stap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+.proc-slider{max-width:1080px;margin:48px auto 0;padding:0 16px}
+
+/* Rail with dots */
+.proc-rail{position:relative;display:grid;grid-template-columns:repeat(4,1fr);align-items:start;margin-bottom:36px;padding:0 6%}
+.proc-rail-bg{position:absolute;top:18px;left:17%;right:17%;height:2px;background:rgba(23,89,232,0.14);border-radius:2px;z-index:0}
+.proc-rail-fill{position:absolute;top:18px;left:17%;height:2px;background:linear-gradient(90deg,var(--accent),#3b6ef5);border-radius:2px;z-index:1;width:0;transition:width .6s cubic-bezier(.55,.1,.25,1)}
+.proc-dot{appearance:none;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:0;font-family:inherit;color:var(--muted);transition:color .3s;z-index:2}
+.proc-dot span{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.95);border:2px solid rgba(23,89,232,0.2);font-family:var(--font-head);font-weight:700;font-size:13px;color:var(--muted);transition:all .35s cubic-bezier(.55,.1,.25,1)}
+.proc-dot em{font-style:normal;font-size:12px;font-weight:500;letter-spacing:.2px;transition:color .3s}
+.proc-dot:hover span{border-color:rgba(23,89,232,0.5);transform:scale(1.05)}
+.proc-dot.done span{background:var(--accent);border-color:var(--accent);color:#fff}
+.proc-dot.active span{background:#fff;border-color:var(--accent);color:var(--accent);transform:scale(1.15);box-shadow:0 8px 24px rgba(23,89,232,0.25)}
+.proc-dot.active em{color:var(--text);font-weight:600}
+
+/* Viewport / track */
+.proc-viewport{position:relative;overflow:hidden;border-radius:20px;background:rgba(255,255,255,0.55);border:1px solid var(--border);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 12px 40px rgba(23,89,232,0.06)}
+.proc-track{display:flex;width:400%;transition:transform .65s cubic-bezier(.55,.1,.25,1)}
+.proc-slide{flex:0 0 25%;padding:48px 56px}
+.proc-slide-inner{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto;gap:8px 24px;align-items:start;max-width:780px;margin:0 auto;opacity:0;transform:translateY(12px);transition:opacity .5s ease .15s,transform .5s ease .15s}
+.proc-slide.visible .proc-slide-inner{opacity:1;transform:none}
+.proc-slide-num{grid-row:1 / 4;font-family:var(--font-head);font-weight:800;font-size:88px;line-height:.85;letter-spacing:-3px;background:linear-gradient(135deg,var(--accent),#3b6ef5);-webkit-background-clip:text;background-clip:text;color:transparent;align-self:start}
+.proc-slide-title{font-family:var(--font-head);font-weight:700;font-size:30px;letter-spacing:-0.5px;margin:0}
+.proc-slide-desc{color:var(--muted);font-size:15.5px;line-height:1.6;margin:0;grid-column:2}
+.proc-slide-bullets{grid-column:2;list-style:none;padding:0;margin:6px 0 0;display:flex;flex-direction:column;gap:8px}
+.proc-slide-bullets li{font-size:14px;color:var(--text);display:flex;align-items:center;gap:10px}
+.proc-slide-bullets li::before{content:'';flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* Controls */
+.proc-controls{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:28px}
+.proc-arrow{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.92);border:1px solid var(--border);color:var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s}
+.proc-arrow:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px);box-shadow:0 8px 20px rgba(23,89,232,0.25)}
+.proc-arrow:disabled{opacity:.3;cursor:default;transform:none;background:rgba(255,255,255,0.92);color:var(--accent)}
+.proc-counter{display:flex;align-items:center;gap:6px;font-family:var(--font-head);font-weight:600;color:var(--muted);font-size:14px;min-width:50px;justify-content:center}
+.proc-counter-sep{opacity:.4}
+.proc-counter span:first-child{color:var(--text);font-size:18px;font-variant-numeric:tabular-nums}
+@media(max-width:760px){
+  .proc-rail{padding:0 4%}
+  .proc-rail-bg,.proc-rail-fill{left:16%;right:16%}
+  .proc-dot span{width:30px;height:30px;font-size:11px}
+  .proc-rail-bg,.proc-rail-fill{top:14px}
+  .proc-dot em{font-size:10px}
+  .proc-slide{padding:32px 24px}
+  .proc-slide-inner{grid-template-columns:1fr;gap:8px}
+  .proc-slide-num{grid-row:auto;font-size:64px}
+  .proc-slide-desc,.proc-slide-bullets{grid-column:auto}
+  .proc-slide-title{font-size:24px}
+}
+</style>
+
+<script>
+(function(){
+  const slider = document.getElementById('procSlider');
+  if(!slider) return;
+  const track = document.getElementById('procTrack');
+  const dots = slider.querySelectorAll('.proc-dot');
+  const slides = slider.querySelectorAll('.proc-slide');
+  const railFill = document.getElementById('procRailFill');
+  const prevBtn = document.getElementById('procPrev');
+  const nextBtn = document.getElementById('procNext');
+  const counter = document.getElementById('procCurrent');
+  const TOTAL = slides.length;
+  let idx = 0;
+  let playing = true;
+  let timer = null;
+  let started = false;
+
+  function render(){
+    track.style.transform = `translateX(-${idx * 25}%)`;
+    dots.forEach((d,i) => {
+      d.classList.toggle('active', i === idx);
+      d.classList.toggle('done', i < idx);
+    });
+    slides.forEach((s,i) => s.classList.toggle('visible', i === idx));
+    railFill.style.width = `${(idx / (TOTAL - 1)) * 66}%`;
+    counter.textContent = String(idx + 1);
+  }
+  function go(i){ idx = (i + TOTAL) % TOTAL; render(); restart(); }
+  function next(){ go(idx + 1); }
+  function prev(){ go(idx - 1); }
+  function restart(){ if(!playing) return; clearInterval(timer); timer = setInterval(next, 5500); }
+
+  dots.forEach((d,i) => d.addEventListener('click', () => go(i)));
+  nextBtn.addEventListener('click', next);
+  prevBtn.addEventListener('click', prev);
+
+  // pause on hover
+  slider.addEventListener('mouseenter', () => clearInterval(timer));
+  slider.addEventListener('mouseleave', () => { if(playing) restart(); });
+
+  // start auto-advance only when in view
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !started){ started = true; render(); restart(); }
+    });
+  }, {threshold: 0.3});
+  io.observe(slider);
+
+  // touch swipe
+  let startX = 0, dx = 0;
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; dx = 0; clearInterval(timer); }, {passive:true});
+  track.addEventListener('touchmove', e => { dx = e.touches[0].clientX - startX; }, {passive:true});
+  track.addEventListener('touchend', () => {
+    if(Math.abs(dx) > 50){ dx < 0 ? next() : prev(); }
+    if(playing) restart();
+  });
+
+  render();
+})();
+</script>
+
+<!-- TESTIMONIALS -->
+<section id="reviews">
+  <div class="section-eyebrow reveal">Klantbeoordelingen</div>
+  <h2 class="reveal reveal-delay-1">Wat klanten zeggen</h2>
+  <p class="section-sub reveal reveal-delay-2">Ik laat de resultaten voor zichzelf spreken. En mijn klanten ook.</p>
+  <div class="testimonials-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Binnen drie weken een volledig nieuwe website én automatisering van ons leadproces. Echt een gamechanger voor ons bedrijf."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">SV</div>
+        <div><div class="testi-name">Sarah van der Berg</div><div class="testi-role">Eigenaar · Bloem & Co</div></div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Onze omzet is met 42% gestegen na de redesign. Maar wat ik nog meer waardeer: hij denkt écht mee als ondernemer."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">MJ</div>
+        <div><div class="testi-name">Mark Jansen</div><div class="testi-role">Directeur · Jansen Mode BV</div></div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"De AI-automatisering bespaart ons 15 uur per week aan handmatig werk. Die tijd steken we nu in dingen die er echt toe doen."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">LK</div>
+        <div><div class="testi-name">Lisa Konings</div><div class="testi-role">Operations · TechFlow BV</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tools-marquee reveal">
+    <span class="tools-label">Gebruikte software</span>
+    <div class="tools-viewport">
+      <div class="tools-track">
+        <!-- group 1 -->
+        <div class="tools-group">
+          <div class="tool-chip tool-chip-text"><span>Photoshop</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/wordpress" alt="" loading="lazy"><span>WordPress</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/woocommerce" alt="" loading="lazy"><span>WooCommerce</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/elementor" alt="" loading="lazy"><span>Elementor</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/hostinger" alt="" loading="lazy"><span>Hostinger</span></div>
+          <div class="tool-chip tool-chip-text"><span>ChatGPT</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/claude" alt="" loading="lazy"><span>Claude</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/googlegemini" alt="" loading="lazy"><span>Gemini</span></div>
+          <div class="tool-chip tool-chip-lov"><span class="tool-lov-mark">♥</span><span>Lovable</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/n8n" alt="" loading="lazy"><span>n8n</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/make" alt="" loading="lazy"><span>Make.com</span></div>
+        </div>
+        <!-- group 2 (identical, for seamless loop) -->
+        <div class="tools-group" aria-hidden="true">
+          <div class="tool-chip tool-chip-text"><span>Photoshop</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/wordpress" alt="" loading="lazy"><span>WordPress</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/woocommerce" alt="" loading="lazy"><span>WooCommerce</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/elementor" alt="" loading="lazy"><span>Elementor</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/hostinger" alt="" loading="lazy"><span>Hostinger</span></div>
+          <div class="tool-chip tool-chip-text"><span>ChatGPT</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/claude" alt="" loading="lazy"><span>Claude</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/googlegemini" alt="" loading="lazy"><span>Gemini</span></div>
+          <div class="tool-chip tool-chip-lov"><span class="tool-lov-mark">♥</span><span>Lovable</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/n8n" alt="" loading="lazy"><span>n8n</span></div>
+          <div class="tool-chip"><img src="https://cdn.simpleicons.org/make" alt="" loading="lazy"><span>Make.com</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog" class="blog-bg">
+  <div class="section-eyebrow reveal">Inzichten & tips</div>
+  <h2 class="reveal reveal-delay-1">Laatste artikelen</h2>
+  <p class="section-sub reveal reveal-delay-2">Praktische kennis voor ondernemers die willen groeien met technologie.</p>
+  <div class="blog-grid">
+    <div class="blog-card reveal">
+      <div class="blog-thumb"><div class="blog-thumb-stripes"></div></div>
+      <div class="blog-body">
+        <div class="blog-meta">AI · 6 min lezen</div>
+        <div class="blog-title">5 AI-tools die jouw MKB-bedrijf direct efficiënter maken</div>
+        <p class="blog-excerpt">Van automatische klantenservice tot slimme planning — deze tools betalen zichzelf terug in weken.</p>
+        <a href="#" class="blog-read">Lees artikel →</a>
+      </div>
+    </div>
+    <div class="blog-card reveal reveal-delay-1">
+      <div class="blog-thumb"><div class="blog-thumb-stripes"></div></div>
+      <div class="blog-body">
+        <div class="blog-meta">Webdev · 4 min lezen</div>
+        <div class="blog-title">De perfecte converterende website in 2025: een checklist</div>
+        <p class="blog-excerpt">Wat maakt het verschil tussen een mooie website en eentje die écht klanten oplevert?</p>
+        <a href="#" class="blog-read">Lees artikel →</a>
+      </div>
+    </div>
+    <div class="blog-card reveal reveal-delay-2">
+      <div class="blog-thumb"><div class="blog-thumb-stripes"></div></div>
+      <div class="blog-body">
+        <div class="blog-meta">Automatisering · 8 min lezen</div>
+        <div class="blog-title">n8n uitgelegd: zo automatiseer je je sales pipeline stap voor stap</div>
+        <p class="blog-excerpt">Een praktische gids voor niet-technische ondernemers over het bouwen van je eerste workflow.</p>
+        <a href="#" class="blog-read">Lees artikel →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="over">
+  <div class="about-inner">
+    <div class="about-photo reveal">
+      <img class="about-photo-img" src="assets/david-portret.png" alt="David Spijker — portret">
+    </div>
+    <div class="about-right reveal reveal-delay-1">
+      <div class="section-eyebrow">Over mij</div>
+      <h2>Hoi, ik ben David Spijker 👋</h2>
+      <p class="about-body">Ik ben een jonge master student met een passie voor innovatie. Ik geloof dat elke ondernemer, groot of klein, de kracht van technologie verdient.<br><br>Geen agency-gedoe, geen weken wachten op antwoord. Gewoon directe samenwerking, eerlijke communicatie, en oplossingen die écht werken voor jouw bedrijf.</p>
+      <a href="#contact" class="btn-primary">Laten we kennismaken →</a>
+      <div class="about-nums">
+        <div class="about-num"><span>10+</span><small>Projecten of websites gemaakt</small></div>
+        <div class="about-num"><span>AI-first</span><small>Met moderne tools</small></div>
+        <div class="about-num"><span>100%</span><small>Resultaatgericht</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-bg">
+  <div class="contact-inner">
+    <form class="contact-form reveal" id="contactForm" onsubmit="return submitContact(event)">
+      <div class="section-eyebrow">Contact</div>
+      <h2>Klaar om te groeien?</h2>
+      <p>Stuur een berichtje en ik neem binnen 4 uur contact op. Geen verplichtingen, gewoon een goed gesprek.</p>
+      <div class="form-row">
+        <div class="field"><label>Naam</label><input type="text" id="cf_name" placeholder="Jan Jansen" required></div>
+        <div class="field"><label>E-mail</label><input type="email" id="cf_email" placeholder="jan@bedrijf.nl" required></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Bedrijf</label><input type="text" id="cf_company" placeholder="Jansen BV"></div>
+        <div class="field"><label>Ik heb interesse in</label><select id="cf_service" style="width:100%;background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none"><option value="website">Een website</option><option value="automatisering">Automatisering</option><option value="eigen">Eigen project / samenwerking</option><option value="overig">Iets anders</option></select></div>
+      </div>
+      <div class="field"><label>Waarmee kan ik je helpen?</label><textarea id="cf_message" placeholder="Vertel iets over je bedrijf en wat je wilt bereiken..." required></textarea></div>
+      <button type="submit" class="btn-submit">Stuur bericht →</button>
+      <div id="cf_success" style="display:none;margin-top:16px;padding:12px 14px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;color:#16a34a;font-size:14px">✓ Bericht verstuurd! Ik neem binnen 4 uur contact op.</div>
+      <div id="cf_error" style="display:none;margin-top:16px;padding:12px 14px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.25);border-radius:8px;color:#b91c1c;font-size:14px"></div>
+    </form>
+    <script>
+      // Web3Forms access key — vul hier jouw key in (krijg je via web3forms.com)
+      const WEB3FORMS_KEY = 'YOUR_ACCESS_KEY_HERE';
+
+      async function submitContact(e){
+        e.preventDefault();
+        const btn = document.querySelector('#contactForm .btn-submit');
+        const errEl = document.getElementById('cf_error');
+        const okEl = document.getElementById('cf_success');
+        errEl.style.display = 'none';
+        okEl.style.display = 'none';
+
+        const data = {
+          name: document.getElementById('cf_name').value.trim(),
+          email: document.getElementById('cf_email').value.trim(),
+          company: document.getElementById('cf_company').value.trim(),
+          service: document.getElementById('cf_service').value,
+          message: document.getElementById('cf_message').value.trim()
+        };
+
+        // 1. Lead opslaan in CRM (lokaal)
+        const lead = {
+          id: 'l'+Math.random().toString(36).slice(2,9),
+          ...data,
+          phone: '',
+          budget: '',
+          status: 'new',
+          source: 'homepage',
+          notes: '',
+          date: new Date().toISOString().slice(0,10)
+        };
+        const leads = JSON.parse(localStorage.getItem('ds_leads')||'[]');
+        leads.unshift(lead);
+        localStorage.setItem('ds_leads', JSON.stringify(leads));
+        localStorage.setItem('ds_newLeadFromForm', 'true');
+
+        // 2. E-mail naar david.pvjl@gmail.com via Web3Forms
+        btn.disabled = true;
+        const originalText = btn.textContent;
+        btn.textContent = 'Versturen...';
+
+        try {
+          const res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json', 'Accept':'application/json'},
+            body: JSON.stringify({
+              access_key: WEB3FORMS_KEY,
+              subject: `Nieuw contact via website — ${data.name} (${data.service})`,
+              from_name: 'davidspijker.nl contactformulier',
+              name: data.name,
+              email: data.email,
+              company: data.company || '—',
+              service: data.service,
+              message: data.message,
+              botcheck: ''
+            })
+          });
+          const json = await res.json();
+          if (!json.success) throw new Error(json.message || 'Verzenden mislukt');
+
+          document.getElementById('contactForm').reset();
+          okEl.style.display = 'block';
+          setTimeout(() => okEl.style.display = 'none', 8000);
+        } catch (err) {
+          // Lead staat lokaal — laat gebruiker weten dat er iets misging maar bericht is wel ontvangen via CRM
+          errEl.textContent = '⚠ Mail kon niet worden verstuurd, maar je bericht is opgeslagen. Stuur eventueel direct een mail naar david.pvjl@gmail.com.';
+          errEl.style.display = 'block';
+          console.error('Web3Forms error:', err);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+        return false;
+      }
+    </script>
+    <div class="contact-side reveal reveal-delay-1">
+      <div class="side-card">
+        <h3>📅 Plan direct een gesprek</h3>
+        <p>Kies een tijdstip dat jou uitkomt. Gratis kennismaking van 30 minuten.</p>
+        <a href="#" class="btn-cal">Open agenda →</a>
+      </div>
+      <div class="side-card">
+        <h3>💬 WhatsApp</h3>
+        <p>Liever direct appen? Ik reageer snel.</p>
+        <a href="https://wa.me/31626135410" class="btn-wa">+31 6 26 13 54 10</a>
+      </div>
+      <div class="side-card">
+        <h3>📍 Locatie</h3>
+        <p style="color:var(--muted);font-size:13px">Leiden, Nederland<br>Beschikbaar remote en op locatie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="websites.html">Websites</a></li>
+        <li><a href="automatisering.html">Automatisering</a></li>
+        <li><a href="index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="index.html#over">Over mij</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<!-- TWEAK PANEL -->
+<div id="tweak-panel">
+  <h4>Tweaks</h4>
+  <div class="tweak-row"><label>Accentkleur</label><input type="color" id="tweak-accent" value="#2563eb"></div>
+  <div class="tweak-row"><label>Stijl hero</label><select id="tweak-hero"><option value="split">Split (huidig)</option><option value="centered">Gecentreerd</option></select></div>
+  <div class="tweak-row"><label>Animaties</label><select id="tweak-anim"><option value="on">Aan</option><option value="off">Uit</option></select></div>
+</div>
+
+<script>
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#1759e8",
+  "heroStyle": "split",
+  "animations": "on"
+}/*EDITMODE-END*/;
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── CARD STACK (only if present) ──
+const stack = document.getElementById('cardStack');
+if (stack) {
+let activeCard = 0;
+const cards = stack.querySelectorAll('.p-card');
+const dots = document.querySelectorAll('.card-dot');
+
+function setCard(idx, animate) {
+  const prev = activeCard;
+  activeCard = idx;
+  cards.forEach((c, i) => {
+    const offset = (i - idx + cards.length) % cards.length;
+    c.classList.toggle('active', i === idx);
+    c.style.transition = 'transform .5s cubic-bezier(.34,1.4,.64,1), box-shadow .4s, opacity .4s, z-index 0s';
+    c.style.zIndex = cards.length - offset;
+    if (i === idx) {
+      c.style.transform = 'rotate(0deg) translateY(0px) scale(1)';
+      c.style.opacity = '1';
+    } else if (offset === 1) {
+      c.style.transform = 'rotate(5deg) translateY(18px) scale(0.97)';
+      c.style.opacity = '0.85';
+    } else {
+      c.style.transform = 'rotate(10deg) translateY(36px) scale(0.94)';
+      c.style.opacity = '0.6';
+    }
+  });
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+setCard(0, false);
+
+// Click active card → next; click back cards → bring to front
+cards.forEach((c, i) => {
+  c.addEventListener('click', () => {
+    if (i === activeCard) {
+      setCard((activeCard + 1) % cards.length, true);
+    } else {
+      setCard(i, true);
+    }
+  });
+});
+dots.forEach(d => d.addEventListener('click', () => setCard(+d.dataset.dot, true)));
+
+// 3D tilt on mouse move
+stack.addEventListener('mousemove', e => {
+  const active = stack.querySelector('.p-card.active');
+  if (!active) return;
+  const r = active.getBoundingClientRect();
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+  const dx = (e.clientX - cx) / (r.width / 2);
+  const dy = (e.clientY - cy) / (r.height / 2);
+  active.style.transition = 'transform .1s ease, box-shadow .1s ease';
+  active.style.transform = `rotate(0deg) translateY(0px) scale(1.02) perspective(600px) rotateY(${dx * 10}deg) rotateX(${-dy * 8}deg)`;
+  active.style.boxShadow = `${-dx * 12}px ${dy * 8}px 40px rgba(23,89,232,0.18)`;
+});
+stack.addEventListener('mouseleave', () => {
+  const active = stack.querySelector('.p-card.active');
+  if (!active) return;
+  active.style.transition = 'transform .5s ease, box-shadow .4s ease';
+  active.style.transform = 'rotate(0deg) translateY(0px) scale(1)';
+  active.style.boxShadow = '';
+});
+
+// Hover on back cards → peek
+cards.forEach((c, i) => {
+  c.addEventListener('mouseenter', () => {
+    if (i === activeCard) return;
+    c.style.transition = 'transform .25s ease';
+    const offset = (i - activeCard + cards.length) % cards.length;
+    const baseRot = offset === 1 ? 5 : 10;
+    const baseY = offset === 1 ? 18 : 36;
+    c.style.transform = `rotate(${baseRot * 0.4}deg) translateY(${baseY - 10}px) scale(${offset === 1 ? 1.0 : 0.97})`;
+  });
+  c.addEventListener('mouseleave', () => {
+    if (i === activeCard) return;
+    setCard(activeCard, false);
+  });
+});
+
+// Drag to cycle cards
+let dragStart = null;
+let dragging = false;
+
+stack.addEventListener('pointerdown', e => {
+  dragStart = {x: e.clientX, y: e.clientY};
+  dragging = false;
+  stack.setPointerCapture(e.pointerId);
+});
+
+stack.addEventListener('pointermove', e => {
+  if (!dragStart) return;
+  const dx = e.clientX - dragStart.x;
+  const dy = e.clientY - dragStart.y;
+  if (Math.abs(dx) > 6 || Math.abs(dy) > 6) dragging = true;
+  if (!dragging) return;
+  const active = stack.querySelector('.p-card.active');
+  if (!active) return;
+  active.style.transition = 'none';
+  active.style.transform = `translateX(${dx}px) rotate(${dx * 0.06}deg) scale(1.02)`;
+  active.style.opacity = Math.max(0.4, 1 - Math.abs(dx) / 300);
+});
+
+stack.addEventListener('pointerup', e => {
+  if (!dragStart) return;
+  const dx = e.clientX - dragStart.x;
+  dragStart = null;
+  const active = stack.querySelector('.p-card.active');
+  if (active) {
+    active.style.transition = '';
+    active.style.opacity = '';
+  }
+  if (dragging && Math.abs(dx) > 60) {
+    setCard(dx < 0 ? (activeCard + 1) % cards.length : (activeCard - 1 + cards.length) % cards.length, true);
+  } else {
+    setCard(activeCard, false);
+  }
+  dragging = false;
+});
+let autoRotate = setInterval(() => setCard((activeCard + 1) % cards.length, true), 3600);
+stack.addEventListener('mouseenter', () => clearInterval(autoRotate));
+stack.addEventListener('mouseleave', () => { autoRotate = setInterval(() => setCard((activeCard + 1) % cards.length, true), 3600); });
+} // end if(stack)
+
+// ── NAV SCROLL EFFECT ──
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.borderBottomColor = window.scrollY > 20 ? 'rgba(23,89,232,0.08)' : 'rgba(23,89,232,0.10)';
+});
+
+// ── TWEAKS ──
+window.addEventListener('message', e => {
+  if(e.data?.type === '__activate_edit_mode') document.getElementById('tweak-panel').style.display = 'block';
+  if(e.data?.type === '__deactivate_edit_mode') document.getElementById('tweak-panel').style.display = 'none';
+});
+window.parent.postMessage({type: '__edit_mode_available'}, '*');
+
+function applyTweaks(t) {
+  document.documentElement.style.setProperty('--accent', t.accentColor || '#1759e8');
+  document.documentElement.style.setProperty('--accent-light', t.accentColor || '#3b6ef5');
+}
+applyTweaks(TWEAK_DEFAULTS);
+
+document.getElementById('tweak-accent').value = TWEAK_DEFAULTS.accentColor || '#1759e8';
+document.getElementById('tweak-accent').addEventListener('input', e => {
+  const edits = {accentColor: e.target.value};
+  applyTweaks({...TWEAK_DEFAULTS, ...edits});
+  window.parent.postMessage({type: '__edit_mode_set_keys', edits}, '*');
+});
+document.getElementById('tweak-hero').value = TWEAK_DEFAULTS.heroStyle;
+document.getElementById('tweak-anim').value = TWEAK_DEFAULTS.animations;
+document.getElementById('tweak-anim').addEventListener('change', e => {
+  const off = e.target.value === 'off';
+  document.querySelectorAll('.reveal').forEach(el => { if(off) el.classList.add('visible'); });
+});
+</script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algemene voorwaarden — David Spijker</title>
+<meta name="description" content="Algemene voorwaarden van Spijker Dienstverlening.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.legal-hero{padding:100px 5% 32px;text-align:center;max-width:780px;margin:0 auto}
+.legal-hero h1{margin-bottom:14px}
+.legal-hero .meta{color:var(--muted);font-size:13.5px;letter-spacing:.4px}
+
+.legal-wrap{max-width:780px;margin:0 auto;padding:32px 5% 100px}
+.legal-toc{background:rgba(255,255,255,0.78);border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin-bottom:48px;backdrop-filter:blur(8px);display:block;position:static;height:auto;top:auto}
+.legal-toc-title{display:block;font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--accent);margin:0 0 14px}
+.legal-toc ol{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;counter-reset:toc}
+.legal-toc li{counter-increment:toc;font-size:14px}
+.legal-toc a{color:var(--text);text-decoration:none;display:flex;gap:10px;padding:4px 0;transition:color .15s}
+.legal-toc a:hover{color:var(--accent)}
+.legal-toc a::before{content:counter(toc,decimal-leading-zero);font-family:var(--font-head);font-weight:700;color:var(--muted);font-size:12px;min-width:22px}
+
+.legal-article{margin-bottom:44px;scroll-margin-top:80px}
+.legal-article h2{font-family:var(--font-head);font-weight:700;font-size:22px;letter-spacing:-0.4px;color:var(--text);margin:0 0 18px;padding-bottom:12px;border-bottom:2px solid var(--accent);display:inline-block}
+.legal-article h2 .num{color:var(--accent);font-weight:800;margin-right:10px}
+.legal-clause{display:flex;gap:14px;padding:10px 0;font-size:15px;line-height:1.7;color:#2d2f4a;align-items:baseline}
+.legal-clause + .legal-clause{border-top:1px solid rgba(23,89,232,0.06)}
+.legal-num{font-family:var(--font-head);font-weight:700;font-size:13px;color:var(--accent);min-width:42px;flex-shrink:0;letter-spacing:.3px}
+.legal-clause p{margin:0}
+.legal-clause strong{color:var(--text);font-weight:600}
+.legal-clause ul{margin:8px 0 0;padding-left:20px}
+.legal-clause ul li{margin:4px 0}
+
+.legal-foot{margin-top:48px;padding:24px 28px;background:linear-gradient(135deg,rgba(23,89,232,0.05),rgba(139,92,246,0.04));border:1px solid var(--border);border-radius:14px;font-size:13.5px;color:var(--muted);line-height:1.7}
+.legal-foot strong{color:var(--text)}
+
+@media(max-width:700px){
+  .legal-toc ol{grid-template-columns:1fr}
+  .legal-article h2{font-size:19px}
+  .legal-clause{flex-direction:column;gap:4px}
+}
+</style>
+</head>
+<body>
+
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="websites.html">Websites</a></li>
+    <li><a href="automatisering.html">Automatisering</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<section class="legal-hero">
+  <div class="reveal">
+    <h1>Algemene voorwaarden</h1>
+    <p class="meta">Laatst bijgewerkt: mei 2026</p>
+  </div>
+</section>
+
+<div class="legal-wrap">
+
+  <nav class="legal-toc reveal" aria-label="Inhoudsopgave">
+    <div class="legal-toc-title">Inhoud</div>
+    <ol>
+      <li><a href="#a1">Definities</a></li>
+      <li><a href="#a2">Toepasselijkheid</a></li>
+      <li><a href="#a3">Aanbod en overeenkomst</a></li>
+      <li><a href="#a4">Uitvoering van de opdracht</a></li>
+      <li><a href="#a5">Tarieven en betaling</a></li>
+      <li><a href="#a6">Annulering en beëindiging</a></li>
+      <li><a href="#a7">Aansprakelijkheid</a></li>
+      <li><a href="#a8">Intellectueel eigendom</a></li>
+      <li><a href="#a9">Toepasselijk recht</a></li>
+      <li><a href="#a10">Wijzigingen en aanvullingen</a></li>
+    </ol>
+  </nav>
+
+  <article class="legal-article reveal" id="a1">
+    <h2><span class="num">01</span>Definities</h2>
+    <div class="legal-clause"><span class="legal-num">1.1</span><p>In deze algemene voorwaarden wordt verstaan onder:</p></div>
+    <div class="legal-clause"><span class="legal-num"></span><p><strong>Opdrachtnemer:</strong> Spijker Dienstverlening, gevestigd te Sibeliusstraat 12, Leiden en ingeschreven bij de Kamer van Koophandel onder nummer 96035250.</p></div>
+    <div class="legal-clause"><span class="legal-num"></span><p><strong>Opdrachtgever:</strong> de natuurlijke of rechtspersoon die een overeenkomst aangaat met de opdrachtnemer.</p></div>
+    <div class="legal-clause"><span class="legal-num"></span><p><strong>Overeenkomst:</strong> iedere afspraak tussen de opdrachtnemer en opdrachtgever waarbij opdrachtnemer diensten verleent aan opdrachtgever.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a2">
+    <h2><span class="num">02</span>Toepasselijkheid</h2>
+    <div class="legal-clause"><span class="legal-num">2.1</span><p>Deze algemene voorwaarden zijn van toepassing op alle aanbiedingen, offertes, opdrachten en overeenkomsten tussen opdrachtnemer en opdrachtgever.</p></div>
+    <div class="legal-clause"><span class="legal-num">2.2</span><p>Afwijkingen van deze voorwaarden zijn alleen geldig als ze schriftelijk zijn overeengekomen.</p></div>
+    <div class="legal-clause"><span class="legal-num">2.3</span><p>Eventuele inkoop- of andere voorwaarden van de opdrachtgever worden uitdrukkelijk van de hand gewezen.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a3">
+    <h2><span class="num">03</span>Aanbod en overeenkomst</h2>
+    <div class="legal-clause"><span class="legal-num">3.1</span><p>Alle aanbiedingen en offertes van opdrachtnemer zijn vrijblijvend, tenzij schriftelijk anders is aangegeven.</p></div>
+    <div class="legal-clause"><span class="legal-num">3.2</span><p>Een overeenkomst komt tot stand op het moment dat de opdrachtgever akkoord gaat met het aanbod van opdrachtnemer, schriftelijk of mondeling.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a4">
+    <h2><span class="num">04</span>Uitvoering van de opdracht</h2>
+    <div class="legal-clause"><span class="legal-num">4.1</span><p>Opdrachtnemer zal de opdracht naar beste inzicht en vermogen uitvoeren.</p></div>
+    <div class="legal-clause"><span class="legal-num">4.2</span><p>Opdrachtgever zorgt ervoor dat alle benodigde informatie tijdig wordt verstrekt om de opdracht correct uit te voeren.</p></div>
+    <div class="legal-clause"><span class="legal-num">4.3</span><p>Opdrachtnemer is niet aansprakelijk voor schade die voortvloeit uit onjuiste of onvolledige informatie verstrekt door de opdrachtgever.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a5">
+    <h2><span class="num">05</span>Tarieven en betaling</h2>
+    <div class="legal-clause"><span class="legal-num">5.1</span><p>De tarieven worden vooraf overeengekomen en zijn exclusief btw, tenzij anders vermeld.</p></div>
+    <div class="legal-clause"><span class="legal-num">5.2</span><p>Betaling dient te geschieden binnen 14 dagen na factuurdatum, tenzij schriftelijk anders is overeengekomen.</p></div>
+    <div class="legal-clause"><span class="legal-num">5.3</span><p>Bij niet tijdige betaling is opdrachtgever zonder nadere ingebrekestelling in verzuim en is opdrachtnemer gerechtigd wettelijke rente en incassokosten in rekening te brengen.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a6">
+    <h2><span class="num">06</span>Annulering en beëindiging</h2>
+    <div class="legal-clause"><span class="legal-num">6.1</span><p>Annulering van een opdracht door de opdrachtgever dient altijd schriftelijk te gebeuren.</p></div>
+    <div class="legal-clause"><span class="legal-num">6.2</span><div><p>Bij annulering door de opdrachtgever binnen de volgende termijnen is een annuleringsvergoeding verschuldigd:</p>
+      <ul>
+        <li>Binnen 2 dagen voor de uitvoeringsdatum: <strong>40%</strong> van het overeengekomen bedrag.</li>
+        <li>Binnen 1 dag voor de uitvoeringsdatum: <strong>60%</strong> van het overeengekomen bedrag.</li>
+        <li>Op de dag van uitvoering: <strong>80%</strong> van het overeengekomen bedrag.</li>
+      </ul>
+    </div></div>
+    <div class="legal-clause"><span class="legal-num">6.3</span><p>Bij voortijdige beëindiging van een opdracht door de opdrachtgever zijn alle reeds gewerkte uren en gemaakte kosten volledig verschuldigd, ongeacht het moment van beëindiging.</p></div>
+    <div class="legal-clause"><span class="legal-num">6.4</span><p>Opdrachtnemer behoudt zich het recht voor om zich op elk moment af te melden in geval van ziekte. In dergelijke situaties zal opdrachtnemer de opdrachtgever zo spoedig mogelijk informeren.</p></div>
+    <div class="legal-clause"><span class="legal-num">6.5</span><p>Opdrachtnemer kan zich tot 48 uur voorafgaand aan de opdracht afmelden om andere redenen. Indien mogelijk zal opdrachtnemer proberen te helpen bij het vinden van een vervangende freelancer. Het niet vinden van een vervanger brengt echter geen aansprakelijkheid of consequenties met zich mee voor opdrachtnemer.</p></div>
+    <div class="legal-clause"><span class="legal-num">6.6</span><p>Beide partijen kunnen de overeenkomst met onmiddellijke ingang beëindigen indien de andere partij in verzuim is, failliet wordt verklaard of in surseance van betaling verkeert.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a7">
+    <h2><span class="num">07</span>Aansprakelijkheid</h2>
+    <div class="legal-clause"><span class="legal-num">7.1</span><p>Opdrachtnemer is uitsluitend aansprakelijk voor directe schade die het gevolg is van opzet of grove schuld.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.2</span><p>De aansprakelijkheid van opdrachtnemer is te allen tijde beperkt tot het bedrag dat door opdrachtgever is betaald voor de betreffende opdracht.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.3</span><p>Opdrachtnemer is niet aansprakelijk voor indirecte schade, zoals gevolgschade, bedrijfsschade, verlies van data, gederfde winst of omzet.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.4</span><p>Voor tijdelijke klussen waarbij opdrachtnemer moet worden ingewerkt, ligt de verantwoordelijkheid voor een juiste en volledige inwerkperiode bij de opdrachtgever. Ongevallen of schade die voortvloeien uit onvoldoende inwerken of een gebrek aan bekwaamheid door onvoldoende instructie zijn voor rekening en risico van de opdrachtgever.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.5</span><p>Opdrachtnemer is niet aansprakelijk voor schade die ontstaat door onjuiste, onvolledige of niet tijdig verstrekte informatie door opdrachtgever die noodzakelijk is voor de uitvoering van de opdracht.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.6</span><p>Opdrachtgever is verantwoordelijk voor het afsluiten van adequate verzekeringen die dekking bieden voor risico's die voortvloeien uit de uitvoering van de opdracht door opdrachtnemer.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.7</span><p>Opdrachtnemer is niet aansprakelijk voor schade of letsel veroorzaakt door gebrekkige materialen, gereedschappen of systemen die door opdrachtgever zijn geleverd voor de uitvoering van de opdracht.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.8</span><p>Opdrachtnemer is niet aansprakelijk voor schade die ontstaat door aanpassingen, wijzigingen of handelingen uitgevoerd door opdrachtgever of derden zonder voorafgaande toestemming van opdrachtnemer.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.9</span><p>Opdrachtnemer is niet aansprakelijk voor schade die voortvloeit uit overmacht, waaronder maar niet beperkt tot natuurrampen, pandemieën, stroomstoringen, stakingen of andere omstandigheden buiten de macht van opdrachtnemer.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.10</span><p>Opdrachtgever vrijwaart opdrachtnemer tegen aanspraken van derden die voortvloeien uit of verband houden met de uitvoering van de opdracht, tenzij sprake is van opzet of grove schuld aan de zijde van opdrachtnemer.</p></div>
+    <div class="legal-clause"><span class="legal-num">7.11</span><p>Eventuele klachten over de uitvoering van de opdracht dienen schriftelijk en binnen <strong>14 dagen</strong> na ontdekking van het gebrek te worden gemeld. Bij het uitblijven van tijdige melding vervalt elk recht op schadevergoeding of herstel.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a8">
+    <h2><span class="num">08</span>Intellectueel eigendom</h2>
+    <div class="legal-clause"><span class="legal-num">8.1</span><p>Alle door opdrachtnemer geleverde werken, waaronder websites, wireframes, ontwerpen, content en andere creaties, blijven eigendom van opdrachtnemer totdat de opdrachtgever volledig heeft voldaan aan alle betalingsverplichtingen.</p></div>
+    <div class="legal-clause"><span class="legal-num">8.2</span><p>Zonder schriftelijke toestemming van opdrachtnemer is het niet toegestaan om de geleverde werken, inclusief wireframes en ontwerpen, te reproduceren, verspreiden, door te verkopen of te gebruiken voor andere doeleinden dan overeengekomen.</p></div>
+    <div class="legal-clause"><span class="legal-num">8.3</span><p>Indien de opdrachtgever wijzigingen aanbrengt in door opdrachtnemer geleverde werken zonder voorafgaande schriftelijke toestemming, kan opdrachtnemer niet aansprakelijk worden gehouden voor eventuele schade of gebreken die daaruit voortvloeien.</p></div>
+    <div class="legal-clause"><span class="legal-num">8.4</span><p>Opdrachtnemer behoudt het recht om geleverde werken, inclusief wireframes en ontwerpen, te gebruiken voor promotionele doeleinden en als onderdeel van zijn portfolio, tenzij schriftelijk anders is overeengekomen.</p></div>
+    <div class="legal-clause"><span class="legal-num">8.5</span><p>Alle intellectuele eigendomsrechten op de door opdrachtnemer geleverde werken blijven bij opdrachtnemer, tenzij uitdrukkelijk schriftelijk anders is overeengekomen.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a9">
+    <h2><span class="num">09</span>Toepasselijk recht</h2>
+    <div class="legal-clause"><span class="legal-num">9.1</span><p>Op deze algemene voorwaarden is uitsluitend Nederlands recht van toepassing.</p></div>
+    <div class="legal-clause"><span class="legal-num">9.2</span><p>Geschillen die voortvloeien uit overeenkomsten waarop deze algemene voorwaarden van toepassing zijn, worden voorgelegd aan de bevoegde rechter in het arrondissement waar opdrachtnemer is gevestigd.</p></div>
+  </article>
+
+  <article class="legal-article reveal" id="a10">
+    <h2><span class="num">10</span>Wijzigingen en aanvullingen</h2>
+    <div class="legal-clause"><span class="legal-num">10.1</span><p>Opdrachtnemer behoudt zich het recht voor deze algemene voorwaarden te wijzigen.</p></div>
+    <div class="legal-clause"><span class="legal-num">10.2</span><p>Wijzigingen worden schriftelijk gecommuniceerd en treden in werking op de datum zoals vermeld in de mededeling.</p></div>
+  </article>
+
+  <div class="legal-foot reveal">
+    <strong>Vragen over deze voorwaarden?</strong> Neem gerust contact op via <a href="index.html#contact" style="color:var(--accent);font-weight:600">het contactformulier</a>.
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="websites.html">Websites</a></li>
+        <li><a href="automatisering.html">Automatisering</a></li>
+        <li><a href="index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="index.html#over">Over mij</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<script src="mobile-nav.js"></script>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="metaTitle">Automatisering — David Spijker</title>
+<meta id="metaDesc" name="description" content="">
+<meta id="metaOgTitle" property="og:title" content="">
+<meta id="metaOgDesc" property="og:description" content="">
+<meta id="metaOgImg" property="og:image" content="">
+<meta property="og:type" content="product">
+<meta name="twitter:card" content="summary_large_image">
+<link id="metaCanonical" rel="canonical" href="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* PAGE THEME — rood (zelfde als automatisering.html) */
+:root{
+  --accent: #dc2626;
+  --accent-light: #ef4444;
+  --accent-glow: rgba(220,38,38,0.22);
+  --border: rgba(220,38,38,0.14);
+}
+.blob-1{background:rgba(220,38,38,0.14) !important}
+.blob-2{background:rgba(239,68,68,0.12) !important}
+.blob-3{background:rgba(248,113,113,0.10) !important}
+.blob-4{background:rgba(220,38,38,0.08) !important}
+body::after{background-image:radial-gradient(circle,rgba(220,38,38,0.055) 1px,transparent 1px) !important}
+nav{background:rgba(253,242,242,0.88) !important}
+.nav-cta:hover,.btn-primary:hover,.btn-submit:hover{background:#b91c1c !important}
+
+/* breadcrumbs */
+.pp-crumbs{max-width:1100px;margin:0 auto;padding:24px 5% 0;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.pp-crumbs a{color:var(--muted);text-decoration:none;transition:color .2s}
+.pp-crumbs a:hover{color:var(--accent)}
+.pp-crumbs .sep{opacity:.4}
+
+/* HERO */
+.pp-hero{max-width:1100px;margin:0 auto;padding:32px 5% 80px;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+.pp-hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(220,38,38,0.10);border:1px solid rgba(220,38,38,0.25);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--accent);margin-bottom:24px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;font-family:var(--font-head)}
+.pp-hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%}
+.pp-hero h1{font-family:var(--font-head);font-weight:800;font-size:clamp(34px,4.4vw,54px);line-height:1.06;letter-spacing:-1.4px;margin-bottom:20px}
+.pp-hero h1 em{font-style:normal;color:var(--accent)}
+.pp-hero-sub{font-size:18px;color:var(--muted);max-width:520px;line-height:1.65;margin-bottom:32px}
+.pp-hero .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+.pp-hero-stats{display:flex;gap:32px;padding-top:28px;border-top:1px solid var(--border)}
+.pp-hero-stat-num{font-family:var(--font-head);font-weight:800;font-size:18px;color:var(--text);display:block;letter-spacing:-0.3px;line-height:1.2}
+.pp-hero-stat-lbl{font-size:12px;color:var(--muted)}
+
+/* hero visual */
+.pp-hero-vis{position:relative;height:420px;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,rgba(220,38,38,0.10),rgba(239,68,68,0.04));border:1px solid var(--border);box-shadow:0 12px 40px rgba(220,38,38,0.10)}
+.pp-hero-vis-stripes{position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(220,38,38,0.05),rgba(220,38,38,0.05) 3px,transparent 3px,transparent 22px)}
+.pp-hero-vis-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:96px;opacity:.85;filter:drop-shadow(0 8px 30px rgba(220,38,38,0.25))}
+.pp-hero-vis-label{position:absolute;left:16px;bottom:14px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:var(--muted);background:rgba(255,255,255,0.85);border:1px solid var(--border);border-radius:6px;padding:4px 10px}
+
+/* SECTIONS */
+.pp-section{max-width:1100px;margin:0 auto;padding:72px 5%}
+.pp-section-narrow{max-width:780px}
+.pp-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;font-weight:600}
+.pp-h2{font-family:var(--font-head);font-weight:800;font-size:clamp(26px,3.4vw,40px);letter-spacing:-1px;line-height:1.1;margin-bottom:18px}
+.pp-lead{color:var(--muted);font-size:17px;line-height:1.75;max-width:680px}
+.pp-lead p{margin-bottom:14px}
+.pp-lead p:last-child{margin-bottom:0}
+
+/* PROBLEM */
+.pp-problem{background:rgba(220,38,38,0.04);border:1px solid var(--border);border-radius:16px;padding:42px 40px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start}
+.pp-problem-mark{font-family:var(--font-head);font-weight:800;font-size:64px;color:var(--accent);line-height:1;opacity:.5}
+.pp-problem-body{color:#2d2f4a;font-size:17px;line-height:1.75}
+.pp-problem-body p{margin-bottom:14px}
+.pp-problem-body p:last-child{margin-bottom:0}
+
+/* FOR WHO */
+.pp-forwho-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+.pp-fw-card{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:12px;padding:20px 22px;display:flex;gap:14px;align-items:center;font-size:15px;color:var(--text);line-height:1.5;box-shadow:0 2px 12px rgba(220,38,38,0.05)}
+.pp-fw-check{width:30px;height:30px;border-radius:50%;background:rgba(220,38,38,0.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+
+/* WHAT YOU GET */
+.pp-bullets{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;margin-top:8px;list-style:none}
+.pp-bullets li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;line-height:1.55;color:var(--text)}
+.pp-bullets li::before{content:'';flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--accent);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");background-size:12px;background-position:center;background-repeat:no-repeat;margin-top:2px}
+
+/* RESULTS */
+.pp-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:8px}
+.pp-result{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:14px;padding:24px 22px;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 14px rgba(220,38,38,0.05);transition:all .25s}
+.pp-result:hover{transform:translateY(-3px);border-color:rgba(220,38,38,0.3);box-shadow:0 12px 32px rgba(220,38,38,0.10)}
+.pp-result-icon{width:42px;height:42px;border-radius:10px;background:rgba(220,38,38,0.10);border:1px solid rgba(220,38,38,0.18);display:flex;align-items:center;justify-content:center;font-size:18px}
+.pp-result-text{font-family:var(--font-head);font-weight:600;font-size:15px;line-height:1.4;color:var(--text)}
+
+/* PROCESS */
+.pp-process{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:8px;position:relative}
+.pp-process::before{content:'';position:absolute;top:24px;left:24px;right:24px;height:1px;background:linear-gradient(90deg,var(--accent),rgba(220,38,38,0.2));z-index:0}
+.pp-step{display:flex;flex-direction:column;align-items:flex-start;text-align:left;position:relative;z-index:1;padding:0 18px 0 0}
+.pp-step-num{width:48px;height:48px;border-radius:50%;background:#fff;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:15px;color:var(--accent);margin-bottom:18px;box-shadow:0 0 20px var(--accent-glow)}
+.pp-step-title{font-family:var(--font-head);font-weight:700;font-size:16px;margin-bottom:6px;letter-spacing:-0.2px}
+.pp-step-desc{color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:8px}
+.pp-step-dur{font-size:11px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;font-family:var(--font-head)}
+
+/* PRICING */
+.pp-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;align-items:stretch}
+.pp-tier{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:16px;padding:32px 28px;display:flex;flex-direction:column;gap:18px;position:relative;transition:all .25s;box-shadow:0 4px 18px rgba(220,38,38,0.05)}
+.pp-tier:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(220,38,38,0.10)}
+.pp-tier-featured{border:2px solid var(--accent);background:#fff;box-shadow:0 12px 32px rgba(220,38,38,0.16);transform:scale(1.02)}
+.pp-tier-featured:hover{transform:scale(1.02) translateY(-4px)}
+.pp-tier-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;padding:5px 14px;border-radius:20px;font-family:var(--font-head);box-shadow:0 4px 12px rgba(220,38,38,0.3)}
+.pp-tier-name{font-family:var(--font-head);font-weight:700;font-size:20px;letter-spacing:-0.3px}
+.pp-tier-desc{font-size:13px;color:var(--muted);margin-top:-12px}
+.pp-tier-price{padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.pp-tier-setup{font-family:var(--font-head);font-weight:800;font-size:28px;color:var(--text);letter-spacing:-0.5px;line-height:1.1}
+.pp-tier-setup-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;font-weight:600;font-family:var(--font-head)}
+.pp-tier-monthly{font-size:14px;color:var(--muted);margin-top:8px}
+.pp-tier-monthly strong{color:var(--text);font-weight:600}
+.pp-tier-features{list-style:none;display:flex;flex-direction:column;gap:10px;flex:1}
+.pp-tier-features li{font-size:14px;color:var(--text);line-height:1.5;display:flex;gap:10px;align-items:flex-start}
+.pp-tier-features li::before{content:'✓';color:var(--accent);font-weight:800;flex-shrink:0;font-size:13px;margin-top:2px}
+.pp-tier-cta{display:block;text-align:center;padding:13px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.18);color:var(--accent);border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;font-family:var(--font-head)}
+.pp-tier-cta:hover{background:rgba(220,38,38,0.14)}
+.pp-tier-featured .pp-tier-cta{background:var(--accent);border-color:var(--accent);color:#fff}
+.pp-tier-featured .pp-tier-cta:hover{background:#b91c1c;box-shadow:0 8px 24px rgba(220,38,38,0.3)}
+
+/* FAQ */
+.pp-faq{max-width:780px;margin:0 auto}
+.pp-faq-item{background:rgba(255,255,255,0.85);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:all .2s}
+.pp-faq-item:hover{border-color:rgba(220,38,38,0.25)}
+.pp-faq-item[open]{background:#fff;border-color:rgba(220,38,38,0.25);box-shadow:0 6px 20px rgba(220,38,38,0.05)}
+.pp-faq-q{padding:20px 24px;font-family:var(--font-head);font-weight:600;font-size:16px;color:var(--text);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px;transition:color .2s}
+.pp-faq-q::-webkit-details-marker{display:none}
+.pp-faq-q:hover{color:var(--accent)}
+.pp-faq-q::after{content:'+';width:28px;height:28px;border-radius:50%;background:rgba(220,38,38,0.08);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;flex-shrink:0;transition:transform .25s,background .2s}
+.pp-faq-item[open] .pp-faq-q::after{transform:rotate(45deg);background:var(--accent);color:#fff}
+.pp-faq-a{padding:0 24px 22px;color:#2d2f4a;font-size:15px;line-height:1.7}
+
+/* RELATED BLOG */
+.pp-blog-link{max-width:1100px;margin:0 auto;padding:0 5% 80px}
+.pp-blog-card{background:rgba(255,255,255,0.95);border:1px solid var(--border);border-radius:16px;padding:32px 36px;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;text-decoration:none;color:inherit;transition:all .25s;box-shadow:0 4px 18px rgba(220,38,38,0.05)}
+.pp-blog-card:hover{transform:translateY(-3px);border-color:rgba(220,38,38,0.3);box-shadow:0 14px 36px rgba(220,38,38,0.10)}
+.pp-blog-icon{width:56px;height:56px;border-radius:14px;background:rgba(220,38,38,0.10);border:1px solid rgba(220,38,38,0.18);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.pp-blog-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);font-weight:600;margin-bottom:6px;font-family:var(--font-head)}
+.pp-blog-title{font-family:var(--font-head);font-weight:700;font-size:20px;line-height:1.3;letter-spacing:-0.3px;margin-bottom:6px;color:var(--text)}
+.pp-blog-excerpt{font-size:14px;color:var(--muted);line-height:1.55}
+.pp-blog-arrow{color:var(--accent);font-size:24px;flex-shrink:0}
+
+/* FINAL CTA */
+.pp-final{max-width:980px;margin:0 auto 60px;padding:72px 56px;text-align:center;background:linear-gradient(135deg,#fef2f2,#fff);border:1px solid var(--border);border-radius:24px;box-shadow:0 12px 40px rgba(220,38,38,0.08);position:relative;overflow:hidden}
+.pp-final::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;border-radius:50%;background:rgba(220,38,38,0.10);filter:blur(60px)}
+.pp-final-inner{position:relative;z-index:1}
+.pp-final h2{font-family:var(--font-head);font-weight:800;font-size:clamp(28px,3.6vw,42px);letter-spacing:-1px;line-height:1.15;margin-bottom:14px;max-width:720px;margin-left:auto;margin-right:auto}
+.pp-final p{color:var(--muted);font-size:17px;line-height:1.65;max-width:560px;margin:0 auto 32px}
+.pp-final-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* 404 */
+.pp-404{max-width:600px;margin:140px auto;text-align:center;padding:0 5%}
+.pp-404 h1{font-size:42px;margin-bottom:14px}
+.pp-404 p{color:var(--muted);margin-bottom:24px}
+
+@media(max-width:900px){
+  .pp-hero{grid-template-columns:1fr;gap:40px;padding:24px 5% 56px}
+  .pp-hero-vis{height:280px}
+  .pp-forwho-grid,.pp-bullets,.pp-tiers{grid-template-columns:1fr}
+  .pp-process{grid-template-columns:1fr;gap:24px}
+  .pp-process::before{display:none}
+  .pp-tier-featured{transform:none}
+  .pp-tier-featured:hover{transform:translateY(-4px)}
+  .pp-problem{grid-template-columns:1fr;padding:28px 22px}
+  .pp-problem-mark{font-size:48px}
+  .pp-blog-card{grid-template-columns:1fr;text-align:center;padding:24px}
+  .pp-blog-icon{margin:0 auto}
+  .pp-final{padding:48px 28px}
+  .pp-section{padding:48px 5%}
+}
+</style>
+</head>
+<body>
+<!-- MESH BLOBS -->
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="websites.html">Websites</a></li>
+    <li><a href="automatisering.html" style="color:var(--text);font-weight:600">Automatisering</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<div id="productRoot"></div>
+
+<script type="application/ld+json" id="jsonld"></script>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="websites.html">Websites</a></li>
+        <li><a href="automatisering.html">Automatisering</a></li>
+        <li><a href="index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="index.html#over">Over mij</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== SEED FALLBACK =====
+const SEED_PRODUCTS = [
+  {
+    id:'pr1',
+    title:'Social Media AI Bot',
+    slug:'social-media-ai-bot',
+    tagline:'Een AI-agent die jouw social media draait — op autopilot',
+    excerpt:'Een AI-agent die jouw merk leert kennen en wekelijks social posts schrijft, plant en publiceert. Jij houdt regie, de AI doet het werk.',
+    audience:'evenementlocaties, hotels en MKB met een merkidentiteit',
+    emoji:'🤖',
+    image:'',
+    status:'published',
+    relatedPost:'mkb-automatiseren-2026',
+    problem:'<p>Consistente social media is belangrijk — maar het schiet erbij in. Personeel heeft geen tijd, een bureau kost €1.500+ per maand en intern pakt niemand het echt op.</p><p>Het resultaat: posts die er soms zijn, soms niet, en die niet de uitstraling hebben die jouw locatie verdient.</p>',
+    solution:'<p>Wij bouwen een AI-agent die jouw merk leert kennen en zelfstandig social media content maakt. Hij analyseert je locatie, je toon, je events en je doelgroep — en levert wekelijks kant-en-klare posts aan voor Instagram, LinkedIn en Facebook.</p><p>Jij keurt goed in een dashboard. Of laat hem direct plaatsen. Geen bureau-overhead, geen wachttijd.</p>',
+    forWho:[
+      'Evenementlocaties met 1+ event per week',
+      'Hotels en restaurants met een eigen merkidentiteit',
+      'MKB-bedrijven die actief willen zijn op social maar geen tijd hebben',
+      'Eigenaren die liever ondernemen dan content schrijven'
+    ],
+    whatYouGet:[
+      'AI-agent op maat getraind op jouw merk en stijl',
+      'Wekelijks 5-7 posts (tekst + beeldsuggestie)',
+      'Automatische planning naar Instagram, LinkedIn en Facebook',
+      'Eigen dashboard om goed te keuren of aan te passen',
+      'Maandelijkse evaluatie en bijsturing',
+      '30 dagen support na livegang',
+      'Onboarding-sessie van 2 uur'
+    ],
+    results:[
+      {label:'Bespaart 8-10 uur per week aan content-werk',icon:'⏱'},
+      {label:'Consistente aanwezigheid op je belangrijkste kanalen',icon:'📈'},
+      {label:'Posts die passen bij jouw merk — geen generieke AI-praatjes',icon:'🎯'},
+      {label:'Meer engagement door regelmaat en kwaliteit',icon:'💬'}
+    ],
+    process:[
+      {title:'Kennismaking',desc:'30 minuten — we kijken of jouw situatie past.',duration:'30 min'},
+      {title:'Setup & training',desc:'Ik bouw en train de AI-agent op jouw merk, toon en kanalen.',duration:'1-2 weken'},
+      {title:'Livegang',desc:'Eerste posts gaan live. Jij keurt goed of laat ‘m direct plaatsen.',duration:'Week 3'},
+      {title:'Optimalisatie',desc:'Maandelijks bijschaven op basis van wat het beste presteert.',duration:'Doorlopend'}
+    ],
+    tiers:[
+      {name:'Basis',desc:'Voor wie net begint',setup:'€ 1.250',monthly:'€ 195/mnd',badge:'',features:['1 platform (Instagram óf LinkedIn)','4 posts per maand','Goedkeuren via dashboard','E-mail support'],cta:'Kies Basis'},
+      {name:'Pro',desc:'Voor groeiende bedrijven',setup:'€ 2.450',monthly:'€ 395/mnd',badge:'Aanbevolen',features:['3 platforms (Instagram, LinkedIn, Facebook)','20 posts per maand','Automatische planning + publicatie','Maandelijkse evaluatie','Prioriteit support'],cta:'Kies Pro'},
+      {name:'Maatwerk',desc:'Voor complexe situaties',setup:'Vanaf € 4.500',monthly:'Op aanvraag',badge:'',features:['Alles in Pro','Custom integraties (CRM, boekingssysteem)','Meerdere merken of locaties','Persoonlijk contact'],cta:'Plan gesprek'}
+    ],
+    faqs:[
+      {q:'Hoe weet de AI hoe ons merk klinkt?',a:'In de onboarding analyseren we je bestaande content, website en eventueel branding-document. Daarmee trainen we de AI op jouw exacte toon en stijl. In de eerste 2 weken stuur jij bij waar nodig.'},
+      {q:'Wat als de posts niet goed zijn?',a:'Jij hebt altijd het laatste woord. In het Basis- en Pro-pakket keur je elke post goed voordat ‘ie live gaat. Niet goed? Eén klik en de AI maakt een nieuwe versie.'},
+      {q:'Kan ik op elk moment stoppen?',a:'Ja. Maandelijks opzegbaar. Je houdt de gegenereerde content en de AI-instellingen.'},
+      {q:'Wat als ik geen beelden heb?',a:'De AI genereert beeldsuggesties op basis van je events en bibliotheek. Voor het Pro-pakket helpen we ook met simpele AI-beelden of stockfoto-koppelingen.'},
+      {q:'Hoe lang duurt het voordat het werkt?',a:'Setup en training duren 1-2 weken. Daarna gaan de eerste posts live. Vanaf maand 2 zie je de eerste merkbare engagement-stijging.'}
+    ],
+    finalCta:{
+      headline:'Klaar voor consistente social media zonder dagelijks werk?',
+      sub:'Plan een vrijblijvend gesprek van 30 minuten. We kijken samen of dit pakket bij jou past.',
+      primary:'Plan gesprek',
+      primaryUrl:'index.html#contact',
+      secondary:'Stuur bericht',
+      secondaryUrl:'index.html#contact'
+    },
+    created:'2026-04-28'
+  }
+];
+
+function getProducts(){
+  try{
+    const r = localStorage.getItem('ds_products');
+    if(r) return JSON.parse(r).filter(p => p.status === 'published');
+  }catch(e){}
+  return SEED_PRODUCTS;
+}
+function getPosts(){
+  try{
+    const r = localStorage.getItem('ds_posts');
+    if(r) return JSON.parse(r).filter(p => p.status === 'published');
+  }catch(e){}
+  return [];
+}
+function esc(s){ return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+const slug = new URL(location.href).searchParams.get('slug');
+const products = getProducts();
+const product = products.find(p => p.slug === slug) || (slug ? null : products[0]);
+const root = document.getElementById('productRoot');
+
+if(!product){
+  root.innerHTML = `
+    <div class="pp-404">
+      <h1>Product niet gevonden</h1>
+      <p>Deze automatisering bestaat niet of is nog niet gepubliceerd.</p>
+      <a href="automatisering.html" class="btn-primary">← Terug naar automatisering</a>
+    </div>
+  `;
+} else {
+  // SEO META
+  const metaT = (product.tagline ? product.title + ' — ' + product.tagline : product.title) + ' | David Spijker';
+  const metaD = product.excerpt;
+  const canonical = location.origin + location.pathname + '?slug=' + encodeURIComponent(product.slug);
+  document.getElementById('metaTitle').textContent = metaT;
+  document.getElementById('metaDesc').content = metaD;
+  document.getElementById('metaOgTitle').content = metaT;
+  document.getElementById('metaOgDesc').content = metaD;
+  document.getElementById('metaCanonical').href = canonical;
+  if(product.image){
+    document.getElementById('metaOgImg').content = product.image;
+  }
+
+  // JSON-LD Product schema
+  const jsonld = {
+    "@context":"https://schema.org",
+    "@type":"Service",
+    "serviceType":"Automatisering",
+    "name": product.title,
+    "description": product.excerpt,
+    "provider":{"@type":"Person","name":"David Spijker","url":location.origin},
+    "areaServed":"Netherlands",
+    "audience": product.audience ? {"@type":"Audience","audienceType":product.audience} : undefined
+  };
+  document.getElementById('jsonld').textContent = JSON.stringify(jsonld, null, 2);
+
+  // Find related blog post
+  const allPosts = getPosts();
+  const relatedPost = product.relatedPost ? allPosts.find(p => p.slug === product.relatedPost) : null;
+
+  const heroVis = product.image
+    ? `<img src="${product.image}" alt="${esc(product.title)}" style="width:100%;height:100%;object-fit:cover">`
+    : `<div class="pp-hero-vis-stripes"></div>
+       <div class="pp-hero-vis-emoji">${product.emoji||'⚡'}</div>
+       <div class="pp-hero-vis-label">// product visual</div>`;
+
+  const tiersHtml = (product.tiers||[]).map(t => {
+    const featured = !!t.badge;
+    return `
+      <div class="pp-tier ${featured?'pp-tier-featured':''}">
+        ${t.badge?`<div class="pp-tier-badge">${esc(t.badge)}</div>`:''}
+        <div class="pp-tier-name">${esc(t.name)}</div>
+        <div class="pp-tier-desc">${esc(t.desc)}</div>
+        <div class="pp-tier-price">
+          <div class="pp-tier-setup-lbl">Setup</div>
+          <div class="pp-tier-setup">${esc(t.setup)}</div>
+          ${t.monthly?`<div class="pp-tier-monthly">+ <strong>${esc(t.monthly)}</strong></div>`:''}
+        </div>
+        <ul class="pp-tier-features">
+          ${(t.features||[]).map(f=>`<li>${esc(f)}</li>`).join('')}
+        </ul>
+        <a href="index.html#contact" class="pp-tier-cta">${esc(t.cta||'Kies dit pakket')} →</a>
+      </div>
+    `;
+  }).join('');
+
+  const processHtml = (product.process||[]).map((s,i) => `
+    <div class="pp-step">
+      <div class="pp-step-num">0${i+1}</div>
+      <div class="pp-step-title">${esc(s.title)}</div>
+      <p class="pp-step-desc">${esc(s.desc)}</p>
+      ${s.duration?`<span class="pp-step-dur">${esc(s.duration)}</span>`:''}
+    </div>
+  `).join('');
+
+  const faqsHtml = (product.faqs||[]).map(f => `
+    <details class="pp-faq-item">
+      <summary class="pp-faq-q">${esc(f.q)}</summary>
+      <div class="pp-faq-a">${esc(f.a)}</div>
+    </details>
+  `).join('');
+
+  const blogBlock = relatedPost ? `
+    <section class="pp-blog-link">
+      <a href="blog/${encodeURIComponent(relatedPost.slug)}.html" class="pp-blog-card">
+        <div class="pp-blog-icon">${relatedPost.emoji||'📖'}</div>
+        <div>
+          <div class="pp-blog-label">Lees de uitleg</div>
+          <div class="pp-blog-title">${esc(relatedPost.title)}</div>
+          <div class="pp-blog-excerpt">${esc(relatedPost.excerpt)}</div>
+        </div>
+        <div class="pp-blog-arrow">→</div>
+      </a>
+    </section>
+  ` : '';
+
+  root.innerHTML = `
+    <nav class="pp-crumbs" aria-label="Breadcrumbs">
+      <a href="index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="automatisering.html">Automatisering</a>
+      <span class="sep">/</span>
+      <span style="color:var(--text)">${esc(product.title)}</span>
+    </nav>
+
+    <section class="pp-hero">
+      <div>
+        <div class="pp-hero-eyebrow">Automatisering</div>
+        <h1>${esc(product.title)}<br><em>${esc(product.tagline||'')}</em></h1>
+        <p class="pp-hero-sub">${esc(product.excerpt)}</p>
+        <div class="btn-row">
+          <a href="#pakketten" class="btn-primary">Bekijk pakketten →</a>
+          <a href="index.html#contact" class="btn-ghost">Plan kennismaking</a>
+        </div>
+        <div class="pp-hero-stats">
+          <div><span class="pp-hero-stat-num">2-4 weken</span><span class="pp-hero-stat-lbl">Setup-tijd</span></div>
+          <div><span class="pp-hero-stat-num">${product.tiers ? product.tiers.length : 3} pakketten</span><span class="pp-hero-stat-lbl">Vanaf ${product.tiers && product.tiers[0] ? esc(product.tiers[0].setup) : '€'}</span></div>
+          <div><span class="pp-hero-stat-num">Maandelijks</span><span class="pp-hero-stat-lbl">Opzegbaar</span></div>
+        </div>
+      </div>
+      <div class="pp-hero-vis">
+        ${heroVis}
+      </div>
+    </section>
+
+    <section class="pp-section">
+      <div class="pp-eyebrow">Het probleem</div>
+      <h2 class="pp-h2">Klinkt dit bekend?</h2>
+      <div class="pp-problem">
+        <div class="pp-problem-mark">"</div>
+        <div class="pp-problem-body">${product.problem||''}</div>
+      </div>
+    </section>
+
+    <section class="pp-section">
+      <div class="pp-eyebrow">De oplossing</div>
+      <h2 class="pp-h2">Wat doet ${esc(product.title)}?</h2>
+      <div class="pp-lead">${product.solution||''}</div>
+    </section>
+
+    <section class="pp-section">
+      <div class="pp-eyebrow">Wat zit erin</div>
+      <h2 class="pp-h2">Concreet wat je krijgt</h2>
+      <ul class="pp-bullets">
+        ${(product.whatYouGet||[]).map(b=>`<li>${esc(b)}</li>`).join('')}
+      </ul>
+    </section>
+
+    <section class="pp-section">
+      <div class="pp-eyebrow">Voor wie</div>
+      <h2 class="pp-h2">Past dit bij jou?</h2>
+      <div class="pp-forwho-grid">
+        ${(product.forWho||[]).map(f=>`<div class="pp-fw-card"><div class="pp-fw-check">✓</div><div>${esc(f)}</div></div>`).join('')}
+      </div>
+    </section>
+
+    <section class="pp-section">
+      <div class="pp-eyebrow">Wat het oplevert</div>
+      <h2 class="pp-h2">Het resultaat</h2>
+      <div class="pp-results">
+        ${(product.results||[]).map(r=>`
+          <div class="pp-result">
+            <div class="pp-result-icon">${r.icon||'✓'}</div>
+            <div class="pp-result-text">${esc(r.label)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="pp-section">
+      <div class="pp-eyebrow">Hoe werkt het</div>
+      <h2 class="pp-h2">Van eerste gesprek tot live</h2>
+      <div class="pp-process">${processHtml}</div>
+    </section>
+
+    <section class="pp-section" id="pakketten">
+      <div class="pp-eyebrow">Pakketten</div>
+      <h2 class="pp-h2">Kies wat past</h2>
+      <p class="pp-lead" style="margin-bottom:32px">Setup-fee eenmalig, plus een maandelijks bedrag voor doorlopend werk en hosting. Maandelijks opzegbaar.</p>
+      <div class="pp-tiers">${tiersHtml}</div>
+    </section>
+
+    <section class="pp-section pp-section-narrow">
+      <div class="pp-eyebrow">Veelgestelde vragen</div>
+      <h2 class="pp-h2">Goede vraag</h2>
+      <div class="pp-faq">${faqsHtml}</div>
+    </section>
+
+    ${blogBlock}
+
+    <section style="padding:0 5% 90px">
+      <div class="pp-final">
+        <div class="pp-final-inner">
+          <h2>${esc(product.finalCta?.headline||'Klaar om te starten?')}</h2>
+          <p>${esc(product.finalCta?.sub||'')}</p>
+          <div class="pp-final-btns">
+            <a href="${esc(product.finalCta?.primaryUrl||'index.html#contact')}" class="btn-primary">${esc(product.finalCta?.primary||'Plan gesprek')} →</a>
+            <a href="${esc(product.finalCta?.secondaryUrl||'index.html#contact')}" class="btn-ghost">${esc(product.finalCta?.secondary||'Stuur bericht')}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  // Reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+  document.querySelectorAll('.pp-section, .pp-hero, .pp-blog-link, .pp-final').forEach(el => {
+    el.classList.add('reveal');
+    observer.observe(el);
+  });
+}
+</script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Websites — David Spijker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.page-hero{padding:100px 5% 60px;text-align:center;max-width:900px;margin:0 auto}
+.page-hero h1{margin-bottom:20px}
+.page-hero .hero-sub{max-width:620px;margin:0 auto 36px}
+.page-hero .btn-row{justify-content:center}
+
+/* Wizard CTA block */
+.wizard-cta{max-width:1100px;margin:0 auto 80px;padding:0 5%}
+.wizard-cta-inner{position:relative;background:linear-gradient(135deg,#0a3fb8 0%,#1759e8 45%,#3b6ef5 100%);border-radius:24px;padding:48px 56px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:center;overflow:hidden;box-shadow:0 24px 60px rgba(23,89,232,0.28)}
+.wizard-cta-inner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 20%,rgba(255,255,255,0.18),transparent 55%),radial-gradient(circle at 10% 90%,rgba(255,255,255,0.12),transparent 50%);pointer-events:none}
+.wizard-cta-eyebrow{position:relative;display:inline-block;background:rgba(255,255,255,0.18);color:#fff;font-family:var(--font-head);font-weight:600;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border-radius:999px;margin-bottom:18px;backdrop-filter:blur(6px)}
+.wizard-cta h2{position:relative;color:#fff;font-size:38px;line-height:1.1;letter-spacing:-1.4px;margin-bottom:14px}
+.wizard-cta h2 em{font-style:normal;color:#fff;position:relative;display:inline-block}
+.wizard-cta h2 em::after{content:'';position:absolute;left:0;right:0;bottom:2px;height:8px;background:rgba(255,255,255,0.22);border-radius:4px;z-index:-1}
+.wizard-cta-sub{position:relative;color:rgba(255,255,255,0.92);font-size:17px;line-height:1.6;margin-bottom:24px;max-width:520px}
+.wizard-cta-meta{position:relative;display:flex;flex-wrap:wrap;gap:18px;margin-bottom:28px}
+.wizard-cta-meta span{color:#fff;font-size:13.5px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.wizard-cta-actions{position:relative;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.wizard-cta-btn{background:#fff;color:#1759e8;font-family:var(--font-head);font-weight:700;font-size:16px;padding:16px 28px;border-radius:14px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:transform .25s, box-shadow .25s;box-shadow:0 8px 24px rgba(0,0,0,0.12)}
+.wizard-cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,0.22)}
+.wizard-cta-btn-arrow{transition:transform .3s}
+.wizard-cta-btn:hover .wizard-cta-btn-arrow{transform:translateX(4px)}
+.wizard-cta-time{color:rgba(255,255,255,0.85);font-size:13.5px}
+.wizard-cta-visual{position:relative;display:flex;flex-direction:column;gap:14px}
+.wizard-cta-visual::before{content:'';position:absolute;left:26px;top:30px;bottom:30px;width:2px;background:linear-gradient(to bottom,rgba(255,255,255,0.5),rgba(255,255,255,0.15));z-index:0}
+
+.wizard-cta-step{position:relative;z-index:1;background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);border-radius:16px;padding:18px 20px;color:#fff;display:flex;align-items:center;gap:16px;transition:transform .5s cubic-bezier(.2,.8,.3,1.1), background .5s, box-shadow .5s, color .5s;overflow:hidden;cursor:default}
+.wizard-cta-step::before{content:'';position:absolute;inset:0;background:#fff;opacity:0;transition:opacity .5s;z-index:-1;border-radius:inherit}
+.wizard-cta-step:hover{transform:translateX(6px);background:rgba(255,255,255,0.22)}
+.wizard-cta-step-num{position:relative;width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.18);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;font-family:var(--font-head);letter-spacing:-0.5px;border:1px solid rgba(255,255,255,0.3);transition:all .5s cubic-bezier(.2,.8,.3,1.1)}
+.wizard-cta-step-num::after{content:'';position:absolute;inset:-4px;border-radius:14px;border:2px solid #fff;opacity:0;transform:scale(.7);transition:all .5s}
+.wizard-cta-step-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.wizard-cta-step-title{font-weight:700;font-size:15.5px;letter-spacing:-0.3px;line-height:1.2;transition:color .5s}
+.wizard-cta-step-sub{font-size:13px;color:rgba(255,255,255,0.78);font-weight:400;line-height:1.4;transition:color .5s}
+.wizard-cta-step--active{background:#fff;color:#0a3fb8;box-shadow:0 22px 44px rgba(0,0,0,0.22), 0 4px 10px rgba(0,0,0,0.10);transform:translateX(8px) scale(1.02)}
+.wizard-cta-step--active .wizard-cta-step-num{background:linear-gradient(135deg,#0a3fb8,#3b6ef5);color:#fff;border-color:transparent;box-shadow:0 8px 20px rgba(10,63,184,0.4);transform:scale(1.08) rotate(-3deg)}
+.wizard-cta-step--active .wizard-cta-step-num::after{opacity:0.35;transform:scale(1)}
+.wizard-cta-step--active .wizard-cta-step-sub{color:#64748b}
+.wizard-cta-step--done .wizard-cta-step-num{background:rgba(255,255,255,0.95);color:#0a3fb8;border-color:transparent}
+.wizard-cta-step--done .wizard-cta-step-num::before{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:inherit;border-radius:inherit;font-size:18px;font-weight:800;color:#0a3fb8;animation:ctaCheckPop .4s cubic-bezier(.2,1.4,.4,1)}
+@keyframes ctaCheckPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+@media(max-width:820px){
+  .wizard-cta-inner{grid-template-columns:1fr;padding:36px 28px}
+  .wizard-cta h2{font-size:30px}
+  .wizard-cta-visual{order:-1}
+}
+</style>
+</head>
+<body>
+<!-- MESH BLOBS -->
+<div id="mesh-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="websites.html" style="color:var(--text);font-weight:600">Websites</a></li>
+    <li><a href="automatisering.html">Automatisering</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Samenwerken →</a>
+  <button class="nav-mobile-btn">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div class="reveal">
+    <div class="hero-badge">Voor MKB'ers</div>
+    <h1>Websites die <em>klanten opleveren</em></h1>
+    <p class="hero-sub">Geen templates, geen bullshit. Ik bouw conversiegerichte websites op maat — van landingspagina tot volledige webshop. Resultaatgericht, in 2-4 weken live.</p>
+    <div class="btn-row">
+      <a href="websites-laten-maken.html" class="btn-primary">✦ Gratis website-preview →</a>
+      <a href="index.html#contact" class="btn-ghost">Offerte aanvragen</a>
+      <a href="#portfolio" class="btn-ghost">Bekijk werk</a>
+    </div>
+  </div>
+</section>
+
+<!-- WIZARD CTA -->
+<section class="wizard-cta reveal">
+  <div class="wizard-cta-inner">
+    <div>
+      <div class="wizard-cta-eyebrow">✨ Nieuw — gratis tool</div>
+      <h2>Krijg een gratis website-preview 
+in 5 minuten</h2>
+      <p class="wizard-cta-sub">Beantwoord 14 korte vragen over je bedrijf, doelen en stijl. Je krijgt direct een live preview van je homepage  in jouw kleuren, met jouw copy en jouw layout-keuze.</p>
+      <div class="wizard-cta-meta">
+        <span>⚡ Direct resultaat</span>
+        <span>🔒 Geen verplichtingen</span>
+        <span>⏱️ ±5 minuten</span>
+      </div>
+      <div class="wizard-cta-actions">
+        <a href="websites-laten-maken.html" class="wizard-cta-btn">Start de wizard <span class="wizard-cta-btn-arrow">→</span></a>
+        <span class="wizard-cta-time">Live preview • gratis • vrijblijvend</span>
+      </div>
+    </div>
+    <div class="wizard-cta-visual">
+      <div class="wizard-cta-step" data-cta-step="0">
+        <span class="wizard-cta-step-num">01</span>
+        <span class="wizard-cta-step-text">
+          <span class="wizard-cta-step-title">Vertel over je bedrijf</span>
+          <span class="wizard-cta-step-sub">Doelgroep, doelen & aanbod</span>
+        </span>
+      </div>
+      <div class="wizard-cta-step" data-cta-step="1">
+        <span class="wizard-cta-step-num">02</span>
+        <span class="wizard-cta-step-text">
+          <span class="wizard-cta-step-title">Kies je stijl & kleuren</span>
+          <span class="wizard-cta-step-sub">Sfeer, palet en layout</span>
+        </span>
+      </div>
+      <div class="wizard-cta-step" data-cta-step="2">
+        <span class="wizard-cta-step-num">03</span>
+        <span class="wizard-cta-step-text">
+          <span class="wizard-cta-step-title">Bekijk je live preview</span>
+          <span class="wizard-cta-step-sub">Direct in je browser</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAKKETTEN STRIP + VERGELIJKINGSTABEL -->
+<section id="pakketten">
+  <div class="section-eyebrow reveal">Pakketten & prijzen</div>
+  <h2 class="reveal reveal-delay-1">Drie pakketten, vaste prijzen</h2>
+  <p class="section-sub reveal reveal-delay-2" style="margin-bottom:40px">Geen verrassingen achteraf. Twijfel je welke past? Vergelijk ze hieronder of plan een gratis gesprek, ik denk mee.</p>
+
+  <div class="pkg-strip">
+    <div class="pkg-card reveal">
+      <div class="pkg-card-name">Snel Online</div>
+      <p class="pkg-card-desc">Snel professioneel online met een 4-pagina site. Perfect voor starters.</p>
+      <div class="pkg-card-price"><span class="pkg-card-amount">€&nbsp;1.295</span><span class="pkg-card-period">eenmalig</span></div>
+      <a href="index.html#contact" class="pkg-card-cta">Plan kennismaking →</a>
+    </div>
+
+    <div class="pkg-card pkg-card-featured reveal reveal-delay-1">
+      <div class="pkg-card-badge">Meest gekozen</div>
+      <div class="pkg-card-name">Lead Generatie</div>
+      <p class="pkg-card-desc">Complete website mét AI-blogsysteem. Bouw maand na maand aan online vindbaarheid.</p>
+      <div class="pkg-card-price"><span class="pkg-card-amount">€&nbsp;2.495</span><span class="pkg-card-period">eenmalig</span></div>
+      <a href="index.html#contact" class="pkg-card-cta">Plan kennismaking →</a>
+    </div>
+
+    <div class="pkg-card reveal reveal-delay-2">
+      <div class="pkg-card-name">Bedrijf in Beweging</div>
+      <p class="pkg-card-desc">Alles uit Lead Generatie + CRM, facturatie en automatiseringen. Eén systeem voor je hele bedrijf.</p>
+      <div class="pkg-card-price"><span class="pkg-card-amount">vanaf&nbsp;€&nbsp;4.995</span><span class="pkg-card-period">op maat</span></div>
+      <a href="index.html#contact" class="pkg-card-cta">Plan vrijblijvend gesprek →</a>
+    </div>
+  </div>
+
+  <details class="pkg-compare reveal">
+    <summary class="pkg-compare-toggle">
+      <span>Vergelijk alle pakketten naast elkaar</span>
+      <span class="pkg-compare-chevron">+</span>
+    </summary>
+    <div class="pkg-compare-table-wrap">
+      <table class="pkg-compare-table">
+        <thead>
+          <tr>
+            <th>Wat zit erin?</th>
+            <th>Snel Online</th>
+            <th class="th-featured">Lead Generatie</th>
+            <th>Bedrijf in Beweging</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Aantal pagina's</td><td>4</td><td class="td-featured">6–8</td><td>6–8 + bedrijfssysteem</td></tr>
+          <tr><td>Custom design</td><td>—</td><td class="td-featured">✓</td><td>✓</td></tr>
+          <tr><td>Mobiel-vriendelijk</td><td>✓</td><td class="td-featured">✓</td><td>✓</td></tr>
+          <tr><td>Basis SEO</td><td>✓</td><td class="td-featured">✓ + uitgebreid</td><td>✓ + uitgebreid</td></tr>
+          <tr><td>Contactformulier</td><td>✓</td><td class="td-featured">Slim + opvolgmail</td><td>Slim + CRM-koppeling</td></tr>
+          <tr><td>Blog-sectie</td><td>—</td><td class="td-featured">✓ (volledig)</td><td>✓ (volledig)</td></tr>
+          <tr><td>AI Blog (Claude Project)</td><td>—</td><td class="td-featured">✓</td><td>✓</td></tr>
+          <tr><td>Google Analytics</td><td>—</td><td class="td-featured">✓</td><td>✓</td></tr>
+          <tr><td>CRM-systeem (Pipedrive)</td><td>—</td><td class="td-featured">—</td><td>✓</td></tr>
+          <tr><td>Boekhouding (Moneybird)</td><td>—</td><td class="td-featured">—</td><td>✓</td></tr>
+          <tr><td>Offerte → factuur automatisering</td><td>—</td><td class="td-featured">—</td><td>✓</td></tr>
+          <tr><td>iDEAL betaalkoppeling</td><td>—</td><td class="td-featured">—</td><td>✓</td></tr>
+          <tr><td>Persoonlijke training</td><td>—</td><td class="td-featured">Onboarding 1u</td><td>Strategie 2u + training 2u</td></tr>
+          <tr><td>Feedback-rondes</td><td>1</td><td class="td-featured">2</td><td>2 + bijsturing</td></tr>
+          <tr><td>Support na livegang</td><td>14 dagen</td><td class="td-featured">30 dagen</td><td>60 dagen + kwartaal-eval</td></tr>
+          <tr class="tr-price"><td>Investering</td><td>€&nbsp;1.295</td><td class="td-featured">€&nbsp;2.495</td><td>vanaf&nbsp;€&nbsp;4.995</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</section>
+
+<style>
+/* === COMPACTE PAKKETTEN STRIP === */
+#pakketten{padding:80px 5% 70px;max-width:1300px;margin:0 auto}
+.pkg-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;margin-bottom:36px}
+.pkg-card{background:rgba(255,255,255,0.94);border:1px solid var(--border);border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;gap:14px;position:relative;transition:transform .25s,box-shadow .25s;box-shadow:0 4px 20px rgba(23,89,232,0.04)}
+.pkg-card:hover{transform:translateY(-4px);box-shadow:0 14px 38px rgba(23,89,232,0.10)}
+.pkg-card-featured{border:2px solid var(--accent);background:#fff;box-shadow:0 12px 32px rgba(23,89,232,0.14);transform:translateY(-6px)}
+.pkg-card-featured:hover{transform:translateY(-10px);box-shadow:0 20px 50px rgba(23,89,232,0.20)}
+.pkg-card-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-family:var(--font-head);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.4px;padding:6px 14px;border-radius:22px;box-shadow:0 4px 14px rgba(23,89,232,0.32);white-space:nowrap}
+.pkg-card-name{font-family:var(--font-head);font-weight:700;font-size:21px;letter-spacing:-0.4px;color:var(--text)}
+.pkg-card-desc{color:var(--muted);font-size:14.5px;line-height:1.6;margin:0;flex-grow:1}
+.pkg-card-price{display:flex;align-items:baseline;gap:8px;padding-top:14px;border-top:1px solid var(--border);flex-wrap:wrap}
+.pkg-card-amount{font-family:var(--font-head);font-weight:800;font-size:30px;color:var(--text);letter-spacing:-1px;line-height:1.1;white-space:nowrap}
+.pkg-card-period{font-size:13px;color:var(--muted)}
+.pkg-card-cta{display:block;text-align:center;padding:13px;background:rgba(23,89,232,0.08);color:var(--accent);border:1px solid rgba(23,89,232,0.2);border-radius:10px;font-family:var(--font-head);font-weight:600;font-size:14px;text-decoration:none;transition:all .2s}
+.pkg-card-cta:hover{background:rgba(23,89,232,0.14)}
+.pkg-card-featured .pkg-card-cta{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pkg-card-featured .pkg-card-cta:hover{background:#1349c8;box-shadow:0 8px 22px rgba(23,89,232,0.32)}
+
+/* Vergelijkingstabel */
+.pkg-compare{background:rgba(255,255,255,0.85);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.pkg-compare-toggle{padding:18px 26px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-head);font-weight:600;font-size:15.5px;color:var(--text)}
+.pkg-compare-toggle::-webkit-details-marker{display:none}
+.pkg-compare-toggle:hover{color:var(--accent)}
+.pkg-compare-chevron{width:30px;height:30px;border-radius:50%;background:rgba(23,89,232,0.10);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;transition:transform .25s}
+.pkg-compare[open] .pkg-compare-chevron{transform:rotate(45deg);background:var(--accent);color:#fff}
+.pkg-compare-table-wrap{overflow-x:auto;border-top:1px solid var(--border)}
+.pkg-compare-table{width:100%;border-collapse:collapse;min-width:680px}
+.pkg-compare-table th,.pkg-compare-table td{padding:13px 18px;text-align:left;font-size:13.5px;border-bottom:1px solid var(--border)}
+.pkg-compare-table th{font-family:var(--font-head);font-weight:700;font-size:13px;color:var(--text);background:rgba(23,89,232,0.04)}
+.pkg-compare-table th.th-featured,.pkg-compare-table td.td-featured{background:rgba(23,89,232,0.06);color:var(--text);font-weight:500}
+.pkg-compare-table th.th-featured{color:var(--accent);font-weight:700}
+.pkg-compare-table tbody tr:hover td{background:rgba(23,89,232,0.025)}
+.pkg-compare-table tbody tr:hover td.td-featured{background:rgba(23,89,232,0.10)}
+.pkg-compare-table td:first-child{font-weight:500;color:var(--text)}
+.pkg-compare-table tr.tr-price td{font-family:var(--font-head);font-weight:700;font-size:15px;color:var(--text);background:rgba(23,89,232,0.06)}
+.pkg-compare-table tr.tr-price td.td-featured{background:rgba(23,89,232,0.12);color:var(--accent)}
+
+@media(max-width:1000px){
+  .pkg-strip{grid-template-columns:1fr;gap:24px}
+  .pkg-card-featured{transform:none}
+  .pkg-card-featured:hover{transform:translateY(-4px)}
+}
+</style>
+
+<section id="portfolio" class="portfolio-sec">
+  <div class="section-eyebrow reveal">Voorbeelden</div>
+  <h2 class="reveal reveal-delay-1">Voorbeeldwebsites</h2>
+  <p class="section-sub reveal reveal-delay-2" style="margin-bottom:40px">Een greep uit websites die ik bouw. Klik op een voorbeeld hieronder om de showcase te wisselen.</p>
+
+  <div class="showcase reveal">
+    <div class="devices">
+      <!-- PHONE -->
+      <div class="device device-phone" data-device="phone">
+        <div class="dev-frame dev-frame-phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <iframe class="dev-iframe" id="phoneFrame" src="about:blank" scrolling="no"></iframe>
+            <div class="dev-overlay" id="phoneOverlay"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESKTOP -->
+      <div class="device device-desktop" data-device="desktop">
+        <div class="dev-frame dev-frame-desktop">
+          <div class="dev-topbar">
+            <span class="dev-dot" style="background:#ff5f57"></span>
+            <span class="dev-dot" style="background:#febc2e"></span>
+            <span class="dev-dot" style="background:#28c840"></span>
+            <div class="dev-urlbar" id="urlbar">modewinkel.nl</div>
+          </div>
+          <div class="dev-screen">
+            <iframe class="dev-iframe" id="desktopFrame" src="about:blank" scrolling="no"></iframe>
+            <div class="dev-overlay" id="desktopOverlay"></div>
+          </div>
+        </div>
+        <div class="dev-base-desktop"></div>
+        <div class="dev-stand"></div>
+      </div>
+
+      <!-- TABLET - info -->
+      <div class="device device-tablet" data-device="tablet">
+        <div class="dev-frame dev-frame-tablet">
+          <div class="tablet-screen">
+            <div class="tab-content" id="tabContent"></div>
+          </div>
+          <div class="tablet-home"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-selector" id="selector"></div>
+  </div>
+</section>
+
+<style>
+/* PORTFOLIO SECTION — accent kleurt mee per project */
+@property --proj-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1759e8;
+}
+.portfolio-sec{position:relative;isolation:isolate;z-index:1;transition:--proj-accent 900ms cubic-bezier(.4,0,.2,1)}
+.portfolio-sec > *{position:relative;z-index:2}
+.portfolio-sec .section-eyebrow,
+.portfolio-sec h2{transition:color 600ms ease}
+/* swap a couple accents inside this section to project color */
+.portfolio-sec .section-eyebrow{color:var(--proj-accent,var(--accent))}
+.portfolio-sec .psel.active{border-color:var(--proj-accent,var(--accent))}
+.portfolio-sec .psel.active::before{background:var(--proj-accent,var(--accent))}
+.portfolio-sec .psel-tag{color:var(--proj-accent,var(--accent))}
+.portfolio-sec .tab-label{color:var(--proj-accent,var(--accent))}
+.portfolio-sec .tab-stat-num{color:var(--proj-accent,var(--accent))}
+.portfolio-sec .tab-tag{background:color-mix(in oklab, var(--proj-accent,var(--accent)) 14%, transparent);color:var(--proj-accent,var(--accent))}
+.portfolio-sec .tab-quote{border-left-color:var(--proj-accent,var(--accent))}
+
+.showcase{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.devices{position:relative;height:540px;display:flex;align-items:center;justify-content:center;margin-bottom:40px;perspective:1600px;gap:30px}
+
+/* DESKTOP */
+.device-desktop{position:relative;width:520px;z-index:1;transition:transform .5s cubic-bezier(.2,.9,.3,1.2);transform:translateX(0) rotateY(4deg);margin:0 20px}
+.devices:hover .device-desktop{transform:translateX(0) rotateY(4deg) translateY(-4px)}
+.dev-frame-desktop{background:#1a1d29;border-radius:10px 10px 4px 4px;padding:8px;box-shadow:0 24px 60px rgba(23,89,232,0.18),0 4px 12px rgba(0,0,0,0.08);border:1px solid rgba(0,0,0,0.1)}
+.dev-topbar{display:flex;align-items:center;gap:5px;padding:6px 10px;background:#2a2d3a;border-radius:6px 6px 0 0}
+.dev-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.dev-urlbar{flex:1;margin-left:14px;background:#1a1d29;border-radius:4px;padding:4px 10px;font-size:10.5px;color:#8a8ea0;font-family:monospace;text-align:center}
+.dev-screen{position:relative;background:#fff;border-radius:0 0 4px 4px;height:360px;overflow:hidden}
+.dev-iframe{width:200%;height:200%;border:0;transform:scale(.5);transform-origin:0 0;pointer-events:none}
+.dev-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(244,245,251,0.4) 100%);pointer-events:none}
+.dev-base-desktop{height:8px;width:30%;margin:0 auto;background:linear-gradient(180deg,#2a2d3a,#1a1d29);border-radius:0 0 4px 4px}
+.dev-stand{height:20px;width:18%;margin:0 auto;background:linear-gradient(180deg,#3a3d4a,#1a1d29);border-radius:0 0 40px 40px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+
+/* TABLET - right side, visible */
+.device-tablet{position:relative;width:240px;z-index:2;transition:transform .6s cubic-bezier(.2,.9,.3,1.2);transform:rotate(4deg) rotateY(-10deg);margin-left:-20px}
+.devices:hover .device-tablet{transform:rotate(4deg) rotateY(-10deg) translateY(-6px) scale(1.02)}
+.dev-frame-tablet{background:#1a1d29;border-radius:22px;padding:12px;box-shadow:0 30px 60px rgba(139,92,246,0.15),0 4px 12px rgba(0,0,0,0.08)}
+.tablet-screen{background:linear-gradient(135deg,#f4f5fb,#eef0f9);border-radius:12px;height:380px;padding:22px 20px;overflow:hidden;position:relative}
+.tablet-home{width:40px;height:4px;background:#3a3d4a;border-radius:2px;margin:8px auto 0}
+.tab-content{animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tab-label{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:6px;font-weight:600}
+.tab-title{font-family:var(--font-head);font-weight:700;font-size:15px;line-height:1.25;margin-bottom:10px;color:var(--text)}
+.tab-divider{height:1px;background:rgba(23,89,232,0.1);margin:10px 0}
+.tab-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.tab-stat{background:rgba(255,255,255,0.7);border-radius:6px;padding:8px;border:1px solid rgba(23,89,232,0.08)}
+.tab-stat-num{font-family:var(--font-head);font-weight:800;font-size:16px;color:var(--accent);letter-spacing:-.3px}
+.tab-stat-lbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.tab-list{list-style:none;padding:0;margin:0}
+.tab-list li{font-size:10.5px;color:var(--text);padding:4px 0;display:flex;align-items:center;gap:5px;line-height:1.35}
+.tab-list li::before{content:'✓';color:#16a34a;font-weight:700;font-size:10px;flex-shrink:0}
+.tab-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px}
+.tab-tag{font-size:8px;background:rgba(23,89,232,0.1);color:var(--accent);border-radius:3px;padding:2px 6px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.tab-quote{font-size:10px;color:var(--muted);font-style:italic;line-height:1.5;margin-top:10px;padding-left:8px;border-left:2px solid var(--accent)}
+
+/* PHONE - left side, stand-alone */
+.device-phone{position:relative;width:140px;z-index:2;transition:transform .5s cubic-bezier(.2,.9,.3,1.2);transform:rotate(-5deg) rotateY(10deg);margin-right:-20px}
+.devices:hover .device-phone{transform:rotate(-5deg) rotateY(10deg) translateY(-6px)}
+.dev-frame-phone{background:#1a1d29;border-radius:22px;padding:6px;box-shadow:0 20px 40px rgba(23,89,232,0.2),0 4px 12px rgba(0,0,0,0.1);position:relative}
+.phone-notch{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:50px;height:14px;background:#1a1d29;border-radius:0 0 10px 10px;z-index:2}
+.phone-screen{background:#fff;border-radius:16px;height:280px;overflow:hidden;position:relative}
+.phone-screen .dev-iframe{width:300%;height:300%;transform:scale(.333);transform-origin:0 0}
+
+/* SELECTOR */
+.project-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;max-width:1100px;margin:0 auto}
+.psel{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .25s;text-align:left;box-shadow:0 2px 12px rgba(23,89,232,0.05);position:relative;overflow:hidden}
+.psel:hover{border-color:rgba(23,89,232,0.3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(23,89,232,0.1)}
+.psel.active{border-color:var(--accent);background:rgba(255,255,255,1);box-shadow:0 8px 28px rgba(23,89,232,0.15)}
+.psel.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.psel-tag{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:600;margin-bottom:6px}
+.psel-title{font-family:var(--font-head);font-weight:700;font-size:14px;margin-bottom:4px;line-height:1.25}
+.psel-result{font-size:11px;color:#16a34a;font-weight:600;margin-top:8px;display:inline-flex;align-items:center;gap:3px;background:rgba(74,222,128,0.1);border-radius:10px;padding:2px 8px}
+
+@media(max-width:900px){
+  .devices{height:auto;flex-direction:column;gap:24px;padding:20px 0}
+  .device-desktop{width:90%;max-width:500px;transform:none}
+  .dev-screen{height:280px}
+  .device-tablet{position:relative;left:auto;top:auto;transform:rotate(-3deg);width:240px}
+  .device-phone{position:relative;left:auto;bottom:auto;width:140px;transform:rotate(3deg)}
+  .devices:hover .device-desktop{transform:translateY(-4px)}
+  .devices:hover .device-tablet{transform:rotate(-3deg) translateY(-4px)}
+  .devices:hover .device-phone{transform:rotate(3deg) translateY(-4px)}
+  .project-selector{grid-template-columns:1fr}
+}
+</style>
+
+<script>
+const SHOWCASE = [
+  {
+    id:'vdbouw',
+    accent:'#d97757',
+    bg:'linear-gradient(135deg, #2a1a12 0%, #3a2820 55%, #d97757 100%)',
+    tag:'Bouwbedrijf · Lokaal',
+    title:'Website · Van der Berg Bouw',
+    url:'vanderbergbouw.nl',
+    result:'Filmische hero',
+    stats:[{n:'Bouw',l:'Sector'},{n:'NL',l:'Taal'}],
+    highlights:['Sfeervolle, filmische hero','Heldere offerte­module','Projecten per categorie','Mobiel én tablet ready'],
+    tags:['bouw','zakelijk','warm'],
+    quote:'"Warme tinten, vakmanschap voorop — een ambachtelijke uitstraling met directe CTA’s."',
+    desktop:'assets/preview-vanderberg.html',
+    phone:'assets/preview-vanderberg-mobile.html'
+  },
+  {
+    id:'psycho',
+    accent:'#3a5d4c',
+    bg:'linear-gradient(135deg, #f6f3ec 0%, #e6ebe2 55%, #c6d3c4 100%)',
+    tag:'Zorg · Praktijk',
+    title:'Website · Anne van der Berg',
+    url:'annevanderberg.nl',
+    result:'Rustige, warme uitstraling',
+    stats:[{n:'Zorg',l:'Sector'},{n:'NL',l:'Taal'}],
+    highlights:['Serene editorial typografie','Portret + sfeerbeeld in hero','Beschikbaarheid live op de pagina','Heldere kennismakings-CTA'],
+    tags:['zorg','praktijk','warm'],
+    quote:'"Een ingetogen, professionele uitstraling die direct vertrouwen wekt — perfect voor een praktijk."',
+    desktop:'assets/preview-anne-vdberg.html',
+    phone:'assets/preview-anne-vdberg-mobile.html'
+  }
+];
+
+const selectorEl = document.getElementById('selector');
+const urlbar = document.getElementById('urlbar');
+const dFrame = document.getElementById('desktopFrame');
+const pFrame = document.getElementById('phoneFrame');
+const tabContent = document.getElementById('tabContent');
+let current = 0;
+
+selectorEl.innerHTML = SHOWCASE.map((p,i)=>`
+  <div class="psel ${i===0?'active':''}" data-i="${i}" onclick="selectShowcase(${i})">
+    <div class="psel-tag">${p.tag}</div>
+    <div class="psel-title">${p.title}</div>
+    <div class="psel-result">↑ ${p.result}</div>
+  </div>
+`).join('');
+
+function selectShowcase(i){
+  if(i===current) return;
+  current = i;
+  document.querySelectorAll('.psel').forEach((e,idx)=>e.classList.toggle('active', idx===i));
+  updateDevices();
+}
+
+function updateDevices(){
+  const p = SHOWCASE[current];
+  urlbar.textContent = p.url;
+  dFrame.src = p.desktop;
+  pFrame.src = p.phone || p.desktop;
+
+  tabContent.style.animation = 'none';
+  void tabContent.offsetWidth;
+  tabContent.style.animation = 'fadeIn .4s ease';
+  tabContent.innerHTML = `
+    <div class="tab-label">${p.tag}</div>
+    <div class="tab-title">${p.title}</div>
+    <div class="tab-stats">
+      ${p.stats.map(s=>`<div class="tab-stat"><div class="tab-stat-num">${s.n}</div><div class="tab-stat-lbl">${s.l}</div></div>`).join('')}
+    </div>
+    <div class="tab-divider"></div>
+    <ul class="tab-list">${p.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>
+    <div class="tab-quote">${p.quote}</div>
+    <div class="tab-tags">${p.tags.map(t=>`<span class="tab-tag">${t}</span>`).join('')}</div>
+  `;
+}
+
+updateDevices();
+</script>
+
+<section id="proces">
+  <div class="section-eyebrow reveal">Hoe werkt het?</div>
+  <h2 class="reveal reveal-delay-1">Van idee tot livegang</h2>
+  <div class="steps">
+    <div class="step reveal"><div class="step-num">01</div><div><div class="step-title">Discovery</div><p class="step-desc">Gratis intakegesprek over doelen en doelgroep.</p></div></div>
+    <div class="step reveal reveal-delay-1"><div class="step-num">02</div><div><div class="step-title">Design</div><p class="step-desc">Ontwerp en copy op maat, iteratief.</p></div></div>
+    <div class="step reveal reveal-delay-2"><div class="step-num">03</div><div><div class="step-title">Bouwen</div><p class="step-desc">Snelle, schone code. Jij ziet de voortgang.</p></div></div>
+    <div class="step reveal reveal-delay-3"><div class="step-num">04</div><div><div class="step-title">Livegang</div><p class="step-desc">Livegang + training zodat jij het zelf kunt beheren.</p></div></div>
+  </div>
+</section>
+
+<section style="text-align:center">
+  <h2 class="reveal">Klaar voor een nieuwe website?</h2>
+  <p class="section-sub reveal reveal-delay-1" style="margin:0 auto 32px">Plan een gratis gesprek — we bespreken jouw doelen en ik maak direct een voorstel.</p>
+  <a href="index.html#contact" class="btn-primary reveal reveal-delay-2">Gratis gesprek inplannen →</a>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><img src="assets/ds-logo.png" alt="DS" class="nav-logo-img">David Spijker</a>
+      <p>Tech-ondernemer uit Leiden. Ik bouw websites en automatiseringen voor MKB'ers die willen groeien.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/31626135410" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="mailto:Contact@DavidSpijker.nl" aria-label="E-mail" title="E-mail">@</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="websites.html">Websites</a></li>
+        <li><a href="automatisering.html">Automatisering</a></li>
+        <li><a href="index.html#contact">Maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bedrijf</h4>
+      <ul>
+        <li><a href="index.html#over">Over mij</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Juridisch</h4>
+      <ul>
+        <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
+        <li><a href="privacy.html">Privacyverklaring</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 David Spijker · Spijker Dienstverlening · KvK 96035250</p>
+    <div class="footer-meta">
+      <a href="admin/login.html">Admin</a>
+    </div>
+  </div>
+</footer>
+<script>
+// Auto-cycle the wizard CTA steps
+(function cycleCtaSteps(){
+  const steps = document.querySelectorAll('.wizard-cta-step[data-cta-step]');
+  if(!steps.length) return;
+  let i = 0;
+  const tick = () => {
+    steps.forEach((s, idx) => {
+      s.classList.toggle('wizard-cta-step--active', idx === i);
+      s.classList.toggle('wizard-cta-step--done', idx < i);
+    });
+    i = (i + 1) % (steps.length + 1);
+    if(i === 0){
+      steps.forEach(s => s.classList.remove('wizard-cta-step--done'));
+    }
+  };
+  tick();
+  setInterval(tick, 2400);
+  // Pause on hover, jump to clicked step
+  steps.forEach((s, idx) => {
+    s.addEventListener('mouseenter', () => { i = idx; tick(); i = idx; });
+  });
+})();
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.borderBottomColor = window.scrollY > 20 ? 'rgba(23,89,232,0.08)' : 'rgba(23,89,232,0.10)';
+});
+</script>
+<script src="mobile-nav.js"></script>
+</body>
+</html>
