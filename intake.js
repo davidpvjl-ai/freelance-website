@@ -825,19 +825,18 @@ Output ALLEEN als geldig JSON zonder markdown, geen extra tekst:
       localStorage.setItem(key, JSON.stringify(list));
     }catch(e){}
 
-    // Bouw preview HTML (zelfde logica als screenPreview) om mee te sturen
-    let previewHTML = '';
+    // Verstuur naar Apps Script webhook (fire-and-forget; faalt stil als webhook offline is)
+    // Apps Script stuurt acknowledgement-mail; Claude routine bouwt premium preview-mail later.
     try {
-      const palette = state.answers.q9_colors;
-      const layout = state.answers.q10 || 'centered';
-      const ui = state.answers.q12 || 'rounded';
-      const bg = state.answers.q12_bg || 'light';
-      const anim = (Array.isArray(state.answers.q11) ? state.answers.q11[0] : state.answers.q11) || 'subtle';
-      const css = buildPreviewCSS(palette, ui, anim, bg);
-      const hero = buildHero(layout, ui, state.generated, palette, state.answers.q9_logo);
-      const testi = buildTestimonials(ui);
-      previewHTML = `<style>${css}</style><div class="anim-${anim}">${hero}${testi}</div>`;
-    } catch(e){ console.warn('Preview build failed:', e); }
+      fetch('https://script.google.com/macros/s/AKfycbzp6X_19XRwWTk_SKa4vd1CNziyvKarNSWF1s439xb2TKtN0_QbaVCRCCY8sk0lLumh/exec', {
+        method: 'POST',
+        headers: {'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({
+          answers: state.answers,
+          generated: state.generated
+        })
+      }).catch(err => console.warn('Webhook submit failed:', err));
+    } catch(e){ console.warn('Webhook submit error:', e); }
 
     // Verstuur naar Apps Script webhook (fire-and-forget; faalt stil als webhook offline is)
     try {
