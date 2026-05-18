@@ -810,19 +810,47 @@ Output ALLEEN als geldig JSON zonder markdown, geen extra tekst:
       } else fallback();
     } catch(e){ console.warn('Claude generate failed:', e); fallback(); }
 
-    // Persist submission so admin can see it
+    // Persist submission lokaal voor admin/wizard.html
+    const submission = {
+      id: 'w'+Math.random().toString(36).slice(2,9),
+      date: new Date().toISOString().slice(0,10),
+      status: 'new',
+      answers: JSON.parse(JSON.stringify(state.answers)),
+      generated: JSON.parse(JSON.stringify(state.generated))
+    };
     try{
       const key = 'ds_wizard_subs';
       const list = JSON.parse(localStorage.getItem(key) || '[]');
-      list.unshift({
-        id: 'w'+Math.random().toString(36).slice(2,9),
-        date: new Date().toISOString().slice(0,10),
-        status: 'new',
-        answers: JSON.parse(JSON.stringify(state.answers)),
-        generated: JSON.parse(JSON.stringify(state.generated))
-      });
+      list.unshift(submission);
       localStorage.setItem(key, JSON.stringify(list));
     }catch(e){}
+
+    // Bouw preview HTML (zelfde logica als screenPreview) om mee te sturen
+    let previewHTML = '';
+    try {
+      const palette = state.answers.q9_colors;
+      const layout = state.answers.q10 || 'centered';
+      const ui = state.answers.q12 || 'rounded';
+      const bg = state.answers.q12_bg || 'light';
+      const anim = (Array.isArray(state.answers.q11) ? state.answers.q11[0] : state.answers.q11) || 'subtle';
+      const css = buildPreviewCSS(palette, ui, anim, bg);
+      const hero = buildHero(layout, ui, state.generated, palette, state.answers.q9_logo);
+      const testi = buildTestimonials(ui);
+      previewHTML = `<style>${css}</style><div class="anim-${anim}">${hero}${testi}</div>`;
+    } catch(e){ console.warn('Preview build failed:', e); }
+
+    // Verstuur naar Apps Script webhook (fire-and-forget; faalt stil als webhook offline is)
+    try {
+      fetch('https://script.google.com/macros/s/AKfycbzp6X_19XRwWTk_SKa4vd1CNziyvKarNSWF1s439xb2TKtN0_QbaVCRCCY8sk0lLumh/exec', {
+        method: 'POST',
+        headers: {'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({
+          answers: state.answers,
+          generated: state.generated,
+          previewHTML: previewHTML
+        })
+      }).catch(err => console.warn('Webhook submit failed:', err));
+    } catch(e){ console.warn('Webhook submit error:', e); }
 
     // Submit naar Formspree (fire-and-forget — wizard wacht niet op response)
     if(FORMSPREE_URL && !FORMSPREE_URL.includes('YOUR_FORM_ID')){
